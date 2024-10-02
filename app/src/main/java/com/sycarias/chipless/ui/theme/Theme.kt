@@ -25,6 +25,7 @@ fun ChiplessButtonColors(
 
 @Composable
 fun ChiplessTheme(
+    bgColor: Color = ChiplessColors.bgPrimary,
     content: @Composable () -> Unit
 ) {
     // Choose between light and dark themes
@@ -40,17 +41,17 @@ fun ChiplessTheme(
     }
 
     // Apply the theme throughout the app
-    ChiplessSurface(colors = colors, content = content)
+    ChiplessSurface(bgColor = bgColor, content = content)
 }
 
 @Composable
 fun ChiplessSurface(
-    colors: ChiplessColorScheme,
+    bgColor: Color = ChiplessColors.bgPrimary,
     content: @Composable () -> Unit
 ) {
     androidx.compose.foundation.layout.Box(
         modifier = androidx.compose.ui.Modifier
-            .background(colors.bgPrimary)
+            .background(bgColor)
             .fillMaxSize()
     ) {
         content()

@@ -30,37 +30,37 @@ val ChiplessTypography = ChiplessTypographyScheme(
     title = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 56.sp,
-        lineHeight = 72.sp,
-        letterSpacing = (-2).sp
+        fontSize = 68.sp,
+        lineHeight = 76.sp,
+        letterSpacing = (-1).sp
     ),
     h1 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp,
         lineHeight = 54.sp,
-        letterSpacing = (-1.5).sp
+        letterSpacing = (-1).sp
     ),
     h2 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp,
         lineHeight = 42.sp,
-        letterSpacing = (-0.5).sp
+        letterSpacing = (-0.25).sp
     ),
     sh1 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 36.sp,
-        letterSpacing = (-0.5).sp
+        letterSpacing = (-0.25).sp
     ),
     sh2 = TextStyle(
         fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 1.sp
     ),
     body = TextStyle(
         fontFamily = PoppinsFamily,
