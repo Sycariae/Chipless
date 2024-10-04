@@ -1,5 +1,6 @@
 package com.sycarias.chipless.ui.theme
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,10 +8,30 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.TextStyle
 import androidx.core.view.WindowCompat
+
+@Composable
+fun ChiplessShadowStyle(
+    style: TextStyle,
+    color: Color = Color.Black,
+    alpha: Float = 0.6f,
+    offset: Offset = Offset(-8f, 8f),
+    blurRadius: Float = 20f
+): TextStyle {
+    return style.copy(
+        shadow = Shadow(
+            color = color.copy(alpha = alpha),
+            offset = offset,
+            blurRadius = blurRadius
+        )
+    )
+}
 
 @Composable
 fun ChiplessButtonColors(

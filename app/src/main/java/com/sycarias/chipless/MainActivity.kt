@@ -12,31 +12,45 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.sycarias.chipless.ui.modifiers.customShadow
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
-import com.sycarias.chipless.ui.theme.ChiplessTypography as CType
-import com.sycarias.chipless.ui.modifiers.customShadow
+import com.sycarias.chipless.ui.theme.ChiplessShadowStyle as CShadowStyle
+import com.sycarias.chipless.ui.theme.ChiplessTypography as CStyle
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChiplessTheme {
-                MainScreen()
+                AppNavigation()
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun AppNavigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "MainScreen") {
+        composable("MainScreen") { MainScreen(navController) }
+        composable("CreateTableScreen") { CreateTableScreen(navController) }
+    }
+}
+
+@Composable
+fun MainScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -46,7 +60,11 @@ fun MainScreen() {
         // Title
         Text(
             text = "CHIPLESS",
-            style = CType.title,
+            style = CShadowStyle(
+                style = CStyle.title,
+                offset = Offset(-12f, 12f),
+                blurRadius = 25f
+            ),
             color = CColor.textPrimary
         )
 
@@ -55,7 +73,10 @@ fun MainScreen() {
         // Subtitle
         Text(
             text = "Bet Manager For Texas\nHold 'Em Poker",
-            style = CType.sh2,
+            style = CShadowStyle(
+                style = CStyle.sh2,
+                offset = Offset(-6f, 6f)
+            ),
             color = CColor.textTertiary,
             textAlign = TextAlign.Center
         )
@@ -75,7 +96,7 @@ fun MainScreen() {
 
         // Create Table Button
         Button(
-            onClick = { /* TODO: Create Table Button click */ },
+            onClick = { navController.navigate("CreateTableScreen") },
             modifier = Modifier
                 .width(320.dp)
                 .height(75.dp)
@@ -89,7 +110,7 @@ fun MainScreen() {
             shape = RoundedCornerShape(100.dp),
             colors = CButtonColors(CColor.primary)
         ) {
-            Text("Create Table", color = CColor.textPrimary, style = CType.h2)
+            Text("Create Table", color = CColor.textPrimary, style = CShadowStyle(style = CStyle.h2, alpha = 0.5f))
         }
 
         Spacer(modifier = Modifier.height(25.dp))
@@ -104,7 +125,7 @@ fun MainScreen() {
             colors = CButtonColors(),
             elevation = ButtonDefaults.buttonElevation(5.dp)
         ) {
-            Text("Saved Tables", color = CColor.textPrimary, style = CType.sh1)
+            Text("Saved Tables", color = CColor.textPrimary, style = CShadowStyle(style = CStyle.sh1))
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -119,17 +140,21 @@ fun MainScreen() {
             colors = CButtonColors(),
             elevation = ButtonDefaults.buttonElevation(5.dp)
         ) {
-            Text("Settings", color = CColor.textPrimary, style = CType.sh1)
+            Text("Settings", color = CColor.textPrimary, style = CShadowStyle(style = CStyle.sh1))
         }
 
         Spacer(modifier = Modifier.height(25.dp))
     }
 }
 
+fun CreateTableScreen(navController: NavController) {
+
+}
+
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
+fun ScreenPreview() {
     ChiplessTheme {
-        MainScreen()
+        AppNavigation()
     }
 }
