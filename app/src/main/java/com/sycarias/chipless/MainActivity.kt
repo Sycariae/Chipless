@@ -6,9 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sycarias.chipless.ui.modifiers.customShadow
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
+import com.sycarias.chipless.ui.theme.ChiplessIconButtonColors as CIconButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle as CShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography as CStyle
@@ -55,8 +56,10 @@ fun MainScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(60.dp))
+
         // Title
         Text(
             text = "CHIPLESS",
@@ -147,8 +150,49 @@ fun MainScreen(navController: NavController) {
     }
 }
 
+@Composable
 fun CreateTableScreen(navController: NavController) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(45.dp))
 
+        // Title
+        Text(
+            text = "Create Table",
+            style = CShadowStyle(
+                style = CStyle.h1,
+                offset = Offset(-12f, 12f),
+                blurRadius = 25f
+            ),
+            color = CColor.textPrimary
+        )
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 30.dp, bottom = 20.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            FilledIconButton(
+                onClick = { /* TODO: Menu Button Click */ },
+                modifier = Modifier
+                    .width(55.dp)
+                    .height(55.dp),
+                colors = CIconButtonColors()
+            ) {
+                Icon(Icons.Outlined.Settings, contentDescription = "Settings", modifier = Modifier.padding(12.dp).fillMaxSize())
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)

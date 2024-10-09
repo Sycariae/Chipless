@@ -1,6 +1,5 @@
 package com.sycarias.chipless.ui.theme
 
-import androidx.compose.material3.Text
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +36,7 @@ val ChiplessTypography = ChiplessTypographyScheme(
     h1 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 36.sp,
+        fontSize = 42.sp,
         lineHeight = 54.sp,
         letterSpacing = (-1).sp
     ),
