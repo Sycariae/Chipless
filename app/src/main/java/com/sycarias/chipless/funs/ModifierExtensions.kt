@@ -1,4 +1,4 @@
-package com.sycarias.chipless.ui.modifiers
+package com.sycarias.chipless.funs
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-fun Modifier.customShadow(
+fun Modifier.buttonShadow(
     color: Color = Color.Black,
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
