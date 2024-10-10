@@ -6,15 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,10 +26,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sycarias.chipless.ui.modifiers.customShadow
+import com.sycarias.chipless.funs.Shadowed
+import com.sycarias.chipless.funs.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
-import com.sycarias.chipless.ui.theme.ChiplessIconButtonColors as CIconButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle as CShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography as CStyle
@@ -103,7 +107,7 @@ fun MainScreen(navController: NavController) {
             modifier = Modifier
                 .width(320.dp)
                 .height(75.dp)
-                .customShadow(
+                .buttonShadow(
                     color = CColor.primary,
                     offsetX = 0.dp,
                     offsetY = 0.dp,
@@ -179,17 +183,41 @@ fun CreateTableScreen(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 30.dp, bottom = 20.dp),
+                .padding(end = 25.dp, bottom = 35.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            FilledIconButton(
+            Button(
                 onClick = { /* TODO: Menu Button Click */ },
                 modifier = Modifier
-                    .width(55.dp)
-                    .height(55.dp),
-                colors = CIconButtonColors()
+                    .width(135.dp)
+                    .height(55.dp)
+                    .buttonShadow(
+                        color = CColor.primary,
+                        offsetX = 0.dp,
+                        offsetY = 0.dp,
+                        blurRadius = 20.dp,
+                        cornerRadius = 100.dp
+                    ),
+                shape = RoundedCornerShape(100.dp),
+                colors = CButtonColors(CColor.primary)
             ) {
-                Icon(Icons.Outlined.Settings, contentDescription = "Settings", modifier = Modifier.padding(12.dp).fillMaxSize())
+                Shadowed(
+                    modifier = Modifier,
+                    blurRadius = 5.dp,
+                    color = Color.Black.copy(alpha = 0.4f),
+                    offsetX = (-3).dp,
+                    offsetY = 4.dp
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.icon_play),
+                        contentDescription = "Settings",
+                        modifier = Modifier
+                            .width(18.dp)
+                            .height(18.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Text("Play", color = CColor.textSecondary, style = CShadowStyle(style = CStyle.sh2))
             }
         }
     }
