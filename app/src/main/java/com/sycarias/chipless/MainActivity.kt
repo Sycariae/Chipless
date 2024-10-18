@@ -26,8 +26,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sycarias.chipless.funs.Shadowed
-import com.sycarias.chipless.funs.buttonShadow
+import com.sycarias.chipless.backend.Shadowed
+import com.sycarias.chipless.backend.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
@@ -56,6 +56,7 @@ fun AppNavigation() {
 
 @Composable
 fun MainScreen(navController: NavController) {
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -92,7 +93,7 @@ fun MainScreen(navController: NavController) {
 
         // Image
         Image(
-            painter = painterResource(id = R.drawable.cards_image), // Add your image in drawable
+            painter = painterResource(id = R.drawable.image_cards), // Add your image in drawable
             contentDescription = "Poker Cards Icon",
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -173,6 +174,74 @@ fun CreateTableScreen(navController: NavController) {
             ),
             color = CColor.textPrimary
         )
+
+        Box (
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            // TABLE IMAGE
+            Shadowed(
+                modifier = Modifier.padding(top = 0.dp),
+                blurRadius = 40.dp,
+                color = CColor.primary.copy(alpha = 1f),
+                offsetX = 0.dp,
+                offsetY = 0.dp
+            ) {
+                Shadowed(
+                    modifier = Modifier,
+                    blurRadius = 5.dp,
+                    color = CColor.primary.copy(alpha = 0.5f),
+                    offsetX = 0.dp,
+                    offsetY = 0.dp
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.image_table), // Add your image in drawable
+                        contentDescription = "Poker Table Image",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.width(400.dp)
+                    )
+                }
+            }
+
+            // PLAYERS TOP ROW
+            Shadowed(
+                modifier = Modifier.padding(25.dp),
+                blurRadius = 20.dp,
+                color = CColor.primary.copy(alpha = 0.9f),
+                offsetX = 0.dp,
+                offsetY = 0.dp
+            ) {
+                Shadowed(
+                    modifier = Modifier,
+                    blurRadius = 5.dp,
+                    color = CColor.primary.copy(alpha = 0.25f),
+                    offsetX = 0.dp,
+                    offsetY = 0.dp
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.image_add_player), // Add your image in drawable
+                            contentDescription = "Add Player Button",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.width(45.dp)
+                        )
+                        Spacer(modifier = Modifier.width(80.dp))
+                        Image(
+                            painter = painterResource(id = R.drawable.image_add_player), // Add your image in drawable
+                            contentDescription = "Add Player Button",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.width(45.dp)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     Column(

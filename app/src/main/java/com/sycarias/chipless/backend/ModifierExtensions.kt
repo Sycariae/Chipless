@@ -1,4 +1,4 @@
-package com.sycarias.chipless.funs
+package com.sycarias.chipless.backend
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
