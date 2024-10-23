@@ -101,10 +101,10 @@ fun MainScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(45.dp))
 
-        // Image
+        val cardsImage = painterResource(id = R.drawable.image_cards) // Add Cards Image in Drawable
         Image(
-            painter = painterResource(id = R.drawable.image_cards), // Add your image in drawable
-            contentDescription = "Poker Cards Icon",
+            painter = remember { cardsImage }, // Cache Cards Image
+            contentDescription = "Poker Cards Image",
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .size(160.dp)
@@ -180,16 +180,15 @@ fun CreateTableScreen(navController: NavController) {
     fun AddPlayerButton(
         buttonId:String
     ) {
-        val aPBImage = painterResource(id = R.drawable.image_add_player) // Add Player Button Image
-
         Button(
             onClick = { /* TODO: Add Player Button click logic */ },
             modifier = Modifier.size(50.dp),
             shape = CircleShape,
             contentPadding = PaddingValues(0.dp)
         ) {
+            val aPBImage = painterResource(id = R.drawable.image_add_player) // Add APButton Image in Drawable
             Image(
-                painter = remember { aPBImage },
+                painter = remember { aPBImage }, // Cache Add Player Button Image
                 contentDescription = "Add Player Button",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
@@ -199,7 +198,7 @@ fun CreateTableScreen(navController: NavController) {
 
     // === Frontend
     val aPBVSpacing = 32.dp // Add Player Buttons Vertical Spacing
-    val aPBRowHSpacing = 86.dp // Add Player Buttons Row Horizontal Spacing
+    val aPBRowHSpacing = 88.dp // Add Player Buttons Row Horizontal Spacing
     val aPBMidHSpacing = 175.dp // Add Player Buttons Middle Horizontal Spacing
 
     Column(
@@ -229,8 +228,9 @@ fun CreateTableScreen(navController: NavController) {
                 blurRadius = 40.dp,
                 color = CColor.primary.copy(alpha = 1f)
             ) {
+                val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
                 Image(
-                    painter = painterResource(id = R.drawable.image_table), // Add your image in drawable
+                    painter = remember { tableImage }, // Cache Table Image
                     contentDescription = "Poker Table Image",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.padding(60.dp)
