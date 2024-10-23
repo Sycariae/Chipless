@@ -17,12 +17,20 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import kotlin.math.ceil
 
 // Compose the given content with a drop shadow on all
 // non-transparent pixels
 @Composable
-fun Shadowed(modifier: Modifier, color: Color, offsetX: Dp, offsetY: Dp, blurRadius: Dp, content: @Composable () -> Unit) {
+fun Shadowed(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Black.copy(alpha = 0.6f),
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
+    blurRadius: Dp = 20.dp,
+    content: @Composable () -> Unit
+) {
     val density = LocalDensity.current
     val offsetXPx = with(density) { offsetX.toPx() }.toInt()
     val offsetYPx = with(density) { offsetY.toPx() }.toInt()

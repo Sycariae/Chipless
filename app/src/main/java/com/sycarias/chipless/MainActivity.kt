@@ -1,22 +1,26 @@
 package com.sycarias.chipless
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -56,6 +60,12 @@ fun AppNavigation() {
 
 @Composable
 fun MainScreen(navController: NavController) {
+    // === Backend
+
+    // === Frontend - Screen-Specific Composables
+
+    // === Frontend
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -125,7 +135,10 @@ fun MainScreen(navController: NavController) {
 
         // Saved Tables Button
         Button(
-            onClick = { /* TODO: Saved Tables Button click */ },
+            onClick = {
+                Toast.makeText(context, "COMING SOON!", Toast.LENGTH_SHORT).show()
+                /* TODO: Saved Tables Button click */
+            },
             modifier = Modifier
                 .width(290.dp)
                 .height(65.dp),
@@ -140,7 +153,10 @@ fun MainScreen(navController: NavController) {
 
         // Settings Button
         Button(
-            onClick = { /* TODO: Settings Button click */ },
+            onClick = {
+                Toast.makeText(context, "COMING SOON!", Toast.LENGTH_SHORT).show()
+                /* TODO: Settings Button click */
+            },
             modifier = Modifier
                 .width(290.dp)
                 .height(65.dp),
@@ -157,6 +173,35 @@ fun MainScreen(navController: NavController) {
 
 @Composable
 fun CreateTableScreen(navController: NavController) {
+    // === Backend
+
+    // === Frontend - Screen-Specific Composables
+    @Composable
+    fun AddPlayerButton(
+        buttonId:String
+    ) {
+        val aPBImage = painterResource(id = R.drawable.image_add_player) // Add Player Button Image
+
+        Button(
+            onClick = { /* TODO: Add Player Button click logic */ },
+            modifier = Modifier.size(50.dp),
+            shape = CircleShape,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Image(
+                painter = remember { aPBImage },
+                contentDescription = "Add Player Button",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+
+    // === Frontend
+    val aPBVSpacing = 32.dp // Add Player Buttons Vertical Spacing
+    val aPBRowHSpacing = 86.dp // Add Player Buttons Row Horizontal Spacing
+    val aPBMidHSpacing = 175.dp // Add Player Buttons Middle Horizontal Spacing
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -177,67 +222,78 @@ fun CreateTableScreen(navController: NavController) {
 
         Box (
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.Center
         ) {
             // TABLE IMAGE
             Shadowed(
-                modifier = Modifier.padding(top = 0.dp),
                 blurRadius = 40.dp,
-                color = CColor.primary.copy(alpha = 1f),
-                offsetX = 0.dp,
-                offsetY = 0.dp
+                color = CColor.primary.copy(alpha = 1f)
             ) {
-                Shadowed(
-                    modifier = Modifier,
-                    blurRadius = 5.dp,
-                    color = CColor.primary.copy(alpha = 0.5f),
-                    offsetX = 0.dp,
-                    offsetY = 0.dp
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.image_table), // Add your image in drawable
-                        contentDescription = "Poker Table Image",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.width(400.dp)
-                    )
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.image_table), // Add your image in drawable
+                    contentDescription = "Poker Table Image",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.padding(60.dp)
+                )
             }
 
-            // PLAYERS TOP ROW
             Shadowed(
-                modifier = Modifier.padding(25.dp),
                 blurRadius = 20.dp,
-                color = CColor.primary.copy(alpha = 0.9f),
-                offsetX = 0.dp,
-                offsetY = 0.dp
+                color = CColor.primary.copy(alpha = 0.9f)
             ) {
                 Shadowed(
-                    modifier = Modifier,
                     blurRadius = 5.dp,
-                    color = CColor.primary.copy(alpha = 0.25f),
-                    offsetX = 0.dp,
-                    offsetY = 0.dp
+                    color = CColor.primary.copy(alpha = 0.25f)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                    Column (
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.image_add_player), // Add your image in drawable
-                            contentDescription = "Add Player Button",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.width(45.dp)
-                        )
-                        Spacer(modifier = Modifier.width(80.dp))
-                        Image(
-                            painter = painterResource(id = R.drawable.image_add_player), // Add your image in drawable
-                            contentDescription = "Add Player Button",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.width(45.dp)
-                        )
+                        Row( // PLAYERS TOP ROW
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            AddPlayerButton("top-left")
+                            Spacer(modifier = Modifier.width(aPBRowHSpacing))
+                            AddPlayerButton("top-right")
+                        }
+                        Spacer(modifier = Modifier.height(aPBVSpacing))
+                        Row( // PLAYER MIDDLE SECTION
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Column () { // LEFT
+                                AddPlayerButton("middle-left-upper")
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton("middle-left-center")
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton("middle-left-lower")
+                            }
+                            Spacer(modifier = Modifier.width(aPBMidHSpacing))
+                            Column () { // RIGHT
+                                AddPlayerButton("middle-right-upper")
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton("middle-right-center")
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton("middle-right-lower")
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(aPBVSpacing))
+                        Row( // PLAYERS BOTTOM ROW
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            AddPlayerButton("bottom-left")
+                            Spacer(modifier = Modifier.width(aPBRowHSpacing))
+                            AddPlayerButton("bottom-right")
+                        }
                     }
                 }
             }
