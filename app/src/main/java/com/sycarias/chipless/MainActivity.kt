@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -52,7 +53,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "MainScreen") {
+    NavHost(
+        navController = navController,
+        startDestination = "MainScreen",
+        //enterTransition = { EnterTransition.None }
+    ) {
         composable("MainScreen") { MainScreen(navController) }
         composable("CreateTableScreen") { CreateTableScreen(navController) }
     }
@@ -60,10 +65,6 @@ fun AppNavigation() {
 
 @Composable
 fun MainScreen(navController: NavController) {
-    // === Backend
-
-    // === Frontend - Screen-Specific Composables
-
     // === Frontend
     val context = LocalContext.current
 
@@ -71,11 +72,8 @@ fun MainScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(60.dp))
-
-        // Title
         Text(
             text = "CHIPLESS",
             style = CShadowStyle(
@@ -166,8 +164,6 @@ fun MainScreen(navController: NavController) {
         ) {
             Text("Settings", color = CColor.textPrimary, style = CShadowStyle(style = CStyle.sh1))
         }
-
-        Spacer(modifier = Modifier.height(25.dp))
     }
 }
 
@@ -176,6 +172,7 @@ fun CreateTableScreen(navController: NavController) {
     // === Backend
 
     // === Frontend - Screen-Specific Composables
+    val aPBImage = painterResource(id = R.drawable.image_add_player) // Add APButton Image in Drawable
     @Composable
     fun AddPlayerButton(
         buttonId:String
@@ -186,7 +183,6 @@ fun CreateTableScreen(navController: NavController) {
             shape = CircleShape,
             contentPadding = PaddingValues(0.dp)
         ) {
-            val aPBImage = painterResource(id = R.drawable.image_add_player) // Add APButton Image in Drawable
             Image(
                 painter = remember { aPBImage }, // Cache Add Player Button Image
                 contentDescription = "Add Player Button",
@@ -206,10 +202,9 @@ fun CreateTableScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(45.dp))
-
         // Title
         Text(
+            modifier = Modifier.padding(top = 45.dp),
             text = "Create Table",
             style = CShadowStyle(
                 style = CStyle.h1,
@@ -218,6 +213,16 @@ fun CreateTableScreen(navController: NavController) {
             ),
             color = CColor.textPrimary
         )
+
+        // Settings Input Fields
+        Column() {
+            // TODO: Add Input Field Composable
+            // inputField("starting-chips")
+            Row() {
+                // inputField("Small Blind")
+                // inputField("Big Blind")
+            }
+        }
 
         Box (
             modifier = Modifier.fillMaxSize(),
@@ -327,7 +332,6 @@ fun CreateTableScreen(navController: NavController) {
                 colors = CButtonColors(CColor.primary)
             ) {
                 Shadowed(
-                    modifier = Modifier,
                     blurRadius = 5.dp,
                     color = Color.Black.copy(alpha = 0.4f),
                     offsetX = (-3).dp,
@@ -336,13 +340,11 @@ fun CreateTableScreen(navController: NavController) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.icon_play),
                         contentDescription = "Settings",
-                        modifier = Modifier
-                            .width(18.dp)
-                            .height(18.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("Play", color = CColor.textSecondary, style = CShadowStyle(style = CStyle.sh2))
+                Text("Play", color = CColor.textPrimary, style = CShadowStyle(style = CStyle.sh2))
             }
         }
     }
