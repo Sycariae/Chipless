@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Chipless" parent="android:Theme.Material.Light.NoActionBar"/>
+    <style name="Theme.Chipless" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="windowSplashScreenBackground">@color/bg_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_splash_screen</item>
+    </style>
 </resources>

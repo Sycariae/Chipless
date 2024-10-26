@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,9 +30,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sycarias.chipless.backend.Shadowed
-import com.sycarias.chipless.backend.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessTheme
+import com.sycarias.chipless.utils.Shadowed
+import com.sycarias.chipless.utils.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle as CShadowStyle

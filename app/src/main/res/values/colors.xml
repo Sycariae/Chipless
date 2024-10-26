@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary and Secondary Colors -->
+    <color name="primary">#FFFF4F77</color>           <!-- Hot Pink -->
+    <color name="secondary">#FF37373C</color>         <!-- Grey -->
+
+    <!-- Accent Colors -->
+    <color name="accent_primary">#FFFF7292</color>    <!-- Hot Pink -->
+    <color name="accent_secondary">#FF55555A</color>  <!-- Grey -->
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFFFF</color>      <!-- White -->
+    <color name="text_secondary">#FFE2E2E2</color>    <!-- Light Grey -->
+    <color name="text_tertiary">#FFADADB2</color>     <!-- Lighter Grey -->
+
+    <!-- Background Colors -->
+    <color name="bg_primary">#FF222225</color>        <!-- Dark Grey -->
+    <color name="bg_secondary">#FF2C2C30</color>      <!-- Lighter Dark Grey -->
+
+    <!-- Status Colors -->
+    <color name="success">#FF35FF92</color>           <!-- Jade Green -->
+    <color name="warning">#FFFF9255</color>           <!-- Orange -->
+    <color name="error">#FFEB3333</color>             <!-- Red -->
 </resources>
