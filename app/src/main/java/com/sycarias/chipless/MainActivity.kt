@@ -12,11 +12,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -31,8 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sycarias.chipless.ui.theme.ChiplessTheme
-import com.sycarias.chipless.utils.Shadowed
 import com.sycarias.chipless.utils.buttonShadow
+import com.sycarias.chipless.utils.composables.Shadowed
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle as CShadowStyle
@@ -77,7 +75,8 @@ fun MainScreen(navController: NavController) {
             text = "CHIPLESS",
             style = CShadowStyle(
                 style = CStyle.title,
-                offset = Offset(-12f, 12f),
+                offsetX = -12f,
+                offsetY = 12f,
                 blurRadius = 25f
             ),
             color = CColor.textPrimary
@@ -90,7 +89,8 @@ fun MainScreen(navController: NavController) {
             text = "Bet Manager For Texas\nHold 'Em Poker",
             style = CShadowStyle(
                 style = CStyle.sh2,
-                offset = Offset(-6f, 6f)
+                offsetX = -6f,
+                offsetY = 6f,
             ),
             color = CColor.textTertiary,
             textAlign = TextAlign.Center
@@ -174,20 +174,26 @@ fun CreateTableScreen(navController: NavController) {
     val aPBImage = painterResource(id = R.drawable.image_add_player) // Add APButton Image in Drawable
     @Composable
     fun AddPlayerButton(
-        buttonId:String
+        onClick: () -> Unit = {}
     ) {
-        Button(
-            onClick = { /* TODO: Add Player Button click logic */ },
-            modifier = Modifier.size(50.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(0.dp)
+        Shadowed(
+            offsetX = (-4).dp,
+            offsetY = 2.dp
         ) {
-            Image(
-                painter = remember { aPBImage }, // Cache Add Player Button Image
-                contentDescription = "Add Player Button",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize()
-            )
+            Button(
+                onClick = onClick,
+                modifier = Modifier.size(50.dp),
+                shape = CircleShape,
+                //elevation = ButtonDefaults.buttonElevation(10.dp),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Image(
+                    painter = remember { aPBImage }, // Cache Add Player Button Image
+                    contentDescription = "Add Player Button",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 
@@ -207,7 +213,8 @@ fun CreateTableScreen(navController: NavController) {
             text = "Create Table",
             style = CShadowStyle(
                 style = CStyle.h1,
-                offset = Offset(-12f, 12f),
+                offsetX = -12f,
+                offsetY = 12f,
                 blurRadius = 25f
             ),
             color = CColor.textPrimary
@@ -228,26 +235,31 @@ fun CreateTableScreen(navController: NavController) {
             contentAlignment = Alignment.Center
         ) {
             // TABLE IMAGE
-            Shadowed(
-                blurRadius = 40.dp,
-                color = CColor.primary.copy(alpha = 1f)
+            Shadowed (
+                blurRadius = 120.dp,
+                color = CColor.primary.copy(alpha = 0.2f)
             ) {
-                val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
-                Image(
-                    painter = remember { tableImage }, // Cache Table Image
-                    contentDescription = "Poker Table Image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.padding(60.dp)
-                )
+                Shadowed(
+                    blurRadius = 50.dp,
+                    color = CColor.primary.copy(alpha = 0.25f)
+                ) {
+                    val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
+                    Image (
+                        painter = remember { tableImage }, // Cache Table Image
+                        contentDescription = "Poker Table Image",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.padding(60.dp).width(225.dp).height(378.dp)
+                    )
+                }
             }
 
             Shadowed(
-                blurRadius = 20.dp,
-                color = CColor.primary.copy(alpha = 0.9f)
+                blurRadius = 35.dp,
+                color = CColor.primary.copy(alpha = 0.2f)
             ) {
                 Shadowed(
                     blurRadius = 5.dp,
-                    color = CColor.primary.copy(alpha = 0.25f)
+                    color = CColor.primary.copy(alpha = 0.5f)
                 ) {
                     Column (
                         modifier = Modifier.fillMaxSize(),
@@ -260,9 +272,9 @@ fun CreateTableScreen(navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            AddPlayerButton("top-left")
+                            AddPlayerButton { /*TODO APB*/ }
                             Spacer(modifier = Modifier.width(aPBRowHSpacing))
-                            AddPlayerButton("top-right")
+                            AddPlayerButton { /*TODO APB*/ }
                         }
                         Spacer(modifier = Modifier.height(aPBVSpacing))
                         Row( // PLAYER MIDDLE SECTION
@@ -272,19 +284,19 @@ fun CreateTableScreen(navController: NavController) {
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Column () { // LEFT
-                                AddPlayerButton("middle-left-upper")
+                                AddPlayerButton { /*TODO APB*/ }
                                 Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton("middle-left-center")
+                                AddPlayerButton { /*TODO APB*/ }
                                 Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton("middle-left-lower")
+                                AddPlayerButton { /*TODO APB*/ }
                             }
                             Spacer(modifier = Modifier.width(aPBMidHSpacing))
                             Column () { // RIGHT
-                                AddPlayerButton("middle-right-upper")
+                                AddPlayerButton { /*TODO APB*/ }
                                 Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton("middle-right-center")
+                                AddPlayerButton { /*TODO APB*/ }
                                 Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton("middle-right-lower")
+                                AddPlayerButton { /*TODO APB*/ }
                             }
                         }
                         Spacer(modifier = Modifier.height(aPBVSpacing))
@@ -294,9 +306,9 @@ fun CreateTableScreen(navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            AddPlayerButton("bottom-left")
+                            AddPlayerButton { /*TODO APB*/ }
                             Spacer(modifier = Modifier.width(aPBRowHSpacing))
-                            AddPlayerButton("bottom-right")
+                            AddPlayerButton { /*TODO APB*/ }
                         }
                     }
                 }

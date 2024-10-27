@@ -22,13 +22,14 @@ fun ChiplessShadowStyle(
     style: TextStyle,
     color: Color = Color.Black,
     alpha: Float = 0.6f,
-    offset: Offset = Offset(-8f, 8f),
+    offsetX: Float = -8f,
+    offsetY: Float = 8f,
     blurRadius: Float = 20f
 ): TextStyle {
     return style.copy(
         shadow = Shadow(
             color = color.copy(alpha = alpha),
-            offset = offset,
+            offset = Offset(offsetX, offsetY),
             blurRadius = blurRadius
         )
     )
