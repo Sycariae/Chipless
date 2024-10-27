@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 import com.sycarias.chipless.utils.buttonShadow
+import com.sycarias.chipless.utils.composables.IntInputField
 import com.sycarias.chipless.utils.composables.Shadowed
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors as CButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
@@ -62,7 +63,7 @@ fun AppNavigation() {
 
 @Composable
 fun MainScreen(navController: NavController) {
-    // === Frontend
+// === Frontend
     val context = LocalContext.current
 
     Column(
@@ -98,7 +99,7 @@ fun MainScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(45.dp))
 
-        val cardsImage = painterResource(id = R.drawable.image_cards) // Add Cards Image in Drawable
+        val cardsImage = painterResource(R.drawable.image_cards) // Add Cards Image in Drawable
         Image(
             painter = remember { cardsImage }, // Cache Cards Image
             contentDescription = "Poker Cards Image",
@@ -168,9 +169,14 @@ fun MainScreen(navController: NavController) {
 
 @Composable
 fun CreateTableScreen(navController: NavController) {
-    // === Backend
+// === Backend
 
-    // === Frontend - Screen-Specific Composables
+    // Default Values for Text Fields
+    var startingChips by remember { mutableStateOf("1000") }
+    var bigBlind by remember { mutableStateOf("10") }
+    var smallBlind by remember { mutableStateOf("5") }
+
+// === Frontend - Screen-Specific Composables
     val aPBImage = painterResource(id = R.drawable.image_add_player) // Add APButton Image in Drawable
     @Composable
     fun AddPlayerButton(
@@ -197,7 +203,7 @@ fun CreateTableScreen(navController: NavController) {
         }
     }
 
-    // === Frontend
+// === Frontend
     val aPBVSpacing = 32.dp // Add Player Buttons Vertical Spacing
     val aPBRowHSpacing = 88.dp // Add Player Buttons Row Horizontal Spacing
     val aPBMidHSpacing = 175.dp // Add Player Buttons Middle Horizontal Spacing
@@ -220,18 +226,50 @@ fun CreateTableScreen(navController: NavController) {
             color = CColor.textPrimary
         )
 
+        Spacer(modifier = Modifier.height(20.dp))
+
         // Settings Input Fields
-        Column() {
-            // TODO: Add Input Field Composable
-            // inputField("starting-chips")
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IntInputField(
+                label = "Starting Chips",
+                initialText = startingChips,
+                minNum = (bigBlind.toIntOrNull() ?: 0) * 10,
+                maxLen = 6,
+                onValueChange = { startingChips = it },
+                modifier = Modifier.width(240.dp)
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+
             Row() {
-                // inputField("Small Blind")
-                // inputField("Big Blind")
+                IntInputField(
+                    label = "Big Blind",
+                    initialText = bigBlind,
+                    minNum = (smallBlind.toIntOrNull() ?: 0) * 2,
+                    maxNum = (startingChips.toIntOrNull() ?: Int.MAX_VALUE) / 10,
+                    maxLen = 4,
+                    onValueChange = { bigBlind = it },
+                    modifier = Modifier.width(160.dp)
+                )
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+                IntInputField(
+                    label = "Small Blind",
+                    initialText = smallBlind,
+                    maxNum = (bigBlind.toIntOrNull() ?: Int.MAX_VALUE) / 2,
+                    maxLen = 4,
+                    onValueChange = { smallBlind = it },
+                    modifier = Modifier.width(160.dp)
+                )
             }
         }
 
         Box (
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(bottom = 80.dp),
             contentAlignment = Alignment.Center
         ) {
             // TABLE IMAGE
