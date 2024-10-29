@@ -27,10 +27,10 @@ fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "MainScreen",
+        startDestination = "MainMenu",
         //enterTransition = { EnterTransition.None }
     ) {
-        composable("MainScreen") { MainMenu(navController) }
-        composable("CreateTableScreen") { CreateTable(navController) }
+        composable("MainMenu") { MainMenu(navController) }
+        composable("CreateTable") { CreateTable(navController) }
     }
 }

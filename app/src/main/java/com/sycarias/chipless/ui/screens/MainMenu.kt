@@ -75,7 +75,7 @@ fun MainMenu(navController: NavController) {
 
         // Create Table Button
         Button(
-            onClick = { navController.navigate("CreateTableScreen") },
+            onClick = { navController.navigate("CreateTable") },
             modifier = Modifier
                 .width(320.dp)
                 .height(75.dp)

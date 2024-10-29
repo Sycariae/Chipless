@@ -2,6 +2,7 @@
   <profile version="1.0">
     <option name="myName" value="Project Default" />
     <inspection_tool class="FunctionName" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="GroovyUnusedDeclaration" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES" />
     <inspection_tool class="PreviewAnnotationInFunctionWithParameters" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="composableFile" value="true" />
       <option name="previewFile" value="true" />
@@ -38,5 +39,6 @@
       <option name="composableFile" value="true" />
       <option name="previewFile" value="true" />
     </inspection_tool>
+    <inspection_tool class="RemoveEmptyParenthesesFromLambdaCall" enabled="true" level="INFORMATION" enabled_by_default="true" />
   </profile>
 </component>

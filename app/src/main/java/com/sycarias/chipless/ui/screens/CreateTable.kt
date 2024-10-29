@@ -26,6 +26,7 @@ import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun CreateTable(navController: NavController) {
     // Default Values for Text Fields
