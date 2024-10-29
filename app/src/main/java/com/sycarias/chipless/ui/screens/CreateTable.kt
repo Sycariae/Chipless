@@ -28,17 +28,27 @@ import com.sycarias.chipless.ui.theme.ChiplessTypography
 
 @Composable
 fun CreateTable(navController: NavController) {
-// === Backend
-
     // Default Values for Text Fields
     var startingChips by remember { mutableStateOf("1000") }
     var bigBlind by remember { mutableStateOf("10") }
     var smallBlind by remember { mutableStateOf("5") }
 
-// === Frontend
-    val aPBVSpacing = 32.dp // Add Player Buttons Vertical Spacing
-    val aPBRowHSpacing = 88.dp // Add Player Buttons Row Horizontal Spacing
-    val aPBMidHSpacing = 175.dp // Add Player Buttons Middle Horizontal Spacing
+    val startingChipsValid by remember {
+        derivedStateOf { (startingChips.toIntOrNull() ?: 0) >= (bigBlind.toIntOrNull() ?: 0) * 10 }
+    }
+    val bigBlindValid by remember {
+        derivedStateOf { (bigBlind.toIntOrNull() ?: 0) in (smallBlind.toIntOrNull() ?: 0)*2 .. (startingChips.toIntOrNull() ?: Int.MAX_VALUE) / 10 }
+    }
+    val smallBlindValid by remember {
+        derivedStateOf {
+            (smallBlind.toIntOrNull() ?: 0) <= (bigBlind.toIntOrNull() ?: Int.MAX_VALUE) / 2
+        }
+    }
+
+    // Add Player Button Spacing
+    val aPBVSpacing = 32.dp // Vertical Spacing
+    val aPBRowHSpacing = 88.dp // Top and Bottom Row Horizontal Spacing
+    val aPBMidHSpacing = 175.dp // Middle Horizontal Spacing
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -58,37 +68,33 @@ fun CreateTable(navController: NavController) {
             color = ChiplessColors.textPrimary
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
-
         // Settings Input Fields
         IntInputField(
             label = "Starting Chips",
-            initialText = startingChips,
-            minNum = (bigBlind.toIntOrNull() ?: 0) * 10,
+            initialValue = startingChips,
             maxLen = 6,
+            isValid = startingChipsValid,
             onValueChange = { startingChips = it },
-            modifier = Modifier.width(240.dp)
+            modifier = Modifier
+                .width(240.dp)
+                .padding(bottom = 15.dp, top = 20.dp)
         )
-
-        Spacer(modifier = Modifier.height(15.dp))
 
         Row() {
             IntInputField(
                 label = "Big Blind",
-                initialText = bigBlind,
-                minNum = (smallBlind.toIntOrNull() ?: 0) * 2,
-                maxNum = (startingChips.toIntOrNull() ?: Int.MAX_VALUE) / 10,
+                initialValue = bigBlind,
                 maxLen = 4,
+                isValid = bigBlindValid,
                 onValueChange = { bigBlind = it },
-                modifier = Modifier.width(160.dp)
+                modifier = Modifier
+                    .width(160.dp)
+                    .padding(end = 20.dp)
             )
-
-            Spacer(modifier = Modifier.width(20.dp))
-
             IntInputField(
                 label = "Small Blind",
-                initialText = smallBlind,
-                maxNum = (bigBlind.toIntOrNull() ?: Int.MAX_VALUE) / 2,
+                initialValue = smallBlind,
+                isValid = smallBlindValid,
                 maxLen = 4,
                 onValueChange = { smallBlind = it },
                 modifier = Modifier.width(160.dp)
@@ -96,7 +102,9 @@ fun CreateTable(navController: NavController) {
         }
 
         Box(
-            modifier = Modifier.fillMaxSize().padding(bottom = 80.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 80.dp),
             contentAlignment = Alignment.Center
         ) {
             // TABLE IMAGE
@@ -113,7 +121,10 @@ fun CreateTable(navController: NavController) {
                         painter = remember { tableImage }, // Cache Table Image
                         contentDescription = "Poker Table Image",
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier.padding(60.dp).width(225.dp).height(378.dp)
+                        modifier = Modifier
+                            .padding(60.dp)
+                            .width(225.dp)
+                            .height(378.dp)
                     )
                 }
             }
