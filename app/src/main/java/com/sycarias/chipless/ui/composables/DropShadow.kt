@@ -1,4 +1,4 @@
-package com.sycarias.chipless.utils.composables
+package com.sycarias.chipless.ui.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

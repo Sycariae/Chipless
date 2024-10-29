@@ -1,4 +1,4 @@
-package com.sycarias.chipless.utils
+package com.sycarias.chipless.ui.extensions
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
