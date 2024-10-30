@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -110,73 +111,83 @@ fun CreateTable(navController: NavController) {
         ) {
             // TABLE IMAGE
             Shadowed(
-                blurRadius = 80.dp,
-                color = ChiplessColors.primary.copy(alpha = 0.3f)
+                blurRadius = 120.dp,
+                color = ChiplessColors.primary.copy(alpha = 0.2f)
             ) {
-                val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
-                Image(
-                    painter = remember { tableImage }, // Cache Table Image
-                    contentDescription = "Poker Table Image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .padding(60.dp)
-                        .width(225.dp)
-                        .height(378.dp)
-                )
+                Shadowed(
+                    blurRadius = 50.dp,
+                    color = ChiplessColors.primary.copy(alpha = 0.3f)
+                ) {
+                    val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
+                    Image(
+                        painter = remember { tableImage }, // Cache Table Image
+                        contentDescription = "Poker Table Image",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .padding(60.dp)
+                            .width(225.dp)
+                            .height(378.dp)
+                    )
+                }
             }
 
             Shadowed(
                 blurRadius = 35.dp,
-                color = ChiplessColors.primary.copy(alpha = 0.3f)
+                color = ChiplessColors.primary.copy(alpha = 0.2f)
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                Shadowed(
+                    blurRadius = 5.dp,
+                    color = ChiplessColors.primary.copy(alpha = 0.5f)
                 ) {
-                    Row( // PLAYERS TOP ROW
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        AddPlayerButton { /*TODO APB*/ }
-                        Spacer(modifier = Modifier.width(aPBRowHSpacing))
-                        AddPlayerButton { /*TODO APB*/ }
-                    }
-                    Spacer(modifier = Modifier.height(aPBVSpacing))
-                    Row( // PLAYER MIDDLE SECTION
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Column() { // LEFT
+                        Row( // PLAYERS TOP ROW
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             AddPlayerButton { /*TODO APB*/ }
-                            Spacer(modifier = Modifier.height(aPBVSpacing))
-                            AddPlayerButton { /*TODO APB*/ }
-                            Spacer(modifier = Modifier.height(aPBVSpacing))
+                            Spacer(modifier = Modifier.width(aPBRowHSpacing))
                             AddPlayerButton { /*TODO APB*/ }
                         }
-                        Spacer(modifier = Modifier.width(aPBMidHSpacing))
-                        Column() { // RIGHT
+                        Spacer(modifier = Modifier.height(aPBVSpacing))
+                        Row( // PLAYER MIDDLE SECTION
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Column() { // LEFT
+                                AddPlayerButton { /*TODO APB*/ }
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton { /*TODO APB*/ }
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton { /*TODO APB*/ }
+                            }
+                            Spacer(modifier = Modifier.width(aPBMidHSpacing))
+                            Column() { // RIGHT
+                                AddPlayerButton { /*TODO APB*/ }
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton { /*TODO APB*/ }
+                                Spacer(modifier = Modifier.height(aPBVSpacing))
+                                AddPlayerButton { /*TODO APB*/ }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(aPBVSpacing))
+                        Row( // PLAYERS BOTTOM ROW
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             AddPlayerButton { /*TODO APB*/ }
-                            Spacer(modifier = Modifier.height(aPBVSpacing))
-                            AddPlayerButton { /*TODO APB*/ }
-                            Spacer(modifier = Modifier.height(aPBVSpacing))
+                            Spacer(modifier = Modifier.width(aPBRowHSpacing))
                             AddPlayerButton { /*TODO APB*/ }
                         }
-                    }
-                    Spacer(modifier = Modifier.height(aPBVSpacing))
-                    Row( // PLAYERS BOTTOM ROW
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        AddPlayerButton { /*TODO APB*/ }
-                        Spacer(modifier = Modifier.width(aPBRowHSpacing))
-                        AddPlayerButton { /*TODO APB*/ }
                     }
                 }
             }
@@ -216,7 +227,7 @@ fun CreateTable(navController: NavController) {
                     offsetY = 4.dp
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.icon_play),
+                        painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
                         contentDescription = "Settings",
                         modifier = Modifier.size(18.dp)
                     )
