@@ -73,7 +73,7 @@ fun CreateTable(navController: NavController) {
             ),
             color = ChiplessColors.textPrimary
         )
-
+        Spacer(Modifier.height(20.dp))
         // Settings Input Fields
         IntInputField(
             label = "Starting Chips",
@@ -81,11 +81,9 @@ fun CreateTable(navController: NavController) {
             maxLen = 6,
             isValid = startingChipsValid,
             onValueChange = { startingChips = it.toInt() },
-            modifier = Modifier
-                .width(240.dp)
-                .padding(bottom = 15.dp, top = 20.dp)
+            modifier = Modifier.width(240.dp)
         )
-
+        Spacer(Modifier.height(15.dp))
         Row() {
             IntInputField(
                 label = "Big Blind",
@@ -93,10 +91,9 @@ fun CreateTable(navController: NavController) {
                 maxLen = 4,
                 isValid = bigBlindValid,
                 onValueChange = { bigBlind = it.toInt() },
-                modifier = Modifier
-                    .width(160.dp)
-                    .padding(end = 20.dp)
+                modifier = Modifier.width(160.dp)
             )
+            Spacer(Modifier.width(20.dp))
             IntInputField(
                 label = "Small Blind",
                 initialValue = smallBlind.toString(),
@@ -122,15 +119,11 @@ fun CreateTable(navController: NavController) {
                     blurRadius = 50.dp,
                     color = ChiplessColors.primary.copy(alpha = 0.3f)
                 ) {
-                    val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
                     Image(
-                        painter = remember { tableImage }, // Cache Table Image
+                        painter = painterResource(id = R.drawable.image_table), // Cache Table Image
                         contentDescription = "Poker Table Image",
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .padding(60.dp)
-                            .width(225.dp)
-                            .height(378.dp)
+                        modifier = Modifier.size(378.dp)
                     )
                 }
             }
@@ -199,50 +192,43 @@ fun CreateTable(navController: NavController) {
     }
 
     Column (
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(end = 25.dp, bottom = 25.dp),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Row(
+        Button(
+            onClick = { /* TODO: Menu Button Click */ },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 25.dp, bottom = 25.dp),
-            horizontalArrangement = Arrangement.End
+                .width(135.dp)
+                .height(55.dp)
+                .buttonShadow(
+                    color = ChiplessColors.primary,
+                    offsetX = 0.dp,
+                    offsetY = 0.dp,
+                    blurRadius = 20.dp,
+                    cornerRadius = 100.dp
+                ),
+            shape = RoundedCornerShape(100.dp),
+            colors = ChiplessButtonColors(ChiplessColors.primary)
         ) {
-            Button(
-                onClick = { /* TODO: Menu Button Click */ },
-                modifier = Modifier
-                    .width(135.dp)
-                    .height(55.dp)
-                    .buttonShadow(
-                        color = ChiplessColors.primary,
-                        offsetX = 0.dp,
-                        offsetY = 0.dp,
-                        blurRadius = 20.dp,
-                        cornerRadius = 100.dp
-                    ),
-                shape = RoundedCornerShape(100.dp),
-                colors = ChiplessButtonColors(ChiplessColors.primary)
+            Shadowed(
+                blurRadius = 5.dp,
+                color = Color.Black.copy(alpha = 0.4f),
+                offsetX = (-3).dp,
+                offsetY = 4.dp
             ) {
-                Shadowed(
-                    blurRadius = 5.dp,
-                    color = Color.Black.copy(alpha = 0.4f),
-                    offsetX = (-3).dp,
-                    offsetY = 4.dp
-                ) {
-                    Icon(
-                        painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
-                        contentDescription = "Settings",
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    "Play",
-                    color = ChiplessColors.textPrimary,
-                    style = ChiplessShadowStyle(style = ChiplessTypography.sh2)
+                Icon(
+                    painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
+                    contentDescription = "Settings",
+                    modifier = Modifier.size(18.dp)
                 )
             }
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                "Play",
+                color = ChiplessColors.textPrimary,
+                style = ChiplessShadowStyle(style = ChiplessTypography.sh2)
+            )
         }
     }
 }
