@@ -31,19 +31,23 @@ import com.sycarias.chipless.ui.theme.ChiplessTypography
 @Composable
 fun CreateTable(navController: NavController) {
     // Default Values for Text Fields
-    var startingChips by remember { mutableStateOf("1000") }
-    var bigBlind by remember { mutableStateOf("10") }
-    var smallBlind by remember { mutableStateOf("5") }
+    var startingChips by remember { mutableIntStateOf(1000) }
+    var bigBlind by remember { mutableIntStateOf(10) }
+    var smallBlind by remember { mutableIntStateOf(5) }
 
     val startingChipsValid by remember {
-        derivedStateOf { (startingChips.toIntOrNull() ?: 0) >= (bigBlind.toIntOrNull() ?: 0) * 10 }
+        derivedStateOf {
+            startingChips in bigBlind * 10 .. 1000000
+        }
     }
     val bigBlindValid by remember {
-        derivedStateOf { (bigBlind.toIntOrNull() ?: 0) in (smallBlind.toIntOrNull() ?: 0)*2 .. (startingChips.toIntOrNull() ?: Int.MAX_VALUE) / 10 }
+        derivedStateOf {
+            bigBlind in smallBlind * 2..startingChips / 10
+        }
     }
     val smallBlindValid by remember {
         derivedStateOf {
-            (smallBlind.toIntOrNull() ?: 0) <= (bigBlind.toIntOrNull() ?: Int.MAX_VALUE) / 2
+            smallBlind in 5..bigBlind / 2
         }
     }
 
@@ -73,10 +77,10 @@ fun CreateTable(navController: NavController) {
         // Settings Input Fields
         IntInputField(
             label = "Starting Chips",
-            initialValue = startingChips,
+            initialValue = startingChips.toString(),
             maxLen = 6,
             isValid = startingChipsValid,
-            onValueChange = { startingChips = it },
+            onValueChange = { startingChips = it.toInt() },
             modifier = Modifier
                 .width(240.dp)
                 .padding(bottom = 15.dp, top = 20.dp)
@@ -85,20 +89,20 @@ fun CreateTable(navController: NavController) {
         Row() {
             IntInputField(
                 label = "Big Blind",
-                initialValue = bigBlind,
+                initialValue = bigBlind.toString(),
                 maxLen = 4,
                 isValid = bigBlindValid,
-                onValueChange = { bigBlind = it },
+                onValueChange = { bigBlind = it.toInt() },
                 modifier = Modifier
                     .width(160.dp)
                     .padding(end = 20.dp)
             )
             IntInputField(
                 label = "Small Blind",
-                initialValue = smallBlind,
+                initialValue = smallBlind.toString(),
                 isValid = smallBlindValid,
                 maxLen = 4,
-                onValueChange = { smallBlind = it },
+                onValueChange = { smallBlind = it.toInt() },
                 modifier = Modifier.width(160.dp)
             )
         }

@@ -22,7 +22,7 @@ fun IntInputField(
     label: String,
     initialValue: String = "",
     defaultValue: String = "0",
-    maxLen: Int = 9,
+    maxLen: Int = 7,
     modifier: Modifier = Modifier,
     isValid: Boolean = true,
     onValueChange: (String) -> Unit = {}
