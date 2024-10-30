@@ -110,83 +110,73 @@ fun CreateTable(navController: NavController) {
         ) {
             // TABLE IMAGE
             Shadowed(
-                blurRadius = 120.dp,
-                color = ChiplessColors.primary.copy(alpha = 0.2f)
+                blurRadius = 80.dp,
+                color = ChiplessColors.primary.copy(alpha = 0.3f)
             ) {
-                Shadowed(
-                    blurRadius = 50.dp,
-                    color = ChiplessColors.primary.copy(alpha = 0.25f)
-                ) {
-                    val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
-                    Image(
-                        painter = remember { tableImage }, // Cache Table Image
-                        contentDescription = "Poker Table Image",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .padding(60.dp)
-                            .width(225.dp)
-                            .height(378.dp)
-                    )
-                }
+                val tableImage = painterResource(id = R.drawable.image_table) // Add Table Image in Drawable
+                Image(
+                    painter = remember { tableImage }, // Cache Table Image
+                    contentDescription = "Poker Table Image",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .padding(60.dp)
+                        .width(225.dp)
+                        .height(378.dp)
+                )
             }
 
             Shadowed(
                 blurRadius = 35.dp,
-                color = ChiplessColors.primary.copy(alpha = 0.2f)
+                color = ChiplessColors.primary.copy(alpha = 0.3f)
             ) {
-                Shadowed(
-                    blurRadius = 5.dp,
-                    color = ChiplessColors.primary.copy(alpha = 0.5f)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                    Row( // PLAYERS TOP ROW
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Row( // PLAYERS TOP ROW
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
+                        AddPlayerButton { /*TODO APB*/ }
+                        Spacer(modifier = Modifier.width(aPBRowHSpacing))
+                        AddPlayerButton { /*TODO APB*/ }
+                    }
+                    Spacer(modifier = Modifier.height(aPBVSpacing))
+                    Row( // PLAYER MIDDLE SECTION
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Column() { // LEFT
                             AddPlayerButton { /*TODO APB*/ }
-                            Spacer(modifier = Modifier.width(aPBRowHSpacing))
+                            Spacer(modifier = Modifier.height(aPBVSpacing))
                             AddPlayerButton { /*TODO APB*/ }
-                        }
-                        Spacer(modifier = Modifier.height(aPBVSpacing))
-                        Row( // PLAYER MIDDLE SECTION
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Column() { // LEFT
-                                AddPlayerButton { /*TODO APB*/ }
-                                Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton { /*TODO APB*/ }
-                                Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton { /*TODO APB*/ }
-                            }
-                            Spacer(modifier = Modifier.width(aPBMidHSpacing))
-                            Column() { // RIGHT
-                                AddPlayerButton { /*TODO APB*/ }
-                                Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton { /*TODO APB*/ }
-                                Spacer(modifier = Modifier.height(aPBVSpacing))
-                                AddPlayerButton { /*TODO APB*/ }
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(aPBVSpacing))
-                        Row( // PLAYERS BOTTOM ROW
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            AddPlayerButton { /*TODO APB*/ }
-                            Spacer(modifier = Modifier.width(aPBRowHSpacing))
+                            Spacer(modifier = Modifier.height(aPBVSpacing))
                             AddPlayerButton { /*TODO APB*/ }
                         }
+                        Spacer(modifier = Modifier.width(aPBMidHSpacing))
+                        Column() { // RIGHT
+                            AddPlayerButton { /*TODO APB*/ }
+                            Spacer(modifier = Modifier.height(aPBVSpacing))
+                            AddPlayerButton { /*TODO APB*/ }
+                            Spacer(modifier = Modifier.height(aPBVSpacing))
+                            AddPlayerButton { /*TODO APB*/ }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(aPBVSpacing))
+                    Row( // PLAYERS BOTTOM ROW
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        AddPlayerButton { /*TODO APB*/ }
+                        Spacer(modifier = Modifier.width(aPBRowHSpacing))
+                        AddPlayerButton { /*TODO APB*/ }
                     }
                 }
             }
