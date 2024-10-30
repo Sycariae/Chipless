@@ -1,4 +1,4 @@
-package com.sycarias.chipless.utils
+package com.sycarias.chipless.ui.utils
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.TextToolbar
