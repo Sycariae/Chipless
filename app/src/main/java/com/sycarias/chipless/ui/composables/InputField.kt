@@ -31,11 +31,15 @@ fun IntInputField(
     val maxLength = minOf(9,maxLen)
 
     fun validateInput(newValue: String): String {
+        var newIntValue = newValue
+        if ( newValue.any { it.isDigit().not() } ) {
+            newIntValue = newIntValue.filter { it.isDigit() }
+        }
         return when {
-            newValue.isEmpty() -> defaultValue
-            textFieldValue.text == "0" -> newValue.trimStart('0')
-            newValue.length > maxLength -> newValue.take(maxLength)
-            else -> newValue
+            newIntValue.isEmpty() -> defaultValue
+            textFieldValue.text == "0" && newIntValue != "0" -> newIntValue.trimStart('0')
+            newIntValue.length > maxLength -> newIntValue.take(maxLength)
+            else -> newIntValue
         }
     }
 
