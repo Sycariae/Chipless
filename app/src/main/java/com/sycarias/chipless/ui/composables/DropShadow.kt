@@ -23,7 +23,7 @@ import kotlin.math.ceil
 // Compose the given content with a drop shadow on all
 // non-transparent pixels
 @Composable
-fun Shadowed(
+fun StaticShadow(
     modifier: Modifier = Modifier,
     color: Color = Color.Black.copy(alpha = 0.6f),
     offsetX: Dp = 0.dp,
