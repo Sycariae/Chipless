@@ -1,6 +1,5 @@
 package com.sycarias.chipless.ui.composables
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -36,13 +35,6 @@ fun DealerIcon(
         }
         val buttonColors = ChiplessButtonColors(bg = color, fg = ChiplessColors.bgSecondary)
 
-        fun Modifier.dealerIconDefaults(): Modifier {
-            return this
-                .width(size)
-                .height(size)
-                .clickable(onClick = onClick)
-        }
-
         val modifier = when {
             active -> Modifier
                 .buttonShadow(
@@ -52,7 +44,8 @@ fun DealerIcon(
                     offsetY = 0.dp,
                     cornerRadius = 100.dp
                 )
-                .dealerIconDefaults()
+                .width(size)
+                .height(size)
             else -> Modifier
                 .buttonShadow(
                     blurRadius = 5.dp,
@@ -61,7 +54,8 @@ fun DealerIcon(
                     offsetY = 0.dp,
                     cornerRadius = 100.dp
                 )
-                .dealerIconDefaults()
+                .width(size)
+                .height(size)
         }
 
         Button(
