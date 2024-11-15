@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.extensions.buttonShadow
@@ -24,6 +25,7 @@ import com.sycarias.chipless.ui.utils.measureTextWidth
 @Composable
 fun PlayerButton(
     name: String = "",
+    size: Dp = 50.dp,
     onClick: () -> Unit = {}
 ) {
     val cornerRadius = 100.dp
@@ -31,15 +33,16 @@ fun PlayerButton(
     val color = ChiplessColors.primary
     val textStyle = ChiplessTypography.body
     val textWidth = measureTextWidth(text = name, style = textStyle)
+    val textPadding = 15.dp
     val width = when {
-        name.isEmpty() -> 50.dp // When Empty, default to this
-        else -> textWidth + 30.dp // Text Width + Padding
+        name.isEmpty() -> size // When Empty, default to this
+        else -> textWidth + (textPadding * 2) // Text Width + Padding
     }
 
     Button(
         onClick = onClick,
         modifier = Modifier
-            .height(50.dp)
+            .height(size)
             .width(width)
             .border(
                 width = (0.5).dp,
@@ -63,14 +66,12 @@ fun PlayerButton(
             .buttonShadow(
                 blurRadius = 35.dp,
                 color = ChiplessColors.primary.copy(alpha = 0.2f),
-                cornerRadius = cornerRadius,
-                //redrawTrigger = { derivedStateOf { width } }
+                cornerRadius = cornerRadius
             )
             .buttonShadow(
                 blurRadius = 6.dp,
                 color = ChiplessColors.primary.copy(alpha = 0.5f),
-                cornerRadius = cornerRadius,
-                //redrawTrigger = { derivedStateOf { width } }
+                cornerRadius = cornerRadius
             ),
         shape = CircleShape,
         colors = ChiplessButtonColors(),
@@ -87,7 +88,7 @@ fun PlayerButton(
             Text(
                 text = name,
                 style = textStyle,
-                modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                modifier = Modifier.padding(start = textPadding, end = textPadding)
             )
         }
     }
