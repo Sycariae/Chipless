@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sycarias.chipless.ui.screens.CreateTable
+import com.sycarias.chipless.ui.screens.GameTable
 import com.sycarias.chipless.ui.screens.MainMenu
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 
@@ -32,5 +33,6 @@ fun AppNavigation() {
     ) {
         composable("MainMenu") { MainMenu(navController) }
         composable("CreateTable") { CreateTable(navController) }
+        composable("GameTable") { GameTable(navController) }
     }
 }
