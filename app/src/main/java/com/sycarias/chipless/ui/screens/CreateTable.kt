@@ -1,5 +1,6 @@
 package com.sycarias.chipless.ui.screens
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,7 +54,6 @@ enum class PlayerButtonSide {
     RIGHT
 }
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun CreateTable(navController: NavController) {
     // Define Sizing and Spacing for Dealer Icons
@@ -101,10 +101,14 @@ fun CreateTable(navController: NavController) {
 
     // Local Dealer Icon Composable using Identifiers
     @Composable
-    fun CTSDealerIcon(id:Int) { // Create Table Screen Dealer Icon
+    fun CTSDealerIcon(
+        id:Int,
+        alpha:Float = 1f
+    ) { // Create Table Screen Dealer Icon
         DealerIcon(
             active = (id == activeDealerId),
             size = dealerIconSize,
+            alpha = alpha,
             onClick = { viewModel.setActiveDealer(id) }
         )
     }
@@ -141,6 +145,8 @@ fun CreateTable(navController: NavController) {
                 -( dealerIconTBRVSpacing + dealerIconSize )
         }
 
+        val dealerIconAlpha = animateFloatAsState(targetValue = if (names[id].isNotEmpty()) 1f else 0f, label = "Dealer Icon Fade In/Out")
+
         Row (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = when (side) {
@@ -172,10 +178,16 @@ fun CreateTable(navController: NavController) {
                     size = playerButtonSize,
                     onClick = onClick
                 )
-                if (names[id].isNotEmpty()) {
+                if (dealerIconAlpha.value != 0f) {
                     Box(
-                        modifier = Modifier.offset(offsetX, offsetY)
-                    ) { CTSDealerIcon(id = id) }
+                        modifier = Modifier
+                            .offset(offsetX, offsetY)
+                    ) {
+                        CTSDealerIcon(
+                            id = id,
+                            alpha = dealerIconAlpha.value
+                        )
+                    }
                 }
             }
         }
@@ -349,7 +361,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 names[5] = when {
-                                    names[5].isEmpty() -> "Seb"
+                                    names[5].isEmpty() -> "Nef"
                                     else -> ""
                                 }
                             }

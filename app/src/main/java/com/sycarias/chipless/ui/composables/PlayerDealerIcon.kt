@@ -12,6 +12,7 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.vectorResource
@@ -27,6 +28,7 @@ import com.sycarias.chipless.ui.theme.ChiplessColors
 fun DealerIcon(
     active: Boolean = true,
     size: Dp = 30.dp,
+    alpha: Float = 1f,
     onClick: () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -39,19 +41,21 @@ fun DealerIcon(
             else -> ChiplessColors.secondary.copy(alpha = 0.6f)
         }
         val buttonColors = ChiplessButtonColors(bg = color, fg = ChiplessColors.bgSecondary)
+        val shape = RoundedCornerShape(100.dp)
 
         Button(
             modifier = Modifier
                 .buttonShadow(
                     blurRadius = 10.dp,
-                    color = glowColor,
+                    color = glowColor.copy(alpha = alpha),
                     offsetX = 0.dp,
                     offsetY = 0.dp,
                     cornerRadius = 100.dp
                 )
                 .width(size)
-                .height(size),
-            shape = RoundedCornerShape(100.dp),
+                .height(size)
+                .graphicsLayer(alpha = alpha, shape = shape),
+            shape = shape,
             colors = buttonColors,
             contentPadding = PaddingValues(start = (2.5).dp),
             onClick = onClick
