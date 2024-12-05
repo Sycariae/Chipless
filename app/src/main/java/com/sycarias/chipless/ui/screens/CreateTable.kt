@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.sycarias.chipless.GameTable
 import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.composables.DealerIcon
 import com.sycarias.chipless.ui.composables.IntInputField
@@ -55,7 +56,7 @@ enum class PlayerButtonSide {
 }
 
 @Composable
-fun CreateTable(navController: NavController) {
+fun CreateTableScreen(navController: NavController) {
     // Define Sizing and Spacing for Dealer Icons
     val dealerIconSize = 30.dp // Sizing of Dealer Icons
     val dealerIconMidSpacing = 5.dp // Spacing Between Player Button and Dealer Icon in Mid-Section
@@ -193,14 +194,15 @@ fun CreateTable(navController: NavController) {
         }
     }
 
+    // START OF UI
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(45.dp))
         // Title
         Text(
-            modifier = Modifier.padding(top = 45.dp),
             text = "Create Table",
             style = ChiplessShadowStyle(
                 style = ChiplessTypography.h1,
@@ -296,7 +298,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
                                 names[1] = when {
-                                    names[1].isEmpty() -> "Alice"
+                                    names[1].isEmpty() -> "Tallulah"
                                     else -> ""
                                 }
                             }
@@ -320,7 +322,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 names[2] = when {
-                                    names[2].isEmpty() -> "Anjali"
+                                    names[2].isEmpty() -> "Adam"
                                     else -> ""
                                 }
                             }
@@ -332,7 +334,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 names[3] = when {
-                                    names[3].isEmpty() -> "Nonrad"
+                                    names[3].isEmpty() -> "Kornrad"
                                     else -> ""
                                 }
                             }
@@ -344,7 +346,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 names[4] = when {
-                                    names[4].isEmpty() -> "Ian"
+                                    names[4].isEmpty() -> "Nonrod"
                                     else -> ""
                                 }
                             }
@@ -406,7 +408,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
                                 names[8] = when {
-                                    names[8].isEmpty() -> "Jodie"
+                                    names[8].isEmpty() -> "Bellamy"
                                     else -> ""
                                 }
                             }
@@ -420,7 +422,7 @@ fun CreateTable(navController: NavController) {
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
                                 names[9] = when {
-                                    names[9].isEmpty() -> "Kody"
+                                    names[9].isEmpty() -> "Fred"
                                     else -> ""
                                 }
                             }
@@ -439,7 +441,7 @@ fun CreateTable(navController: NavController) {
         verticalArrangement = Arrangement.Bottom
     ) {
         Button(
-            onClick = { navController.navigate("GameTable") },
+            onClick = { navController.navigate(GameTable) },
             modifier = Modifier
                 .height(55.dp)
                 .buttonShadow(
