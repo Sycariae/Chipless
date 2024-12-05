@@ -1,5 +1,6 @@
 package com.sycarias.chipless.ui.composables
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -38,12 +39,13 @@ fun PlayerButton(
         name.isEmpty() -> size // When Empty, default to this
         else -> textWidth + (textPadding * 2) // Text Width + Padding
     }
+    val animatedWidth = animateDpAsState(targetValue = width, label = "Player Button Width")
 
     Button(
         onClick = onClick,
         modifier = Modifier
             .height(size)
-            .width(width)
+            .width(animatedWidth.value)
             .border(
                 width = (0.5).dp,
                 shape = shape,
@@ -88,7 +90,8 @@ fun PlayerButton(
             Text(
                 text = name,
                 style = textStyle,
-                modifier = Modifier.padding(start = textPadding, end = textPadding)
+                modifier = Modifier.padding(start = textPadding, end = textPadding),
+                softWrap = false
             )
         }
     }
