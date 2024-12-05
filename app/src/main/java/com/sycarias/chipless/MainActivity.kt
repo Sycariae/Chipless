@@ -4,13 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.sycarias.chipless.ui.screens.CreateTable
-import com.sycarias.chipless.ui.screens.GameTable
-import com.sycarias.chipless.ui.screens.MainMenu
+import androidx.navigation.toRoute
+import com.sycarias.chipless.ui.screens.CreateTableScreen
+import com.sycarias.chipless.ui.screens.GameTableScreen
+import com.sycarias.chipless.ui.screens.MainMenuScreen
 import com.sycarias.chipless.ui.theme.ChiplessTheme
+import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,16 +26,29 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Serializable
+object MainMenu
+
+@Serializable
+object CreateTable
+
+@Serializable
+data class GameTable(
+    val activeDealerId: State<Int?>
+)
+
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "MainMenu",
-        //enterTransition = { EnterTransition.None }
+        startDestination = MainMenu
     ) {
-        composable("MainMenu") { MainMenu(navController) }
-        composable("CreateTable") { CreateTable(navController) }
-        composable("GameTable") { GameTable(navController) }
+        composable<MainMenu> { MainMenuScreen(navController) }
+        composable<CreateTable> { CreateTableScreen(navController) }
+        composable<GameTable> { backStackEntry ->
+            val gameTable: GameTable = backStackEntry.toRoute()
+            GameTableScreen(navController, gameTable.activeDealerId)
+        }
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sycarias.chipless.CreateTable
 import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
@@ -25,7 +26,7 @@ import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
 
 @Composable
-fun MainMenu(navController: NavController) {
+fun MainMenuScreen(navController: NavController) {
 // === Frontend
     val context = LocalContext.current
 
@@ -75,7 +76,7 @@ fun MainMenu(navController: NavController) {
 
         // Create Table Button
         Button(
-            onClick = { navController.navigate("CreateTable") },
+            onClick = { navController.navigate(CreateTable) },
             modifier = Modifier
                 .width(320.dp)
                 .height(75.dp)
