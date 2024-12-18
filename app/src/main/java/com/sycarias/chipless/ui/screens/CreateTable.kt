@@ -7,7 +7,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,8 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sycarias.chipless.GameTable
 import com.sycarias.chipless.R
@@ -32,17 +33,7 @@ import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
-
-class DealerViewModel: ViewModel() {
-    // Holds the ID or index of the active dealer
-    private val _activeDealerId = mutableStateOf<Int?>(null)
-    val activeDealerId: State<Int?> = _activeDealerId
-
-    // Function to update the active dealer
-    fun setActiveDealer(id: Int) {
-        _activeDealerId.value = id
-    }
-}
+import com.sycarias.chipless.ui.utils.TableDataViewModel
 
 enum class PlayerButtonLocation {
     TOP_ROW,
@@ -56,12 +47,12 @@ enum class PlayerButtonSide {
 }
 
 @Composable
-fun CreateTableScreen(navController: NavController) {
+fun CreateTableScreen(navController: NavController, viewModel: TableDataViewModel) {
     // Define Sizing and Spacing for Dealer Icons
     val dealerIconSize = 30.dp // Sizing of Dealer Icons
     val dealerIconMidSpacing = 5.dp // Spacing Between Player Button and Dealer Icon in Mid-Section
-    val dealerIconTBRHSpacing = -6.dp // Horizontal Spacing Between Player Button and Dealer Icon in Top and Bottom Rows
-    val dealerIconTBRVSpacing = -10.dp // Vertical Spacing Between Player Button and Dealer Icon in Top and Bottom Rows
+    val dealerIconTBRHSpacing = (-6).dp // Horizontal Spacing Between Player Button and Dealer Icon in Top and Bottom Rows
+    val dealerIconTBRVSpacing = (-10).dp // Vertical Spacing Between Player Button and Dealer Icon in Top and Bottom Rows
 
     // Define Sizing and Spacing for Player Buttons
     val playerButtonSize = 50.dp // Sizing of Player Buttons
@@ -70,10 +61,12 @@ fun CreateTableScreen(navController: NavController) {
     val playerButtonMidHSpacing = 175.dp /*- (dealerIconMidClearance * 2)*/ // Player Button Middle Horizontal Spacing
     val playerButtonTBRHSpacing = 88.dp /*- (dealerIconTBRHClearance * 2)*/ // Player Button Top and Bottom Row Horizontal Spacing
 
-    // Default Values for Input Fields
-    var startingChips by remember { mutableIntStateOf(1000) }
-    var bigBlind by remember { mutableIntStateOf(10) }
-    var smallBlind by remember { mutableIntStateOf(5) }
+    // View Model Variables
+    val activeDealerId by remember { viewModel.activeDealerId }
+    val startingChips by remember { viewModel.startingChips }
+    val bigBlind by remember { viewModel.bigBlind }
+    val smallBlind by remember { viewModel.smallBlind }
+    val playerNames = viewModel.playerNames
 
     // Input Field Validation
     val startingChipsValid by remember {
@@ -91,14 +84,6 @@ fun CreateTableScreen(navController: NavController) {
             smallBlind in 5..bigBlind / 2
         }
     }
-
-    val names = remember {
-        mutableStateListOf(*Array(10) { "" })
-    }
-
-    // Dealer Icon States
-    val viewModel: DealerViewModel = viewModel()
-    val activeDealerId by viewModel.activeDealerId
 
     // Local Dealer Icon Composable using Identifiers
     @Composable
@@ -146,7 +131,7 @@ fun CreateTableScreen(navController: NavController) {
                 -( dealerIconTBRVSpacing + dealerIconSize )
         }
 
-        val dealerIconAlpha = animateFloatAsState(targetValue = if (names[id].isNotEmpty()) 1f else 0f, label = "Dealer Icon Fade In/Out")
+        val dealerIconAlpha = animateFloatAsState(targetValue = if (playerNames[id].isNotEmpty()) 1f else 0f, label = "Dealer Icon Fade In/Out")
 
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -175,7 +160,7 @@ fun CreateTableScreen(navController: NavController) {
                 }
             ) {
                 PlayerButton(
-                    name = names[id],
+                    name = playerNames[id],
                     size = playerButtonSize,
                     onClick = onClick
                 )
@@ -219,7 +204,7 @@ fun CreateTableScreen(navController: NavController) {
             initialValue = startingChips.toString(),
             maxLen = 6,
             isValid = startingChipsValid,
-            onValueChange = { startingChips = it.toInt() },
+            onValueChange = { viewModel.setStartingChips(it.toInt()) },
             modifier = Modifier.width(240.dp)
         )
         Spacer(Modifier.height(15.dp))
@@ -229,7 +214,7 @@ fun CreateTableScreen(navController: NavController) {
                 initialValue = bigBlind.toString(),
                 maxLen = 4,
                 isValid = bigBlindValid,
-                onValueChange = { bigBlind = it.toInt() },
+                onValueChange = { viewModel.setBigBlind(it.toInt()) },
                 modifier = Modifier.width(160.dp)
             )
             Spacer(Modifier.width(20.dp))
@@ -238,7 +223,7 @@ fun CreateTableScreen(navController: NavController) {
                 initialValue = smallBlind.toString(),
                 isValid = smallBlindValid,
                 maxLen = 4,
-                onValueChange = { smallBlind = it.toInt() },
+                onValueChange = { viewModel.setSmallBlind(it.toInt()) },
                 modifier = Modifier.width(160.dp)
             )
         }
@@ -283,10 +268,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
-                                names[0] = when {
-                                    names[0].isEmpty() -> "Luke"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 0,
+                                    name = when {
+                                        playerNames[0].isEmpty() -> "Luke"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                     }
@@ -297,10 +285,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
-                                names[1] = when {
-                                    names[1].isEmpty() -> "Tallulah"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 1,
+                                    name = when {
+                                        playerNames[1].isEmpty() -> "Tallulah"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                     }
@@ -321,10 +312,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                names[2] = when {
-                                    names[2].isEmpty() -> "Adam"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 2,
+                                    name = when {
+                                        playerNames[2].isEmpty() -> "Hobo J."
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
@@ -333,10 +327,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                names[3] = when {
-                                    names[3].isEmpty() -> "Kornrad"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 3,
+                                    name = when {
+                                        playerNames[3].isEmpty() -> "Kornrad"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
@@ -345,10 +342,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                names[4] = when {
-                                    names[4].isEmpty() -> "Nonrod"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 4,
+                                    name = when {
+                                        playerNames[4].isEmpty() -> "Nonrod"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                     }
@@ -362,10 +362,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                names[5] = when {
-                                    names[5].isEmpty() -> "Nef"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 5,
+                                    name = when {
+                                        playerNames[5].isEmpty() -> "Nef"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
@@ -374,10 +377,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                names[6] = when {
-                                    names[6].isEmpty() -> "E-van"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 6,
+                                    name = when {
+                                        playerNames[6].isEmpty() -> "E-van"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
@@ -386,10 +392,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                names[7] = when {
-                                    names[7].isEmpty() -> "Adam"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 7,
+                                    name = when {
+                                        playerNames[7].isEmpty() -> "Adam"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                     }
@@ -407,10 +416,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
-                                names[8] = when {
-                                    names[8].isEmpty() -> "Bellamy"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 8,
+                                    name = when {
+                                        playerNames[8].isEmpty() -> "Bellamy"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                     }
@@ -421,10 +433,13 @@ fun CreateTableScreen(navController: NavController) {
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
-                                names[9] = when {
-                                    names[9].isEmpty() -> "Fred"
-                                    else -> ""
-                                }
+                                viewModel.updatePlayerName(
+                                    id = 9,
+                                    name = when {
+                                        playerNames[9].isEmpty() -> "Fred"
+                                        else -> ""
+                                    }
+                                )
                             }
                         )
                     }

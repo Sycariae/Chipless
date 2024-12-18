@@ -2,7 +2,10 @@ package com.sycarias.chipless.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -10,6 +13,7 @@ import androidx.navigation.NavController
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
+import com.sycarias.chipless.ui.utils.TableDataViewModel
 
 enum class GameStage {
     PREFLOP,
@@ -19,15 +23,22 @@ enum class GameStage {
 }
 
 @Composable
-fun GameTableScreen(navController: NavController/*, activeDealerId: State<Int?>*/) {
-    var gameStage: GameStage by remember { mutableStateOf(GameStage.PREFLOP) }
+fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {
+    // View Model Variables
+    val activeDealerId by remember { viewModel.activeDealerId }
+    val startingChips by remember { viewModel.startingChips }
+    val bigBlind by remember { viewModel.bigBlind }
+    val smallBlind by remember { viewModel.smallBlind }
+    val playerNames = viewModel.playerNames
+    val activePlayer = remember { viewModel.activePlayer }
+
+    val gameStage: GameStage by remember { mutableStateOf(GameStage.PREFLOP) }
     val gameStageTitle = when(gameStage) {
         GameStage.PREFLOP -> "Pre-Flop"
         GameStage.FLOP -> "Flop"
         GameStage.TURN -> "Turn"
         GameStage.RIVER -> "River"
     }
-    var activePlayer by remember { mutableStateOf("Luke") }
 
     // START OF UI
     Column(
