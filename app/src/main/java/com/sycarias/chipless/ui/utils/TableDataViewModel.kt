@@ -1,6 +1,9 @@
 package com.sycarias.chipless.ui.utils
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 
@@ -17,7 +20,7 @@ class TableDataViewModel: ViewModel() {
     // PLAYERS
     private val _playerNames = mutableStateListOf(*Array(10) { "" })
     val playerNames: SnapshotStateList<String> = _playerNames
-    val activePlayer by derivedStateOf { playerNames[activeDealerId.value] } // TODO: Make updatable based on game stage.
+    val playerCount = derivedStateOf { _playerNames.count { it.isNotBlank() } }
 
     // Update a specific player's name
     fun updatePlayerName(id: Int, name: String) {

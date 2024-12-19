@@ -66,6 +66,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     val startingChips by remember { viewModel.startingChips }
     val bigBlind by remember { viewModel.bigBlind }
     val smallBlind by remember { viewModel.smallBlind }
+    val playerCount by remember { viewModel.playerCount }
     val playerNames = viewModel.playerNames
 
     // Input Field Validation
@@ -83,6 +84,40 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         derivedStateOf {
             smallBlind in 5..bigBlind / 2
         }
+    }
+
+    // Table Config Validation
+    val tableConfigValid by remember {
+        derivedStateOf {
+            startingChipsValid
+                    && bigBlindValid
+                    && smallBlindValid
+                    && playerCount >= 4
+                    && playerNames[activeDealerId].isNotEmpty()
+        }
+    }
+
+    // Define Theming of Play Button based on Table Config Validity
+    val playerButtonHeight = 55.dp
+    val playButtonColor = when (tableConfigValid) {
+        true -> ChiplessColors.primary
+        false -> ChiplessColors.secondary
+    }
+    val playButtonModifier = when (tableConfigValid) {
+        true -> Modifier
+            .height(playerButtonHeight)
+            .buttonShadow(
+                color = ChiplessColors.primary,
+                offsetX = 0.dp,
+                offsetY = 0.dp,
+                blurRadius = 20.dp,
+                cornerRadius = 100.dp
+            )
+        false -> Modifier.height(playerButtonHeight)
+    }
+    val playButtonTextColor = when (tableConfigValid) {
+        true -> ChiplessColors.textPrimary
+        false -> ChiplessColors.textTertiary
     }
 
     // Local Dealer Icon Composable using Identifiers
@@ -456,18 +491,15 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         verticalArrangement = Arrangement.Bottom
     ) {
         Button(
-            onClick = { navController.navigate(GameTable) },
-            modifier = Modifier
-                .height(55.dp)
-                .buttonShadow(
-                    color = ChiplessColors.primary,
-                    offsetX = 0.dp,
-                    offsetY = 0.dp,
-                    blurRadius = 20.dp,
-                    cornerRadius = 100.dp
-                ),
+            onClick = {
+                when (tableConfigValid) {
+                    true -> { navController.navigate(GameTable) }
+                    false -> {}
+                }
+            },
+            modifier = playButtonModifier,
             shape = RoundedCornerShape(100.dp),
-            colors = ChiplessButtonColors(ChiplessColors.primary)
+            colors = ChiplessButtonColors(playButtonColor)
         ) {
             StaticShadow(
                 blurRadius = 5.dp,
@@ -478,14 +510,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 Icon(
                     painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
                     contentDescription = "Settings",
-                    tint = ChiplessColors.textPrimary,
-                    modifier = Modifier.size(18.dp)
+                    tint = playButtonTextColor,
+                        modifier = Modifier.size(18.dp)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 "Play",
-                color = ChiplessColors.textPrimary,
+                color = playButtonTextColor,
                 style = ChiplessShadowStyle(style = ChiplessTypography.sh2)
             )
         }
