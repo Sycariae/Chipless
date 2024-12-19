@@ -30,7 +30,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val bigBlind by remember { viewModel.bigBlind }
     val smallBlind by remember { viewModel.smallBlind }
     val playerNames = viewModel.playerNames
-    val activePlayer = remember { viewModel.activePlayer }
+    val activePlayerName by viewModel.activePlayerName
 
     val gameStage: GameStage by remember { mutableStateOf(GameStage.PREFLOP) }
     val gameStageTitle = when(gameStage) {
@@ -63,7 +63,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         // Player Turn Subtitle
         Text(
-            text = "$activePlayer's Turn",
+            text = "$activePlayerName's Turn",
             style = ChiplessShadowStyle(
                 style = ChiplessTypography.h2,
                 offsetX = -12f,
