@@ -27,7 +27,6 @@ class TableDataViewModel: ViewModel() {
     // ACTIVE PLAYER
     private val _activePlayer = mutableIntStateOf(activeDealerId.value)
     val activePlayer: State<Int> = _activePlayer
-    val activePlayerName = derivedStateOf { playerNames[activePlayer.value] }
 
     fun updateActivePlayer(id: Int) {
         _activePlayer.intValue = id
