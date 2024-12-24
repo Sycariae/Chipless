@@ -33,6 +33,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         GameStage.FLOP -> "Flop"
         GameStage.TURN -> "Turn"
         GameStage.RIVER -> "River"
+        GameStage.SHOWDOWN -> "Showdown"
     }
 
     // START OF UI

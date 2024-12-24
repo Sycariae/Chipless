@@ -5,4 +5,5 @@ enum class GameStage {
     FLOP,
     TURN,
     RIVER,
+    SHOWDOWN
 }

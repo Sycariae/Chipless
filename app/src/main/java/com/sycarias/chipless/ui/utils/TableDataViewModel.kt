@@ -43,7 +43,8 @@ class TableDataViewModel: ViewModel() {
             GameStage.PREFLOP -> GameStage.FLOP
             GameStage.FLOP -> GameStage.TURN
             GameStage.TURN -> GameStage.RIVER
-            GameStage.RIVER -> GameStage.PREFLOP
+            GameStage.RIVER -> GameStage.SHOWDOWN
+            GameStage.SHOWDOWN -> GameStage.PREFLOP
         }
     }
 
