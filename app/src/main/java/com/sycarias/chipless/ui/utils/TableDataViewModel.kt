@@ -1,9 +1,6 @@
 package com.sycarias.chipless.ui.utils
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 
@@ -17,7 +14,7 @@ class TableDataViewModel: ViewModel() {
         _activeDealerId.intValue = id
     }
 
-    // PLAYERS
+    // PLAYER LIST
     private val _playerNames = mutableStateListOf(*Array(10) { "" })
     val playerNames: SnapshotStateList<String> = _playerNames
     val playerCount = derivedStateOf { _playerNames.count { it.isNotBlank() } }
@@ -27,12 +24,27 @@ class TableDataViewModel: ViewModel() {
         _playerNames[id] = name
     }
 
+    // ACTIVE PLAYER
     private val _activePlayer = mutableIntStateOf(activeDealerId.value)
     val activePlayer: State<Int> = _activePlayer
     val activePlayerName = derivedStateOf { playerNames[activePlayer.value] }
 
     fun updateActivePlayer(id: Int) {
         _activePlayer.intValue = id
+    }
+
+    // GAME STAGE
+    private val _gameStage = mutableStateOf(GameStage.PREFLOP)
+    val gameStage: State<GameStage> = _gameStage
+
+    // Update game stage to next stage
+    fun incrementGameStage() {
+        _gameStage.value = when(_gameStage.value) {
+            GameStage.PREFLOP -> GameStage.FLOP
+            GameStage.FLOP -> GameStage.TURN
+            GameStage.TURN -> GameStage.RIVER
+            GameStage.RIVER -> GameStage.PREFLOP
+        }
     }
 
     // TABLE CONFIG
