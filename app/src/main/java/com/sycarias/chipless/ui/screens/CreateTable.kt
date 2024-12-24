@@ -493,7 +493,10 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         Button(
             onClick = {
                 when (tableConfigValid) {
-                    true -> { navController.navigate(GameTable) }
+                    true -> {
+                        viewModel.updateActivePlayer(activeDealerId)
+                        navController.navigate(GameTable)
+                    }
                     false -> {}
                 }
             },
