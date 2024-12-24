@@ -3,8 +3,8 @@ package com.sycarias.chipless.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,14 +13,8 @@ import androidx.navigation.NavController
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
+import com.sycarias.chipless.ui.utils.GameStage
 import com.sycarias.chipless.ui.utils.TableDataViewModel
-
-enum class GameStage {
-    PREFLOP,
-    FLOP,
-    TURN,
-    RIVER,
-}
 
 @Composable
 fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {
@@ -30,10 +24,11 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val bigBlind by remember { viewModel.bigBlind }
     val smallBlind by remember { viewModel.smallBlind }
     val playerNames = viewModel.playerNames
-    val activePlayerName by viewModel.activePlayerName
+    val activePlayer by remember { viewModel.activePlayer }
+    val activePlayerName by remember { derivedStateOf { playerNames[activePlayer] } }
 
-    val gameStage: GameStage by remember { mutableStateOf(GameStage.PREFLOP) }
-    val gameStageTitle = when(gameStage) {
+    val gameStage by remember { viewModel.gameStage }
+    val gameStageTitle: String = when(gameStage) {
         GameStage.PREFLOP -> "Pre-Flop"
         GameStage.FLOP -> "Flop"
         GameStage.TURN -> "Turn"
