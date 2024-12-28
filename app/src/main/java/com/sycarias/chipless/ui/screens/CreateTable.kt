@@ -90,10 +90,10 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     val tableConfigValid by remember {
         derivedStateOf {
             startingChipsValid
-                    && bigBlindValid
-                    && smallBlindValid
-                    && playerCount >= 4
-                    && playerNames[activeDealerId].isNotEmpty()
+                && bigBlindValid
+                && smallBlindValid
+                && playerCount >= 4
+                && activeDealerId?.let { id -> playerNames[id].isNotEmpty() } == true
         }
     }
 
@@ -494,7 +494,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
             onClick = {
                 when (tableConfigValid) {
                     true -> {
-                        viewModel.updateActivePlayer(activeDealerId)
+                        viewModel.updateActivePlayer(activeDealerId ?: viewModel.participatingPlayers.first())
                         navController.navigate(GameTable)
                     }
                     false -> {}
