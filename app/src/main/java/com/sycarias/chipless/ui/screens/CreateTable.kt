@@ -304,7 +304,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 0,
+                                    playerID = 0,
                                     name = when {
                                         playerNames[0].isEmpty() -> "Luke"
                                         else -> ""
@@ -321,7 +321,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 1,
+                                    playerID = 1,
                                     name = when {
                                         playerNames[1].isEmpty() -> "Tallulah"
                                         else -> ""
@@ -348,7 +348,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 2,
+                                    playerID = 2,
                                     name = when {
                                         playerNames[2].isEmpty() -> "Hobo J."
                                         else -> ""
@@ -363,7 +363,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 3,
+                                    playerID = 3,
                                     name = when {
                                         playerNames[3].isEmpty() -> "Kornrad"
                                         else -> ""
@@ -378,7 +378,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 4,
+                                    playerID = 4,
                                     name = when {
                                         playerNames[4].isEmpty() -> "Nonrod"
                                         else -> ""
@@ -398,7 +398,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 5,
+                                    playerID = 5,
                                     name = when {
                                         playerNames[5].isEmpty() -> "Nef"
                                         else -> ""
@@ -413,7 +413,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 6,
+                                    playerID = 6,
                                     name = when {
                                         playerNames[6].isEmpty() -> "E-van"
                                         else -> ""
@@ -428,7 +428,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 7,
+                                    playerID = 7,
                                     name = when {
                                         playerNames[7].isEmpty() -> "Adam"
                                         else -> ""
@@ -452,7 +452,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 8,
+                                    playerID = 8,
                                     name = when {
                                         playerNames[8].isEmpty() -> "Bellamy"
                                         else -> ""
@@ -469,7 +469,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
                                 viewModel.updatePlayerName(
-                                    id = 9,
+                                    playerID = 9,
                                     name = when {
                                         playerNames[9].isEmpty() -> "Fred"
                                         else -> ""
