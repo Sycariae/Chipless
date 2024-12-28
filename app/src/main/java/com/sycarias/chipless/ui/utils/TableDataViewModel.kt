@@ -125,23 +125,23 @@ class TableDataViewModel: ViewModel() {
 
 
     // = GAME STAGE
-    private val _gameStage = mutableStateOf(GameStage.PREFLOP)
-    val gameStage: State<GameStage> = _gameStage
+    private val _bettingRound = mutableStateOf(BettingRound.PREFLOP)
+    val bettingRound: State<BettingRound> = _bettingRound
 
     // Update game stage to next stage
     private fun incrementGameStage() {
-        _gameStage.value = when(_gameStage.value) {
-            GameStage.PREFLOP -> GameStage.FLOP
-            GameStage.FLOP -> GameStage.TURN
-            GameStage.TURN -> GameStage.RIVER
-            GameStage.RIVER -> GameStage.SHOWDOWN
-            GameStage.SHOWDOWN -> GameStage.PREFLOP
+        _bettingRound.value = when(_bettingRound.value) {
+            BettingRound.PREFLOP -> BettingRound.FLOP
+            BettingRound.FLOP -> BettingRound.TURN
+            BettingRound.TURN -> BettingRound.RIVER
+            BettingRound.RIVER -> BettingRound.SHOWDOWN
+            BettingRound.SHOWDOWN -> BettingRound.PREFLOP
         }
     }
 
 
     // = RESETS
-    fun initiateNewStage() {
+    fun initiateNewRound() {
         // Reset player statuses excluding FOLDED, ALL_IN and SAT_OUT
         _playerStatuses.replaceAll { status ->
             when(status) {
@@ -156,13 +156,13 @@ class TableDataViewModel: ViewModel() {
         incrementGameStage() // Set game stage to next stage from the current one
     }
 
-    fun initiateNewRound() {
+    fun initiateNewMatch() {
         // Reset player statuses excluding SAT_OUT
         _playerStatuses.replaceAll { status ->
             if (status != PlayerStatus.SAT_OUT) PlayerStatus.IDLE else PlayerStatus.SAT_OUT
         }
         _playerCurrentBets.fill(0) // Reset all current player bets
 
-        _gameStage.value = GameStage.PREFLOP // Set game stage to first stage: PREFLOP
+        _bettingRound.value = BettingRound.PREFLOP // Set game stage to first stage: PREFLOP
     }
 }

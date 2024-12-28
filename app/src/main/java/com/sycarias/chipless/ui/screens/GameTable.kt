@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
-import com.sycarias.chipless.ui.utils.GameStage
+import com.sycarias.chipless.ui.utils.BettingRound
 import com.sycarias.chipless.ui.utils.TableDataViewModel
 
 @Composable
@@ -27,13 +27,13 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val activePlayer by remember { viewModel.activePlayer }
     val activePlayerName by remember { derivedStateOf { playerNames[activePlayer] } }
 
-    val gameStage by remember { viewModel.gameStage }
-    val gameStageTitle: String = when(gameStage) {
-        GameStage.PREFLOP -> "Pre-Flop"
-        GameStage.FLOP -> "Flop"
-        GameStage.TURN -> "Turn"
-        GameStage.RIVER -> "River"
-        GameStage.SHOWDOWN -> "Showdown"
+    val gameStage by remember { viewModel.bettingRound }
+    val bettingRoundTitle: String = when(gameStage) {
+        BettingRound.PREFLOP -> "Pre-Flop"
+        BettingRound.FLOP -> "Flop"
+        BettingRound.TURN -> "Turn"
+        BettingRound.RIVER -> "River"
+        BettingRound.SHOWDOWN -> "Showdown"
     }
 
     // START OF UI
@@ -46,7 +46,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         // Game Stage Title
         Text(
-            text = gameStageTitle,
+            text = bettingRoundTitle,
             style = ChiplessShadowStyle(
                 style = ChiplessTypography.h1,
                 offsetX = -12f,
