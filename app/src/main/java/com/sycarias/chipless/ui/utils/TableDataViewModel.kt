@@ -108,19 +108,24 @@ class TableDataViewModel: ViewModel() {
     }
 
 
-    // = ACTIVE PLAYER
-    private val _activePlayer = mutableIntStateOf(activeDealerId.value ?: _participatingPlayers.first())
-    val activePlayer: State<Int?> = _activePlayer
+    // = ACTING PLAYER
+    private val _actingPlayer = mutableIntStateOf(activeDealerId.value ?: _participatingPlayers.first())
+    val actingPlayer: State<Int> = _actingPlayer
 
-    // Update the active player id
+    // Update the acting player id
     fun updateActivePlayer(playerID: Int) {
-        _activePlayer.intValue = playerID
+        _actingPlayer.intValue = playerID
     }
 
-    // Increment to the next active player (filtering out empty and inactive players)
-    fun incrementActivePlayer() {
-        val nextIndex = _participatingPlayers.indexOfFirst { it > _activePlayer.intValue }
-        _activePlayer.intValue = if (nextIndex != -1) _participatingPlayers[nextIndex] else _participatingPlayers.firstOrNull() ?: 0
+    // Increment to the next acting player (filtering out empty and inactive players)
+    fun incrementActingPlayer() {
+        val nextPlayerID = _participatingPlayers.indexOfFirst { it > _actingPlayer.intValue }
+
+        _actingPlayer.intValue = if (nextPlayerID != -1) {
+            _participatingPlayers[nextPlayerID]
+        } else {
+            _participatingPlayers.firstOrNull() ?: 0
+        }
     }
 
 
