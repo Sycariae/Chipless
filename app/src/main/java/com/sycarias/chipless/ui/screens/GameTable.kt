@@ -24,7 +24,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val bigBlind by remember { viewModel.bigBlind }
     val smallBlind by remember { viewModel.smallBlind }
     val playerNames = viewModel.playerNames
-    val activePlayer by remember { viewModel.activePlayer }
+    val activePlayer by remember { viewModel.actingPlayer }
     val activePlayerName by remember { derivedStateOf { playerNames[activePlayer] } }
 
     val gameStage by remember { viewModel.bettingRound }
