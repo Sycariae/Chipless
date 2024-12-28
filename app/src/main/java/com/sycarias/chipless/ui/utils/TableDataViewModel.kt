@@ -101,7 +101,7 @@ class TableDataViewModel: ViewModel() {
 
 
     // = PARTICIPATING PLAYERS
-    private val _participatingPlayers by derivedStateOf {
+    val participatingPlayers by derivedStateOf {
         _playerNames.indices.filter { playerID ->
             _playerNames[playerID].isNotBlank() && _playerStatuses[playerID] !in listOf(PlayerStatus.FOLDED, PlayerStatus.SAT_OUT)
         }
@@ -109,7 +109,7 @@ class TableDataViewModel: ViewModel() {
 
 
     // = ACTING PLAYER
-    private val _actingPlayer = mutableIntStateOf(activeDealerId.value ?: _participatingPlayers.first())
+    private val _actingPlayer = mutableIntStateOf(activeDealerId.value ?: participatingPlayers.first())
     val actingPlayer: State<Int> = _actingPlayer
 
     // Update the acting player id
@@ -119,12 +119,12 @@ class TableDataViewModel: ViewModel() {
 
     // Increment to the next acting player (filtering out empty and inactive players)
     fun incrementActingPlayer() {
-        val nextPlayerID = _participatingPlayers.indexOfFirst { it > _actingPlayer.intValue }
+        val nextPlayerID = participatingPlayers.indexOfFirst { it > _actingPlayer.intValue }
 
         _actingPlayer.intValue = if (nextPlayerID != -1) {
-            _participatingPlayers[nextPlayerID]
+            participatingPlayers[nextPlayerID]
         } else {
-            _participatingPlayers.firstOrNull() ?: 0
+            participatingPlayers.firstOrNull() ?: 0
         }
     }
 
