@@ -35,11 +35,6 @@ object CreateTable
 @Serializable
 object GameTable
 
-/*@Serializable
-data class GameTable(
-    val activeDealerId: State<Int?>
-)*/
-
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
