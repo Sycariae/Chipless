@@ -249,7 +249,10 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 initialValue = bigBlind.toString(),
                 maxLen = 4,
                 isValid = bigBlindValid,
-                onValueChange = { viewModel.setBigBlind(it.toInt()) },
+                onValueChange = {
+                    viewModel.setBigBlind( it.toInt() )
+                    viewModel.setSmallBlind( it.toInt() / 2 )
+                },
                 modifier = Modifier.width(160.dp)
             )
             Spacer(Modifier.width(20.dp))
