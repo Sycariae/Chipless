@@ -1,4 +1,4 @@
-package com.sycarias.chipless.ui.utils
+package com.sycarias.chipless.viewModel
 
 // The different statuses that a player can have
 enum class PlayerStatus {

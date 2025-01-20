@@ -12,7 +12,7 @@ import com.sycarias.chipless.ui.screens.CreateTableScreen
 import com.sycarias.chipless.ui.screens.GameTableScreen
 import com.sycarias.chipless.ui.screens.MainMenuScreen
 import com.sycarias.chipless.ui.theme.ChiplessTheme
-import com.sycarias.chipless.ui.utils.TableDataViewModel
+import com.sycarias.chipless.viewModel.TableDataViewModel
 import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {

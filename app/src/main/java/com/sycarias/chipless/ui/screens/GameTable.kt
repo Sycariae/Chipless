@@ -13,8 +13,8 @@ import androidx.navigation.NavController
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
-import com.sycarias.chipless.ui.utils.BettingRound
-import com.sycarias.chipless.ui.utils.TableDataViewModel
+import com.sycarias.chipless.viewModel.BettingRound
+import com.sycarias.chipless.viewModel.TableDataViewModel
 
 @Composable
 fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {

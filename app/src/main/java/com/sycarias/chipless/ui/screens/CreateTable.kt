@@ -33,7 +33,7 @@ import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
-import com.sycarias.chipless.ui.utils.TableDataViewModel
+import com.sycarias.chipless.viewModel.TableDataViewModel
 
 enum class PlayerButtonLocation {
     TOP_ROW,

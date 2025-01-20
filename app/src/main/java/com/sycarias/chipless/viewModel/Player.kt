@@ -1,4 +1,4 @@
-package com.sycarias.chipless.ui.utils
+package com.sycarias.chipless.viewModel
 
 data class Player(
     var name: String = "",

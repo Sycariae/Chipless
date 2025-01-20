@@ -1,4 +1,4 @@
-package com.sycarias.chipless.ui.utils
+package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -14,7 +14,11 @@ class Players (playerCount: Int) {
     }
     val activeIDs by derivedStateOf { // The list of active players: players that can legally take a turn
         players.indices.filter { playerID ->
-            players[playerID].name.isNotBlank() && players[playerID].status !in listOf(PlayerStatus.FOLDED, PlayerStatus.SAT_OUT, PlayerStatus.ALL_IN)
+            players[playerID].name.isNotBlank() && players[playerID].status !in listOf(
+                PlayerStatus.FOLDED,
+                PlayerStatus.SAT_OUT,
+                PlayerStatus.ALL_IN
+            )
         }
     }
     val highestBet = derivedStateOf {
