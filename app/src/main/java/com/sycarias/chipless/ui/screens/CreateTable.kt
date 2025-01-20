@@ -62,12 +62,10 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     val playerButtonTBRHSpacing = 88.dp /*- (dealerIconTBRHClearance * 2)*/ // Player Button Top and Bottom Row Horizontal Spacing
 
     // View Model Variables
-    val activeDealerId by remember { viewModel.activeDealerId }
     val startingChips by remember { viewModel.startingChips }
     val bigBlind by remember { viewModel.bigBlind }
     val smallBlind by remember { viewModel.smallBlind }
-    val playerCount by remember { viewModel.playerCount }
-    val playerNames = viewModel.playerNames
+    val players = viewModel.players
 
     // Input Field Validation
     val startingChipsValid by remember {
@@ -89,11 +87,11 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     // Table Config Validation
     val tableConfigValid by remember {
         derivedStateOf {
-            startingChipsValid
-                && bigBlindValid
-                && smallBlindValid
-                && playerCount >= 4
-                && activeDealerId?.let { id -> playerNames[id].isNotEmpty() } == true
+            (startingChipsValid
+                    && bigBlindValid
+                    && smallBlindValid
+                    && players.participatingIDs.count() >= 4)
+                    && players.isActive(players.dealerID)
         }
     }
 
@@ -123,21 +121,21 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     // Local Dealer Icon Composable using Identifiers
     @Composable
     fun CTSDealerIcon(
-        id:Int,
+        playerID:Int,
         alpha:Float = 1f
     ) { // Create Table Screen Dealer Icon
         DealerIcon(
-            active = (id == activeDealerId),
+            active = (playerID == players.dealerID),
             size = dealerIconSize,
             alpha = alpha,
-            onClick = { viewModel.setActiveDealer(id) }
+            onClick = { players.setDealerPlayer(playerID) }
         )
     }
 
     // Local Player Button Composable using Identifiers
     @Composable
     fun CTSPlayerButton(
-        id: Int,
+        playerID: Int,
         location: PlayerButtonLocation,
         side: PlayerButtonSide,
         onClick: () -> Unit = {}
@@ -166,7 +164,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 -( dealerIconTBRVSpacing + dealerIconSize )
         }
 
-        val dealerIconAlpha = animateFloatAsState(targetValue = if (playerNames[id].isNotEmpty()) 1f else 0f, label = "Dealer Icon Fade In/Out")
+        val dealerIconAlpha = animateFloatAsState(targetValue = if (players.isActive(playerID)) 1f else 0f, label = "Dealer Icon Fade In/Out")
 
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -195,7 +193,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 }
             ) {
                 PlayerButton(
-                    name = playerNames[id],
+                    name = players.getPlayerName(playerID),
                     size = playerButtonSize,
                     onClick = onClick
                 )
@@ -205,7 +203,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             .offset(offsetX, offsetY)
                     ) {
                         CTSDealerIcon(
-                            id = id,
+                            playerID = playerID,
                             alpha = dealerIconAlpha.value
                         )
                     }
@@ -302,14 +300,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 ) {
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
-                            id = 0,
+                            playerID = 0,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 0,
                                     name = when {
-                                        playerNames[0].isEmpty() -> "Luke"
+                                        players.isActive(0) -> "Luke"
                                         else -> ""
                                     }
                                 )
@@ -319,14 +317,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
-                            id = 1,
+                            playerID = 1,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 1,
                                     name = when {
-                                        playerNames[1].isEmpty() -> "Tallulah"
+                                        players.isActive(1) -> "Tallulah"
                                         else -> ""
                                     }
                                 )
@@ -346,14 +344,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         horizontalAlignment = Alignment.End
                     ) { // LEFT
                         CTSPlayerButton(
-                            id = 2,
+                            playerID = 2,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 2,
                                     name = when {
-                                        playerNames[2].isEmpty() -> "Hobo J."
+                                        players.isActive(2) -> "Hobo J."
                                         else -> ""
                                     }
                                 )
@@ -361,14 +359,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            id = 3,
+                            playerID = 3,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 3,
                                     name = when {
-                                        playerNames[3].isEmpty() -> "Kornrad"
+                                        players.isActive(3) -> "Kornrad"
                                         else -> ""
                                     }
                                 )
@@ -376,14 +374,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            id = 4,
+                            playerID = 4,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 4,
                                     name = when {
-                                        playerNames[4].isEmpty() -> "Nonrod"
+                                        players.isActive(4) -> "Nonrod"
                                         else -> ""
                                     }
                                 )
@@ -396,14 +394,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         horizontalAlignment = Alignment.Start
                     ) { // RIGHT
                         CTSPlayerButton(
-                            id = 5,
+                            playerID = 5,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 5,
                                     name = when {
-                                        playerNames[5].isEmpty() -> "Nef"
+                                        players.isActive(5) -> "Nef"
                                         else -> ""
                                     }
                                 )
@@ -411,14 +409,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            id = 6,
+                            playerID = 6,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 6,
                                     name = when {
-                                        playerNames[6].isEmpty() -> "E-van"
+                                        players.isActive(6) -> "E-van"
                                         else -> ""
                                     }
                                 )
@@ -426,14 +424,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            id = 7,
+                            playerID = 7,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 7,
                                     name = when {
-                                        playerNames[7].isEmpty() -> "Adam"
+                                        players.isActive(7) -> "Adam"
                                         else -> ""
                                     }
                                 )
@@ -450,14 +448,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 ) {
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
-                            id = 8,
+                            playerID = 8,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 8,
                                     name = when {
-                                        playerNames[8].isEmpty() -> "Bellamy"
+                                        players.isActive(8) -> "Bellamy"
                                         else -> ""
                                     }
                                 )
@@ -467,14 +465,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
-                            id = 9,
+                            playerID = 9,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
-                                viewModel.updatePlayerName(
+                                players.setPlayerName(
                                     playerID = 9,
                                     name = when {
-                                        playerNames[9].isEmpty() -> "Fred"
+                                        players.isActive(9) -> "Fred"
                                         else -> ""
                                     }
                                 )
@@ -497,7 +495,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
             onClick = {
                 when (tableConfigValid) {
                     true -> {
-                        viewModel.updateActivePlayer(activeDealerId ?: viewModel.participatingPlayers.first())
+                        viewModel.initialiseNewTable()
                         navController.navigate(GameTable)
                     }
                     false -> {}

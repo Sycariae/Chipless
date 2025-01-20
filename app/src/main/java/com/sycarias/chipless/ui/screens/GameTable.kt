@@ -19,13 +19,12 @@ import com.sycarias.chipless.ui.utils.TableDataViewModel
 @Composable
 fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {
     // View Model Variables
-    val activeDealerId by remember { viewModel.activeDealerId }
     val startingChips by remember { viewModel.startingChips }
     val bigBlind by remember { viewModel.bigBlind }
     val smallBlind by remember { viewModel.smallBlind }
-    val playerNames = viewModel.playerNames
-    val activePlayer by remember { viewModel.actingPlayer }
-    val activePlayerName by remember { derivedStateOf { playerNames[activePlayer] } }
+
+    val players = viewModel.players
+    val focusPlayerName by remember { derivedStateOf { players.getPlayerName(players.focusID) } }
 
     val gameStage by remember { viewModel.bettingRound }
     val bettingRoundTitle: String = when(gameStage) {
@@ -59,7 +58,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         // Player Turn Subtitle
         Text(
-            text = "$activePlayerName's Turn",
+            text = "$focusPlayerName's Turn",
             style = ChiplessShadowStyle(
                 style = ChiplessTypography.h2,
                 offsetX = -12f,
