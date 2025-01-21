@@ -27,6 +27,11 @@ data class Player(
         balance -= amount
     }
 
+    // = ELIMINATION
+    fun eliminate() {
+        status = PlayerStatus.ELIMINATED
+    }
+
     // = RESETS
     fun resetForNewRound() {
         currentBet = 0
