@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateListOf
 
 class Players (playerCount: Int) {
     private val players = mutableStateListOf(*Array(playerCount) { Player() })
+
     val participatingIDs by derivedStateOf { // The list of players that are not sitting out or don't exist
         players.indices.filter { playerID ->
             players[playerID].name.isNotBlank() && players[playerID].status != PlayerStatus.SAT_OUT
@@ -21,17 +22,22 @@ class Players (playerCount: Int) {
             )
         }
     }
+
     val highestBet = derivedStateOf {
         players.maxByOrNull { it.currentBet }?.currentBet ?: 0
     }
+
     private val _focusID = mutableIntStateOf(-1) // The focussed player, the one whose turn it is. By default, this is the first id from the list of active players
     val focusID by _focusID
+
     private val _dealerID = mutableIntStateOf(-1)
     val dealerID by _dealerID
+
     // The index within the list of active player IDs for the dealer player ID
     private val dealerIndexInActiveIDs by derivedStateOf {
         activeIDs.find { it == _dealerID.intValue } ?: activeIDs.first()
     }
+
     // The active player ID of the player after the dealer
     val smallBlindPlayer by derivedStateOf {
         activeIDs.indexOfFirst { it == (dealerIndexInActiveIDs + 1) }
@@ -65,6 +71,15 @@ class Players (playerCount: Int) {
                 activeIDs.firstOrNull() ?: -1
             }
         )
+    }
+
+    // = ELIMINATION
+    fun checkAllForEliminations() {
+        players.forEach { player ->
+            if (player.balance <= 0) {
+                player.eliminate()
+            }
+        }
     }
 
     // Player Data Getter Functions
