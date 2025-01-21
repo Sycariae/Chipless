@@ -113,6 +113,7 @@ class TableDataViewModel: ViewModel() {
     }
     fun initiateNewMatch() {
         _players.resetAllForNewMatch() // Reset player statuses excluding SAT_OUT and all current player bets
+        players.checkAllForEliminations() // Check every player and applies ELIMINATED status to those with a balance of 0
         resetBettingRound() // Set game stage to first stage: PREFLOP
     }
     // Ran when first starting the table, performs all resets and ensures players are given correct starting balances
