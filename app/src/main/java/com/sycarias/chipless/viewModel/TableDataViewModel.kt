@@ -31,7 +31,7 @@ class TableDataViewModel: ViewModel() {
 
 
     // = PLAYERS
-    private val _players by mutableStateOf( Players(10) )
+    private val _players by mutableStateOf(Players(10))
     val players: Players = _players
 
 
@@ -40,8 +40,8 @@ class TableDataViewModel: ViewModel() {
     private val _currentTableBet = _players.highestBet
     val currentTableBet: State<Int> = _currentTableBet
     // The running total of all bets made this match that'll be shared amongst the winners at the end
-    private val _tablePot = mutableIntStateOf(0)
-    val tablePot: State<Int> = _tablePot
+    private val _tablePots by mutableStateOf(TablePots())
+    val tablePot: TablePots = _tablePots
 
     // Bet Placement Helper Functions
     fun callBet(playerID: Int) {
@@ -67,21 +67,18 @@ class TableDataViewModel: ViewModel() {
         _players.setPlayerStatus(playerID = _players.smallBlindPlayer, status = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
     }
     private fun placeBet(playerID: Int, betAmount: Int, isRaise: Boolean) {
-        _tablePot.intValue += betAmount // Add bet amount to table pot and set table bet
-
+        _tablePots.makeDeposit(betAmount) // Add bet amount to table pot and set table bet
         _players.placePlayerBet(playerID = playerID, amount = betAmount) // Update bet amount and balance for betting player
-
         _players.updateStatusesOnBet(betterID = playerID, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
 
     // Distribute the table pot amongst the winners
-    fun distributeWinnings(playerIDs: List<Int>) {
-        val winningsSplit = _tablePot.intValue / playerIDs.count() // Calculate an even split amongst the winners
+    fun distributeWinnings(winningsAmount: Int, playerIDs: List<Int>) {
+        val winningsSplit = winningsAmount / playerIDs.count() // Calculate an even split amongst the winners
 
         playerIDs.forEach { playerID ->
             _players.payPlayer(playerID = playerID, amount = winningsSplit) // Award each player their split
         }
-        _tablePot.intValue = 0 // Reset the pot value back to 0
     }
 
 
@@ -113,7 +110,8 @@ class TableDataViewModel: ViewModel() {
     }
     fun initiateNewMatch() {
         _players.resetAllForNewMatch() // Reset player statuses excluding SAT_OUT and all current player bets
-        players.checkAllForEliminations() // Check every player and applies ELIMINATED status to those with a balance of 0
+        _players.checkAllForEliminations() // Check every player and applies ELIMINATED status to those with a balance of 0
+        _tablePots.resetPots()
         resetBettingRound() // Set game stage to first stage: PREFLOP
     }
     // Ran when first starting the table, performs all resets and ensures players are given correct starting balances
@@ -121,6 +119,7 @@ class TableDataViewModel: ViewModel() {
         _players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
         _players.setStartingBalances(_startingChips.intValue) // Set all player balances to startingChips
         _players.setInitialFocusPlayer() // Set focus player to the 3rd player after the dealer
+        _tablePots.resetPots()
         resetBettingRound() // Set betting round to PREFLOP
     }
 }
