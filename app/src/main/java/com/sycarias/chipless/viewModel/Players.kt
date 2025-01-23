@@ -101,17 +101,17 @@ class Players (playerCount: Int) {
 
     // Player Data Setter Functions
     fun setPlayerName(playerID: Int, name: String) {
-        players[playerID].setName(name)
+        players[playerID].name = name
     }
     fun setPlayerStatus(playerID: Int, status: PlayerStatus) {
-        players[playerID].setStatus(status)
+        players[playerID].status = status
     }
     fun updateStatusesOnBet(betterID: Int, isRaise: Boolean) {
         // Update statuses for other participating players to PARTIAL_MATCH
         if (isRaise) {
             players.forEach { player ->
                 if (player.status == PlayerStatus.BET_MATCHED) {
-                    player.setStatus(PlayerStatus.PARTIAL_MATCH)
+                    player.status = PlayerStatus.PARTIAL_MATCH
                 }
             }
         }
@@ -134,7 +134,7 @@ class Players (playerCount: Int) {
     }
     fun setStartingBalances(startingChips: Int) {
         players.forEach { player ->
-            player.setBalance(startingChips)
+            player.balance = startingChips
         }
     }
 

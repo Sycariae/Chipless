@@ -6,18 +6,6 @@ data class Player(
     var balance: Int = 0,
     var currentBet: Int = 0
 ) {
-    fun setName(newName: String) {
-        name = newName
-    }
-
-    fun setStatus(newStatus: PlayerStatus) {
-        status = newStatus
-    }
-
-    fun setBalance(amount: Int) {
-        balance = amount
-    }
-
     fun pay(amount: Int) {
         balance += amount
     }
