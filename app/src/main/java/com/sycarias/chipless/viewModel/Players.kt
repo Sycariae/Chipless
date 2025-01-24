@@ -1,9 +1,6 @@
 package com.sycarias.chipless.viewModel
 
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.*
 
 class Players (playerCount: Int) {
     private val players = mutableStateListOf(*Array(playerCount) { Player() })
@@ -83,17 +80,17 @@ class Players (playerCount: Int) {
     }
 
     // Player Data Getter Functions
-    fun getPlayerName(playerID: Int): String {
-        return players[playerID].name
+    fun getPlayerName(playerID: Int): State<String> {
+        return derivedStateOf { players[playerID].name }
     }
-    fun getPlayerStatus(playerID: Int): PlayerStatus {
-        return players[playerID].status
+    fun getPlayerStatus(playerID: Int): State<PlayerStatus> {
+        return derivedStateOf { players[playerID].status }
     }
-    fun getPlayerBalance(playerID: Int): Int {
-        return players[playerID].balance
+    fun getPlayerBalance(playerID: Int): State<Int> {
+        return derivedStateOf { players[playerID].balance }
     }
-    fun getPlayerCurrentBet(playerID: Int): Int {
-        return players[playerID].currentBet
+    fun getPlayerCurrentBet(playerID: Int): State<Int> {
+        return derivedStateOf { players[playerID].currentBet }
     }
     fun isActive(playerID: Int): Boolean {
         return playerID in activeIDs

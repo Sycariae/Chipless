@@ -3,7 +3,6 @@ package com.sycarias.chipless.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,7 +23,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val smallBlind by remember { viewModel.smallBlind }
 
     val players = viewModel.players
-    val focusPlayerName by remember { derivedStateOf { players.getPlayerName(players.focusID) } }
+    val focusPlayerName by remember { players.getPlayerName(players.focusID) }
 
     val gameStage by remember { viewModel.bettingRound }
     val bettingRoundTitle: String = when(gameStage) {

@@ -193,7 +193,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 }
             ) {
                 PlayerButton(
-                    name = players.getPlayerName(playerID),
+                    name = players.getPlayerName(playerID).value,
                     size = playerButtonSize,
                     onClick = onClick
                 )
