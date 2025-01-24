@@ -95,6 +95,9 @@ class Players (playerCount: Int) {
     fun isActive(playerID: Int): Boolean {
         return playerID in activeIDs
     }
+    fun isNotActive(playerID: Int): Boolean {
+        return playerID !in activeIDs
+    }
 
     // Player Data Setter Functions
     fun setPlayerName(playerID: Int, name: String) {

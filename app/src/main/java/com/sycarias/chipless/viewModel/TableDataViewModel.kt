@@ -52,11 +52,11 @@ class TableDataViewModel: ViewModel() {
     }
     fun allInBet(playerID: Int) {
         val isRaise = when { // Determine whether the ALL_IN bet is a raise or not
-            _players.getPlayerBalance(playerID) > _currentTableBet.value -> true
+            _players.getPlayerBalance(playerID).value > _currentTableBet.value -> true
             else -> false
         }
 
-        placeBet(playerID = playerID, betAmount = _players.getPlayerBalance(playerID), isRaise = isRaise)
+        placeBet(playerID = playerID, betAmount = _players.getPlayerBalance(playerID).value, isRaise = isRaise)
 
         _players.setPlayerStatus(playerID = playerID, status = PlayerStatus.ALL_IN)
     }
