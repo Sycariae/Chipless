@@ -306,7 +306,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 0,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(0) -> "Luke"
                                         else -> ""
                                     }
@@ -323,7 +323,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 1,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(1) -> "Tallulah"
                                         else -> ""
                                     }
@@ -350,7 +350,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 2,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(2) -> "Hobo J."
                                         else -> ""
                                     }
@@ -365,7 +365,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 3,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(3) -> "Kornrad"
                                         else -> ""
                                     }
@@ -380,7 +380,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 4,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(4) -> "Nonrod"
                                         else -> ""
                                     }
@@ -400,7 +400,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 5,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(5) -> "Nef"
                                         else -> ""
                                     }
@@ -415,7 +415,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 6,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(6) -> "E-van"
                                         else -> ""
                                     }
@@ -430,7 +430,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 7,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(7) -> "Adam"
                                         else -> ""
                                     }
@@ -454,7 +454,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 8,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(8) -> "Bellamy"
                                         else -> ""
                                     }
@@ -471,7 +471,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             onClick = {
                                 players.setPlayerName(
                                     playerID = 9,
-                                    name = when {
+                                    newName = when {
                                         players.isNotActive(9) -> "Fred"
                                         else -> ""
                                     }

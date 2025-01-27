@@ -100,11 +100,11 @@ class Players (playerCount: Int) {
     }
 
     // Player Data Setter Functions
-    fun setPlayerName(playerID: Int, name: String) {
-        players[playerID].name = name
+    fun setPlayerName(playerID: Int, newName: String) {
+        players[playerID].name = newName
     }
-    fun setPlayerStatus(playerID: Int, status: PlayerStatus) {
-        players[playerID].status = status
+    fun setPlayerStatus(playerID: Int, newStatus: PlayerStatus) {
+        players[playerID].status = newStatus
     }
     fun updateStatusesOnBet(betterID: Int, isRaise: Boolean) {
         // Update statuses for other participating players to PARTIAL_MATCH
@@ -119,7 +119,7 @@ class Players (playerCount: Int) {
         // Update status for betting player to be BET_MATCHED or RAISED or ALL_IN
         setPlayerStatus(
             playerID = betterID,
-            status = if (isRaise) {
+            newStatus = if (isRaise) {
                 PlayerStatus.RAISED
             } else {
                 PlayerStatus.BET_MATCHED
