@@ -36,12 +36,12 @@ class Players (playerCount: Int) {
     }
 
     // The active player ID of the player after the dealer
-    val smallBlindPlayer by derivedStateOf {
         activeIDs.indexOfFirst { it == (dealerIndexInActiveIDs + 1) }
+    val smallBlindPlayerID by derivedStateOf {
     }
     // The active player ID of the player after the small blind player; 2nd after the dealer
-    val bigBlindPlayer by derivedStateOf {
         activeIDs.indexOfFirst { it == (dealerIndexInActiveIDs + 2) }
+    val bigBlindPlayerID by derivedStateOf {
     }
 
     // Dealer Player Setter Function

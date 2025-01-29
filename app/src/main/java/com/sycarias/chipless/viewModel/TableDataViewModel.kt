@@ -61,10 +61,10 @@ class TableDataViewModel: ViewModel() {
         _players.setPlayerStatus(playerID = playerID, newStatus = PlayerStatus.ALL_IN)
     }
     fun placeForcedBets() {
-        placeBet(playerID = _players.smallBlindPlayer, betAmount = _smallBlind.intValue, isRaise = false) // Place forced bet for small blind player
-        placeBet(playerID = _players.bigBlindPlayer, betAmount = _bigBlind.intValue, isRaise = false) // Place forced bet for big blind player
+        placeBet(playerID = _players.smallBlindPlayerID, betAmount = _smallBlind.intValue, isRaise = false) // Place forced bet for small blind player
+        placeBet(playerID = _players.bigBlindPlayerID, betAmount = _bigBlind.intValue, isRaise = false) // Place forced bet for big blind player
 
-        _players.setPlayerStatus(playerID = _players.smallBlindPlayer, newStatus = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
+        _players.setPlayerStatus(playerID = _players.smallBlindPlayerID, newStatus = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
     }
     private fun placeBet(playerID: Int, betAmount: Int, isRaise: Boolean) {
         _tablePots.makeDeposit(betAmount) // Add bet amount to table pot and set table bet
