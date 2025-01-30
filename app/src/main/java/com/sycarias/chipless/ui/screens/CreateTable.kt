@@ -344,14 +344,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         horizontalAlignment = Alignment.End
                     ) { // LEFT
                         CTSPlayerButton(
-                            playerID = 2,
+                            playerID = 9,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 2,
+                                    playerID = 9,
                                     newName = when {
-                                        players.isNotActive(2) -> "Hobo J."
+                                        players.isNotActive(9) -> "Hobo J."
                                         else -> ""
                                     }
                                 )
@@ -359,14 +359,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            playerID = 3,
+                            playerID = 8,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 3,
+                                    playerID = 8,
                                     newName = when {
-                                        players.isNotActive(3) -> "Kornrad"
+                                        players.isNotActive(8) -> "Kornrad"
                                         else -> ""
                                     }
                                 )
@@ -374,14 +374,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            playerID = 4,
+                            playerID = 7,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 4,
+                                    playerID = 7,
                                     newName = when {
-                                        players.isNotActive(4) -> "Nonrod"
+                                        players.isNotActive(7) -> "Nonrod"
                                         else -> ""
                                     }
                                 )
@@ -394,14 +394,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         horizontalAlignment = Alignment.Start
                     ) { // RIGHT
                         CTSPlayerButton(
-                            playerID = 5,
+                            playerID = 2,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 5,
+                                    playerID = 2,
                                     newName = when {
-                                        players.isNotActive(5) -> "Nef"
+                                        players.isNotActive(2) -> "Nef"
                                         else -> ""
                                     }
                                 )
@@ -409,14 +409,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            playerID = 6,
+                            playerID = 3,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 6,
+                                    playerID = 3,
                                     newName = when {
-                                        players.isNotActive(6) -> "E-van"
+                                        players.isNotActive(3) -> "E-van"
                                         else -> ""
                                     }
                                 )
@@ -424,14 +424,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
                         CTSPlayerButton(
-                            playerID = 7,
+                            playerID = 4,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 7,
+                                    playerID = 4,
                                     newName = when {
-                                        players.isNotActive(7) -> "Adam"
+                                        players.isNotActive(4) -> "Adam"
                                         else -> ""
                                     }
                                 )
@@ -448,14 +448,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 ) {
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
-                            playerID = 8,
+                            playerID = 6,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 8,
+                                    playerID = 6,
                                     newName = when {
-                                        players.isNotActive(8) -> "Bellamy"
+                                        players.isNotActive(6) -> "Bellamy"
                                         else -> ""
                                     }
                                 )
@@ -465,14 +465,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
-                            playerID = 9,
+                            playerID = 5,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
                                 players.setPlayerName(
-                                    playerID = 9,
+                                    playerID = 5,
                                     newName = when {
-                                        players.isNotActive(9) -> "Fred"
+                                        players.isNotActive(5) -> "Fred"
                                         else -> ""
                                     }
                                 )
