@@ -26,17 +26,27 @@ class Players (playerCount: Int) {
 
     private val _focusID = mutableIntStateOf(0) // The focussed player, the one whose turn it is. By default, this is the first id from the list of active players
     val focusID by _focusID
+    val focusPlayer by derivedStateOf { players[_focusID.intValue] }
 
     private val _dealerID = mutableIntStateOf(0)
     val dealerID by _dealerID
+    val dealerPlayer by derivedStateOf { players[_dealerID.intValue] }
 
     // The index within the list of active player IDs for the dealer player ID
     private val dealerIndexInActiveIDs by derivedStateOf {
         activeIDs.indexOf(_dealerID.intValue).takeIf { it != -1 } ?: activeIDs.firstOrNull() ?: -1
     }
+    // The index within the list of active player IDs for the focus player ID
+    private val focusIndexInActiveIDs by derivedStateOf {
+        activeIDs.indexOf(_focusID.intValue).takeIf { it != -1 } ?: activeIDs.firstOrNull() ?: -1
+    }
     // The index within the list of active player IDs for the next focus player ID
     private val nextFocusIndexInActiveIDs by derivedStateOf {
-        activeIDs.indexOfFirst { it > _focusID.intValue }.takeIf { it != -1 } ?: activeIDs.firstOrNull() ?: -1
+        if (activeIDs.isNotEmpty()) {
+            activeIDs[(focusIndexInActiveIDs + 1) % activeIDs.size]
+        } else {
+            -1 // Return an invalid player ID if no active players exist
+        }
     }
 
     // The active player ID of the player after the dealer
