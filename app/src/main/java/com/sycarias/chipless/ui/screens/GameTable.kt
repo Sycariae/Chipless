@@ -1,6 +1,9 @@
 package com.sycarias.chipless.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -10,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
 import com.sycarias.chipless.ui.theme.ChiplessTypography
+import com.sycarias.chipless.ui.theme.presets.Heading
 import com.sycarias.chipless.viewModel.BettingRound
 import com.sycarias.chipless.viewModel.TableDataViewModel
 
@@ -35,13 +40,35 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         BettingRound.SHOWDOWN -> "Showdown"
     }
 
+    @Composable
+    fun PlayerActionButton(
+        onClick: () -> Unit,
+        text: String
+    ) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .width(200.dp)
+                .height(45.dp),
+            shape = RoundedCornerShape(100.dp),
+            colors = ChiplessButtonColors(),
+            elevation = ButtonDefaults.buttonElevation(5.dp)
+        ) {
+            Text(
+                text = text,
+                color = ChiplessColors.textPrimary,
+                style = ChiplessShadowStyle(style = ChiplessTypography.sh2)
+            )
+        }
+    }
+
     // START OF UI
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(45.dp))
+        Spacer(modifier = Modifier.height(35.dp))
 
         // Game Stage Title
         Text(
@@ -66,6 +93,19 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
                 blurRadius = 25f
             ),
             color = ChiplessColors.textSecondary
+        )
+        Spacer(modifier = Modifier.height(45.dp))
+
+        PlayerActionButton(
+            onClick = { viewModel.initiateNewRound() },
+            text = "Next Round"
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        PlayerActionButton(
+            onClick = { players.incrementFocusPlayer() },
+            text = "Next Player"
         )
     }
 }
