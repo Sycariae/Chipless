@@ -218,7 +218,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(45.dp))
+        Spacer(modifier = Modifier.height(35.dp))
         // Title
         Text(
             text = "Create Table",
@@ -230,17 +230,8 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
             ),
             color = ChiplessColors.textPrimary
         )
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(12.dp))
         // Settings Input Fields
-        IntInputField(
-            label = "Starting Chips",
-            initialValue = startingChips.toString(),
-            maxLen = 6,
-            isValid = startingChipsValid,
-            onValueChange = { viewModel.setStartingChips(it.toInt()) },
-            modifier = Modifier.width(240.dp)
-        )
-        Spacer(Modifier.height(15.dp))
         Row() {
             IntInputField(
                 label = "Big Blind",
@@ -251,18 +242,27 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     viewModel.setBigBlind( it.toInt() )
                     viewModel.setSmallBlind( it.toInt() / 2 )
                 },
-                modifier = Modifier.width(160.dp)
+                modifier = Modifier.width(150.dp)
             )
-            Spacer(Modifier.width(20.dp))
+            Spacer(Modifier.width(18.dp))
             IntInputField(
                 label = "Small Blind",
                 initialValue = smallBlind.toString(),
                 isValid = smallBlindValid,
                 maxLen = 4,
                 onValueChange = { viewModel.setSmallBlind(it.toInt()) },
-                modifier = Modifier.width(160.dp)
+                modifier = Modifier.width(150.dp)
             )
         }
+        Spacer(Modifier.height(12.dp))
+        IntInputField(
+            label = "Starting Chips",
+            initialValue = startingChips.toString(),
+            maxLen = 6,
+            isValid = startingChipsValid,
+            onValueChange = { viewModel.setStartingChips(it.toInt()) },
+            modifier = Modifier.width(200.dp)
+        )
 
         Box(
             modifier = Modifier
