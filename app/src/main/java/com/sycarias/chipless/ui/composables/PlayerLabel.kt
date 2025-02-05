@@ -67,12 +67,12 @@ fun PlayerLabel(
             )
             .buttonShadow(
                 blurRadius = 35.dp,
-                color = ChiplessColors.primary.copy(alpha = 0.2f),
+                color = color.copy(alpha = 0.2f),
                 cornerRadius = cornerRadius
             )
             .buttonShadow(
                 blurRadius = 6.dp,
-                color = ChiplessColors.primary.copy(alpha = 0.5f),
+                color = color.copy(alpha = 0.5f),
                 cornerRadius = cornerRadius
             ),
         shape = CircleShape,
