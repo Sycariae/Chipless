@@ -24,7 +24,7 @@ import com.sycarias.chipless.ui.theme.ChiplessTypography
 import com.sycarias.chipless.ui.utils.measureTextWidth
 
 @Composable
-fun PlayerButton(
+fun PlayerLabel(
     name: String = "",
     size: Dp = 50.dp,
     onClick: () -> Unit = {}
