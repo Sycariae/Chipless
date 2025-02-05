@@ -5,7 +5,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
@@ -14,6 +13,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.sycarias.chipless.ui.composables.presets.Label
 import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
 import com.sycarias.chipless.ui.theme.ChiplessTypography as CStyle
 
@@ -44,7 +44,7 @@ fun IntInputField(
     }
 
     OutlinedTextField(
-        label = { Text(text = label, style = CStyle.l2) },
+        label = { Label(text = label) },
         value = textFieldValue,
         modifier = modifier,
         isError = !isValid,

@@ -1,10 +1,6 @@
 package com.sycarias.chipless.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -13,11 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sycarias.chipless.ui.theme.ChiplessButtonColors
-import com.sycarias.chipless.ui.theme.ChiplessColors
-import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
-import com.sycarias.chipless.ui.theme.ChiplessTypography
-import com.sycarias.chipless.ui.theme.presets.Heading
+import com.sycarias.chipless.ui.composables.presets.ActionButton
+import com.sycarias.chipless.ui.composables.presets.ActionButtonText
+import com.sycarias.chipless.ui.composables.presets.Heading
+import com.sycarias.chipless.ui.composables.presets.Subtitle
 import com.sycarias.chipless.viewModel.BettingRound
 import com.sycarias.chipless.viewModel.TableDataViewModel
 
@@ -45,21 +40,9 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         onClick: () -> Unit,
         text: String
     ) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .width(200.dp)
-                .height(45.dp),
-            shape = RoundedCornerShape(100.dp),
-            colors = ChiplessButtonColors(),
-            elevation = ButtonDefaults.buttonElevation(5.dp)
-        ) {
-            Text(
-                text = text,
-                color = ChiplessColors.textPrimary,
-                style = ChiplessShadowStyle(style = ChiplessTypography.sh2)
-            )
-        }
+        ActionButton(
+            onClick = onClick
+        ) { ActionButtonText(text = text) }
     }
 
     // START OF UI
@@ -70,42 +53,24 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     ) {
         Spacer(modifier = Modifier.height(35.dp))
 
-        // Game Stage Title
-        Text(
-            text = bettingRoundTitle,
-            style = ChiplessShadowStyle(
-                style = ChiplessTypography.h1,
-                offsetX = -12f,
-                offsetY = 12f,
-                blurRadius = 25f
-            ),
-            color = ChiplessColors.textPrimary
-        )
+        // Game Stage Heading
+        Heading(text = bettingRoundTitle)
+
         Spacer(modifier = Modifier.height(6.dp))
 
-        // Player Turn Subtitle
-        Text(
-            text = "$focusPlayerName's Turn",
-            style = ChiplessShadowStyle(
-                style = ChiplessTypography.h2,
-                offsetX = -12f,
-                offsetY = 12f,
-                blurRadius = 25f
-            ),
-            color = ChiplessColors.textSecondary
-        )
+        // Player Turn Subheading
+        Subtitle(text = "$focusPlayerName's Turn")
+
         Spacer(modifier = Modifier.height(45.dp))
 
-        PlayerActionButton(
-            onClick = { viewModel.initiateNewRound() },
-            text = "Next Round"
-        )
+        ActionButton(
+            onClick = { viewModel.initiateNewRound() }
+        ) { ActionButtonText(text = "Next Round") }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        PlayerActionButton(
-            onClick = { players.incrementFocusPlayer() },
-            text = "Next Player"
-        )
+        ActionButton(
+            onClick = { players.incrementFocusPlayer() }
+        ) { ActionButtonText(text = "Next Player") }
     }
 }

@@ -3,10 +3,7 @@ package com.sycarias.chipless.ui.screens
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -26,13 +23,14 @@ import com.sycarias.chipless.GameTable
 import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.composables.DealerIcon
 import com.sycarias.chipless.ui.composables.IntInputField
-import com.sycarias.chipless.ui.composables.PlayerButton
+import com.sycarias.chipless.ui.composables.PlayerLabel
 import com.sycarias.chipless.ui.composables.StaticShadow
+import com.sycarias.chipless.ui.composables.presets.ActionButton
+import com.sycarias.chipless.ui.composables.presets.ActionButtonText
+import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
-import com.sycarias.chipless.ui.theme.ChiplessShadowStyle
-import com.sycarias.chipless.ui.theme.ChiplessTypography
 import com.sycarias.chipless.viewModel.TableDataViewModel
 
 enum class PlayerButtonLocation {
@@ -101,18 +99,21 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         true -> ChiplessColors.primary
         false -> ChiplessColors.secondary
     }
-    val playButtonModifier = when (tableConfigValid) {
-        true -> Modifier
-            .height(playerButtonHeight)
-            .buttonShadow(
-                color = ChiplessColors.primary,
-                offsetX = 0.dp,
-                offsetY = 0.dp,
-                blurRadius = 20.dp,
-                cornerRadius = 100.dp
-            )
-        false -> Modifier.height(playerButtonHeight)
-    }
+    val playButtonModifier = Modifier
+        .height(55.dp)
+        .then(
+            when (tableConfigValid) {
+                true -> Modifier
+                    .buttonShadow(
+                        color = ChiplessColors.primary,
+                        offsetX = 0.dp,
+                        offsetY = 0.dp,
+                        blurRadius = 20.dp,
+                        cornerRadius = 100.dp
+                    )
+                false -> Modifier
+            }
+        )
     val playButtonTextColor = when (tableConfigValid) {
         true -> ChiplessColors.textPrimary
         false -> ChiplessColors.textTertiary
@@ -192,7 +193,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         }
                 }
             ) {
-                PlayerButton(
+                PlayerLabel(
                     name = players.getPlayerName(playerID).value,
                     size = playerButtonSize,
                     onClick = onClick
@@ -219,18 +220,11 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         verticalArrangement = Arrangement.Top
     ) {
         Spacer(modifier = Modifier.height(35.dp))
-        // Title
-        Text(
-            text = "Create Table",
-            style = ChiplessShadowStyle(
-                style = ChiplessTypography.h1,
-                offsetX = -12f,
-                offsetY = 12f,
-                blurRadius = 25f
-            ),
-            color = ChiplessColors.textPrimary
-        )
+
+        Heading(text = "Create Table")
+
         Spacer(Modifier.height(12.dp))
+
         // Settings Input Fields
         Row() {
             IntInputField(
@@ -245,6 +239,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 modifier = Modifier.width(150.dp)
             )
             Spacer(Modifier.width(18.dp))
+
             IntInputField(
                 label = "Small Blind",
                 initialValue = smallBlind.toString(),
@@ -255,6 +250,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
             )
         }
         Spacer(Modifier.height(12.dp))
+
         IntInputField(
             label = "Starting Chips",
             initialValue = startingChips.toString(),
@@ -315,6 +311,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                     }
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
+
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
                             playerID = 1,
@@ -333,6 +330,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     }
                 }
                 Spacer(modifier = Modifier.height(playerButtonTBRVSpacing))
+
                 Row( // PLAYER MIDDLE SECTION
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -358,6 +356,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
+
                         CTSPlayerButton(
                             playerID = 8,
                             side = PlayerButtonSide.LEFT,
@@ -373,6 +372,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
+
                         CTSPlayerButton(
                             playerID = 7,
                             side = PlayerButtonSide.LEFT,
@@ -389,6 +389,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                     }
                     Spacer(modifier = Modifier.width(playerButtonMidHSpacing))
+
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.Start
@@ -408,6 +409,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
+
                         CTSPlayerButton(
                             playerID = 3,
                             side = PlayerButtonSide.RIGHT,
@@ -423,6 +425,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
+
                         CTSPlayerButton(
                             playerID = 4,
                             side = PlayerButtonSide.RIGHT,
@@ -440,6 +443,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     }
                 }
                 Spacer(modifier = Modifier.height(playerButtonTBRVSpacing))
+
                 Row( // PLAYERS BOTTOM ROW
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -463,6 +467,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         )
                     }
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
+
                     Row (modifier = Modifier.weight(1f)) {
                         CTSPlayerButton(
                             playerID = 5,
@@ -491,7 +496,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Button(
+        ActionButton(
             onClick = {
                 when (tableConfigValid) {
                     true -> {
@@ -502,7 +507,6 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 }
             },
             modifier = playButtonModifier,
-            shape = RoundedCornerShape(100.dp),
             colors = ChiplessButtonColors(playButtonColor)
         ) {
             StaticShadow(
@@ -515,14 +519,14 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
                     contentDescription = "Settings",
                     tint = playButtonTextColor,
-                        modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                "Play",
-                color = playButtonTextColor,
-                style = ChiplessShadowStyle(style = ChiplessTypography.sh2)
+
+            ActionButtonText(
+                text = "Play",
+                color = playButtonTextColor
             )
         }
     }
