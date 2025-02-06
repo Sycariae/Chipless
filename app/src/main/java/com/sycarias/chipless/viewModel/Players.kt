@@ -26,44 +26,33 @@ class Players (playerCount: Int) {
 
     private val _focusID = mutableIntStateOf(0) // The focussed player, the one whose turn it is. By default, this is the first id from the list of active players
     val focusID by _focusID
-    val focusPlayer by derivedStateOf { players[_focusID.intValue] }
+    val focusPlayer by derivedStateOf { players[focusID] }
 
     private val _dealerID = mutableIntStateOf(0)
     val dealerID by _dealerID
-    val dealerPlayer by derivedStateOf { players[_dealerID.intValue] }
-
-    // The index within the list of active player IDs for the dealer player ID
-    private val dealerIndexInActiveIDs by derivedStateOf {
-        activeIDs.indexOf(_dealerID.intValue).takeIf { it != -1 } ?: activeIDs.firstOrNull() ?: -1
-    }
-    // The index within the list of active player IDs for the focus player ID
-    private val focusIndexInActiveIDs by derivedStateOf {
-        activeIDs.indexOf(_focusID.intValue).takeIf { it != -1 } ?: activeIDs.firstOrNull() ?: -1
-    }
-    // The index within the list of active player IDs for the next focus player ID
-    private val nextFocusIndexInActiveIDs by derivedStateOf {
-        if (activeIDs.isNotEmpty()) {
-            activeIDs[(focusIndexInActiveIDs + 1) % activeIDs.size]
-        } else {
-            -1 // Return an invalid player ID if no active players exist
-        }
-    }
+    val dealerPlayer by derivedStateOf { players[dealerID] }
 
     // The active player ID of the player after the dealer
-    val smallBlindPlayerID by derivedStateOf {
-        if (activeIDs.isNotEmpty()) {
-            activeIDs[(dealerIndexInActiveIDs + 1) % activeIDs.size]
-        } else {
-            -1 // Return an invalid player ID if no active players exist
+    val smallBlindPlayerID by getNextInActiveIDs(dealerID, increment = 1)
+    val smallBlindPlayer by derivedStateOf { players[smallBlindPlayerID] }
+    // The active player ID of the player after the small blind player; 2nd after the dealer
+    val bigBlindPlayerID by getNextInActiveIDs(dealerID, increment = 2)
+    val bigBlindPlayer by derivedStateOf { players[bigBlindPlayerID] }
+
+    fun getNextInActiveIDs(
+        playerID: Int,
+        increment: Int = 1
+    ): State<Int> {
+        return derivedStateOf {
+            if (activeIDs.isNotEmpty()) {
+                activeIDs[( ( activeIDs.indexOf(playerID).takeIf { it != -1 } ?: activeIDs.first() ) + increment) % activeIDs.size]
+            } else {
+                -1 // Return an invalid player ID if no active players exist
+            }
         }
     }
-    // The active player ID of the player after the small blind player; 2nd after the dealer
-    val bigBlindPlayerID by derivedStateOf {
-        if (activeIDs.isNotEmpty()) {
-            activeIDs[(dealerIndexInActiveIDs + 2) % activeIDs.size]
-        } else {
-            -1 // Return an invalid player ID if no active players exist
-        }
+    fun getPlayer(playerID: Int): Player {
+        return players[playerID]
     }
 
     // Dealer Player Setter Function
@@ -77,14 +66,14 @@ class Players (playerCount: Int) {
     }
     fun setInitialFocusPlayer() {
         if (activeIDs.isNotEmpty()) {
-            setFocusPlayer(activeIDs[(dealerIndexInActiveIDs + 3) % activeIDs.size])
+            setFocusPlayer(getNextInActiveIDs(playerID = dealerID, increment = 3).value)
         } else {
             throw IndexOutOfBoundsException("NO ACTIVE PLAYERS: activeIDs IS EMPTY")
         }
     }
     fun incrementFocusPlayer() {
         if (activeIDs.isNotEmpty()) {
-            setFocusPlayer(nextFocusIndexInActiveIDs)
+            setFocusPlayer(getNextInActiveIDs(playerID = focusID, increment = 1).value)
         } else {
             throw IndexOutOfBoundsException("NO ACTIVE PLAYERS: activeIDs IS EMPTY")
         }
