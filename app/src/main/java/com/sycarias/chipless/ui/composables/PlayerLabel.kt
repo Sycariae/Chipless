@@ -78,58 +78,60 @@ fun PlayerLabel(
         }
     }
 
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .height(size)
-            .width(animatedWidth.value)
-            .border(
-                width = (0.5).dp,
-                shape = shape,
-                color = borderColor
-            )
-            .innerShadow(
-                shape = shape,
-                color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = true).value),
-                blur = getGlowBlur(0, isInnerShadow = true).value,
-                offsetX = 0.dp,
-                offsetY = 0.dp
-            )
-            .innerShadow(
-                shape = shape,
-                color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = true).value),
-                blur = getGlowBlur(1, isInnerShadow = true).value,
-                offsetX = 0.dp,
-                offsetY = 0.dp
-            )
-            .buttonShadow(
-                color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = false).value),
-                blurRadius = getGlowBlur(0, isInnerShadow = false).value,
-                cornerRadius = cornerRadius
-            )
-            .buttonShadow(
-                color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = false).value),
-                blurRadius = getGlowBlur(1, isInnerShadow = false).value,
-                cornerRadius = cornerRadius
-            ),
-        shape = CircleShape,
-        colors = ChiplessButtonColors(),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        if ( name.isEmpty() ) {
-            Icon(
-                painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
-                contentDescription = "Add Icon",
-                modifier = Modifier
-                    .size(17.dp)
-            )
-        } else {
-            Text(
-                text = name,
-                style = textStyle,
-                modifier = Modifier.padding(start = textPadding, end = textPadding),
-                softWrap = false
-            )
+    if (!(name.isEmpty() && hideOnEmpty)) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .height(size)
+                .width(animatedWidth.value)
+                .border(
+                    width = (0.5).dp,
+                    shape = shape,
+                    color = borderColor
+                )
+                .innerShadow(
+                    shape = shape,
+                    color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = true).value),
+                    blur = getGlowBlur(0, isInnerShadow = true).value,
+                    offsetX = 0.dp,
+                    offsetY = 0.dp
+                )
+                .innerShadow(
+                    shape = shape,
+                    color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = true).value),
+                    blur = getGlowBlur(1, isInnerShadow = true).value,
+                    offsetX = 0.dp,
+                    offsetY = 0.dp
+                )
+                .buttonShadow(
+                    color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = false).value),
+                    blurRadius = getGlowBlur(0, isInnerShadow = false).value,
+                    cornerRadius = cornerRadius
+                )
+                .buttonShadow(
+                    color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = false).value),
+                    blurRadius = getGlowBlur(1, isInnerShadow = false).value,
+                    cornerRadius = cornerRadius
+                ),
+            shape = CircleShape,
+            colors = ChiplessButtonColors(),
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            if (name.isNotEmpty()) {
+                Text(
+                    text = name,
+                    style = textStyle,
+                    modifier = Modifier.padding(start = textPadding, end = textPadding),
+                    softWrap = false
+                )
+            } else {
+                Icon(
+                    painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
+                    contentDescription = "Add Icon",
+                    modifier = Modifier
+                        .size(17.dp)
+                )
+            }
         }
     }
 }
