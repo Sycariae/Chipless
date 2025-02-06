@@ -94,7 +94,6 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     }
 
     // Define Theming of Play Button based on Table Config Validity
-    val playerButtonHeight = 55.dp
     val playButtonColor = when (tableConfigValid) {
         true -> ChiplessColors.primary
         false -> ChiplessColors.secondary
