@@ -28,8 +28,8 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val players = viewModel.players
     val focusPlayerName by remember { derivedStateOf { players.focusPlayer.name } }
 
-    val gameStage by remember { viewModel.bettingRound }
-    val bettingRoundTitle: String = when(gameStage) {
+    val bettingRound by remember { viewModel.bettingRound }
+    val bettingRoundTitle: String = when(bettingRound) {
         BettingRound.PREFLOP -> "Pre-Flop"
         BettingRound.FLOP -> "Flop"
         BettingRound.TURN -> "Turn"
