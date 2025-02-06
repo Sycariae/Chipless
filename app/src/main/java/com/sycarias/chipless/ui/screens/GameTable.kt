@@ -110,8 +110,9 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         Spacer(modifier = Modifier.height(10.dp))
 
         PlayerLabel(
-            name = playerNames[3],
-            glowIntensity = if (playerNames[3] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
+            name = if (bettingRound == BettingRound.FLOP) playerNames[3] else "",
+            glowIntensity = if (playerNames[3] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
+            hideOnEmpty = true
         )
     }
 }
