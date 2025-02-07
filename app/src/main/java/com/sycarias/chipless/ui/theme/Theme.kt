@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.geometry.Offset
@@ -41,17 +39,6 @@ fun ChiplessButtonColors(
     fg: Color = ChiplessColors.textSecondary
 ): ButtonColors {
     return ButtonDefaults.buttonColors(
-        containerColor = bg,
-        contentColor = fg
-    )
-}
-
-@Composable
-fun ChiplessIconButtonColors(
-    bg: Color = ChiplessColors.secondary,
-    fg: Color = ChiplessColors.textSecondary
-): IconButtonColors {
-    return IconButtonDefaults.iconButtonColors(
         containerColor = bg,
         contentColor = fg
     )
