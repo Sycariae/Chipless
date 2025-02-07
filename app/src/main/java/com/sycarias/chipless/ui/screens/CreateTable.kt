@@ -29,7 +29,6 @@ import com.sycarias.chipless.ui.composables.presets.ActionButton
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.extensions.buttonShadow
-import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.viewModel.TableDataViewModel
 
@@ -506,7 +505,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 }
             },
             modifier = playButtonModifier,
-            colors = ChiplessButtonColors(playButtonColor)
+            color = playButtonColor
         ) {
             StaticShadow(
                 blurRadius = 5.dp,

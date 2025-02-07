@@ -4,21 +4,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
+import com.sycarias.chipless.ui.utils.colorMix
 
 @Composable
 fun LargeFocusButton(
     onClick: () -> Unit,
-    contents: @Composable () -> Unit = {}
+    contents: @Composable () -> Unit
 ) {
     Button(
         onClick = onClick,
@@ -45,16 +46,17 @@ fun LargeButton(
     modifier: Modifier = Modifier
         .width(290.dp)
         .height(65.dp),
+    enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(100.dp),
-    buttonColors: ButtonColors = ChiplessButtonColors(),
+    color: Color = ChiplessColors.secondary,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(5.dp),
-    contents: @Composable () -> Unit = {}
+    contents: @Composable () -> Unit
 ) {
     Button(
-        onClick = onClick,
+        onClick = if (enabled) onClick else { {} },
         modifier = modifier,
         shape = shape,
-        colors = buttonColors,
+        colors = ChiplessButtonColors(if (enabled) color else colorMix(color, ChiplessColors.bgPrimary, 0.4f)),
         elevation = elevation
     ) {
         contents()
@@ -67,16 +69,17 @@ fun ActionButton(
     modifier: Modifier = Modifier
         .width(120.dp)
         .height(55.dp),
+    enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(100.dp),
-    colors: ButtonColors = ChiplessButtonColors(),
+    color: Color = ChiplessColors.secondary,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(5.dp),
-    contents: @Composable () -> Unit = {}
+    contents: @Composable () -> Unit
 ) {
     Button(
-        onClick = onClick,
+        onClick = if (enabled) onClick else { {} },
         modifier = modifier,
         shape = shape,
-        colors = colors,
+        colors = ChiplessButtonColors(if (enabled) color else colorMix(color, ChiplessColors.bgPrimary, 0.4f)),
         elevation = elevation
     ) {
         contents()
