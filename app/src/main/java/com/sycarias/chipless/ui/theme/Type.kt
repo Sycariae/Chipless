@@ -31,72 +31,63 @@ val ChiplessTypography = ChiplessTypographyScheme(
         fontWeight = FontWeight.Bold,
         fontSize = 68.sp,
         lineHeight = 76.sp,
-        letterSpacing = (-1).sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = (-1).sp
     ),
     h1 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 42.sp,
         lineHeight = 54.sp,
-        letterSpacing = (-1).sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = (-1).sp
     ),
     h2 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp,
         lineHeight = 42.sp,
-        letterSpacing = (-0.25).sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = (-0.25).sp
     ),
     sh1 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 36.sp,
-        letterSpacing = (-0.25).sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = (-0.25).sp
     ),
     sh2 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
         lineHeight = 28.sp,
-        letterSpacing = 1.sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = 1.sp
     ),
     body = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 1.sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = 1.sp
     ),
     l1 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
         lineHeight = 22.sp,
-        letterSpacing = 1.sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = 1.sp
     ),
     l2 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 12.sp,
         lineHeight = 20.sp,
-        letterSpacing = 1.sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = 1.sp
     ),
     l3 = TextStyle(
         fontFamily = PoppinsFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 10.sp,
         lineHeight = 18.sp,
-        letterSpacing = 1.2.sp,
-        color = ChiplessColors.textSecondary
+        letterSpacing = 1.2.sp
     ),
 )
 
