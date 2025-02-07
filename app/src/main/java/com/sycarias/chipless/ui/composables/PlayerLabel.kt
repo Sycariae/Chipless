@@ -64,24 +64,24 @@ fun PlayerLabel(
             }
         } else Color.Transparent
 
-    fun getGlowOpacity(id: Int, isInnerShadow: Boolean): State<Float> {
+    fun getGlowOpacity(id: Int): State<Float> {
         return derivedStateOf {
             if (!greyedOut) {
                 when (glowIntensity) {
-                    GlowIntensity.HIGH -> if (isInnerShadow) { listOf(0.4f, 1f)[id] } else { listOf(0.4f, 0.5f)[id] }
-                    GlowIntensity.MEDIUM -> if (isInnerShadow) { listOf(0.4f, 1f)[id] } else { listOf(0.2f, 0.5f)[id] }
-                    GlowIntensity.LOW -> if (isInnerShadow) { listOf(0.25f, 0.4f)[id] } else { listOf(0.1f, 0.3f)[id] }
+                    GlowIntensity.HIGH -> listOf(0.4f, 1f, 0.4f, 0.5f)[id]
+                    GlowIntensity.MEDIUM -> listOf(0.4f, 1f, 0.2f, 0.5f)[id]
+                    GlowIntensity.LOW -> listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
                 }
             } else 0f
         }
     }
-    fun getGlowBlur(id: Int, isInnerShadow: Boolean): State<Dp> {
+    fun getGlowBlur(id: Int): State<Dp> {
         return derivedStateOf {
             if (!greyedOut) {
                 when (glowIntensity) {
-                    GlowIntensity.HIGH -> if (isInnerShadow) { listOf(26.dp, 12.dp)[id] } else { listOf(75.dp, 25.dp)[id] }
-                    GlowIntensity.MEDIUM -> if (isInnerShadow) { listOf(22.dp, 8.dp)[id] } else { listOf(35.dp, 6.dp)[id] }
-                    GlowIntensity.LOW -> if (isInnerShadow) { listOf(18.dp, 8.dp)[id] } else { listOf(35.dp, 6.dp)[id]}
+                    GlowIntensity.HIGH -> listOf(26.dp, 12.dp, 75.dp, 25.dp)[id]
+                    GlowIntensity.MEDIUM -> listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
+                    GlowIntensity.LOW -> listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
                 }
             } else 0.dp
         }
@@ -101,26 +101,26 @@ fun PlayerLabel(
                     )
                     .innerShadow(
                         shape = shape,
-                        color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = true).value),
-                        blur = getGlowBlur(0, isInnerShadow = true).value,
+                        color = glowColor.copy(alpha = getGlowOpacity(0).value),
+                        blur = getGlowBlur(0).value,
                         offsetX = 0.dp,
                         offsetY = 0.dp
                     )
                     .innerShadow(
                         shape = shape,
-                        color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = true).value),
-                        blur = getGlowBlur(1, isInnerShadow = true).value,
+                        color = glowColor.copy(alpha = getGlowOpacity(1).value),
+                        blur = getGlowBlur(1).value,
                         offsetX = 0.dp,
                         offsetY = 0.dp
                     )
                     .buttonShadow(
-                        color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = false).value),
-                        blurRadius = getGlowBlur(0, isInnerShadow = false).value,
+                        color = glowColor.copy(alpha = getGlowOpacity(2).value),
+                        blurRadius = getGlowBlur(2).value,
                         cornerRadius = cornerRadius
                     )
                     .buttonShadow(
-                        color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = false).value),
-                        blurRadius = getGlowBlur(1, isInnerShadow = false).value,
+                        color = glowColor.copy(alpha = getGlowOpacity(3).value),
+                        blurRadius = getGlowBlur(3).value,
                         cornerRadius = cornerRadius
                     ),
                 shape = CircleShape,
