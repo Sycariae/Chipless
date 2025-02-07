@@ -12,7 +12,7 @@ val ChiplessColors = ChiplessColorScheme(
 
     textPrimary = Color(0xFFFFFFFF),    // White
     textSecondary = Color(0xFFE2E2E2),  // Light Grey
-    textTertiary = Color(0xFFADADB2),   // Lighter Grey
+    textTertiary = Color(0xFF969699),   // Light-ish Grey
 
     bgPrimary = Color(0xFF222225),      // Dark Grey
     bgSecondary = Color(0xFF2C2C30),    // Lighter Dark Grey
