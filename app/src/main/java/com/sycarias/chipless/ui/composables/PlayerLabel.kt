@@ -5,10 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Modifier
@@ -32,6 +31,7 @@ enum class GlowIntensity {
     LOW
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerLabel(
     name: String = "",
@@ -39,13 +39,14 @@ fun PlayerLabel(
     onClick: () -> Unit = {},
     chips: Int? = null,
     glowIntensity: GlowIntensity = GlowIntensity.MEDIUM,
-    greyOut: Boolean = false,
+    greyedOut: Boolean = false,
     hideOnEmpty: Boolean = false,
 ) {
     val cornerRadius = 100.dp
     val shape = RoundedCornerShape(cornerRadius)
     val glowColor = ChiplessColors.primary
     val textStyle = ChiplessTypography.body
+    val textColor = if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary
     val textWidth = measureTextWidth(text = name, style = textStyle)
     val textPadding = 15.dp
     val width = when {
@@ -54,83 +55,94 @@ fun PlayerLabel(
     }
     val animatedWidth = animateDpAsState(targetValue = width, label = "Player Button Width")
 
-    val borderColor = when (glowIntensity) {
-        GlowIntensity.HIGH -> glowColor
-        GlowIntensity.MEDIUM -> glowColor
-        GlowIntensity.LOW -> Color.Transparent
-    }
+    val borderColor =
+        if (!greyedOut) {
+            when (glowIntensity) {
+                GlowIntensity.HIGH -> glowColor
+                GlowIntensity.MEDIUM -> glowColor
+                GlowIntensity.LOW -> Color.Transparent
+            }
+        } else Color.Transparent
+
     fun getGlowOpacity(id: Int, isInnerShadow: Boolean): State<Float> {
         return derivedStateOf {
-            when (glowIntensity) {
-                GlowIntensity.HIGH -> if (isInnerShadow) { listOf(0.4f, 1f)[id] } else { listOf(0.4f, 0.5f)[id] }
-                GlowIntensity.MEDIUM -> if (isInnerShadow) { listOf(0.4f, 1f)[id] } else { listOf(0.2f, 0.5f)[id] }
-                GlowIntensity.LOW -> if (isInnerShadow) { listOf(0.25f, 0.4f)[id] } else { listOf(0.1f, 0.3f)[id] }
-            }
+            if (!greyedOut) {
+                when (glowIntensity) {
+                    GlowIntensity.HIGH -> if (isInnerShadow) { listOf(0.4f, 1f)[id] } else { listOf(0.4f, 0.5f)[id] }
+                    GlowIntensity.MEDIUM -> if (isInnerShadow) { listOf(0.4f, 1f)[id] } else { listOf(0.2f, 0.5f)[id] }
+                    GlowIntensity.LOW -> if (isInnerShadow) { listOf(0.25f, 0.4f)[id] } else { listOf(0.1f, 0.3f)[id] }
+                }
+            } else 0f
         }
     }
     fun getGlowBlur(id: Int, isInnerShadow: Boolean): State<Dp> {
         return derivedStateOf {
-            when (glowIntensity) {
-                GlowIntensity.HIGH -> if (isInnerShadow) { listOf(26.dp, 12.dp)[id] } else { listOf(75.dp, 25.dp)[id] }
-                GlowIntensity.MEDIUM -> if (isInnerShadow) { listOf(22.dp, 8.dp)[id] } else { listOf(35.dp, 6.dp)[id] }
-                GlowIntensity.LOW -> if (isInnerShadow) { listOf(18.dp, 8.dp)[id] } else { listOf(35.dp, 6.dp)[id]}
-            }
+            if (!greyedOut) {
+                when (glowIntensity) {
+                    GlowIntensity.HIGH -> if (isInnerShadow) { listOf(26.dp, 12.dp)[id] } else { listOf(75.dp, 25.dp)[id] }
+                    GlowIntensity.MEDIUM -> if (isInnerShadow) { listOf(22.dp, 8.dp)[id] } else { listOf(35.dp, 6.dp)[id] }
+                    GlowIntensity.LOW -> if (isInnerShadow) { listOf(18.dp, 8.dp)[id] } else { listOf(35.dp, 6.dp)[id]}
+                }
+            } else 0.dp
         }
     }
 
-    if (!(name.isEmpty() && hideOnEmpty)) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .height(size)
-                .width(animatedWidth.value)
-                .border(
-                    width = (0.5).dp,
-                    shape = shape,
-                    color = borderColor
-                )
-                .innerShadow(
-                    shape = shape,
-                    color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = true).value),
-                    blur = getGlowBlur(0, isInnerShadow = true).value,
-                    offsetX = 0.dp,
-                    offsetY = 0.dp
-                )
-                .innerShadow(
-                    shape = shape,
-                    color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = true).value),
-                    blur = getGlowBlur(1, isInnerShadow = true).value,
-                    offsetX = 0.dp,
-                    offsetY = 0.dp
-                )
-                .buttonShadow(
-                    color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = false).value),
-                    blurRadius = getGlowBlur(0, isInnerShadow = false).value,
-                    cornerRadius = cornerRadius
-                )
-                .buttonShadow(
-                    color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = false).value),
-                    blurRadius = getGlowBlur(1, isInnerShadow = false).value,
-                    cornerRadius = cornerRadius
-                ),
-            shape = CircleShape,
-            colors = ChiplessButtonColors(),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            if (name.isNotEmpty()) {
-                Text(
-                    text = name,
-                    style = textStyle,
-                    modifier = Modifier.padding(start = textPadding, end = textPadding),
-                    softWrap = false
-                )
-            } else {
-                Icon(
-                    painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
-                    contentDescription = "Add Icon",
-                    modifier = Modifier
-                        .size(17.dp)
-                )
+    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+        if (!(name.isEmpty() && hideOnEmpty)) {
+            Button(
+                onClick = onClick,
+                modifier = Modifier
+                    .height(size)
+                    .width(animatedWidth.value)
+                    .border(
+                        width = (0.5).dp,
+                        shape = shape,
+                        color = borderColor
+                    )
+                    .innerShadow(
+                        shape = shape,
+                        color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = true).value),
+                        blur = getGlowBlur(0, isInnerShadow = true).value,
+                        offsetX = 0.dp,
+                        offsetY = 0.dp
+                    )
+                    .innerShadow(
+                        shape = shape,
+                        color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = true).value),
+                        blur = getGlowBlur(1, isInnerShadow = true).value,
+                        offsetX = 0.dp,
+                        offsetY = 0.dp
+                    )
+                    .buttonShadow(
+                        color = glowColor.copy(alpha = getGlowOpacity(0, isInnerShadow = false).value),
+                        blurRadius = getGlowBlur(0, isInnerShadow = false).value,
+                        cornerRadius = cornerRadius
+                    )
+                    .buttonShadow(
+                        color = glowColor.copy(alpha = getGlowOpacity(1, isInnerShadow = false).value),
+                        blurRadius = getGlowBlur(1, isInnerShadow = false).value,
+                        cornerRadius = cornerRadius
+                    ),
+                shape = CircleShape,
+                colors = if (greyedOut) ChiplessButtonColors(ChiplessColors.secondary.copy(alpha = 0.4f)) else ChiplessButtonColors(),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                if (name.isNotEmpty()) {
+                    Text(
+                        text = name,
+                        style = textStyle,
+                        color = textColor,
+                        modifier = Modifier.padding(start = textPadding, end = textPadding),
+                        softWrap = false
+                    )
+                } else {
+                    Icon(
+                        painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
+                        contentDescription = "Add Icon",
+                        modifier = Modifier
+                            .size(17.dp)
+                    )
+                }
             }
         }
     }
