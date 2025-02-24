@@ -58,7 +58,7 @@ fun IntInputField(
                 onValueChange(validatedValue)
             }
         },
-        textStyle = CStyle.body,
+        textStyle = CStyle.body.copy(color = CColor.textSecondary),
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
             errorBorderColor = CColor.accentPrimary,
