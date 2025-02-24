@@ -129,7 +129,7 @@ fun Label(
 @Composable
 fun LargeFocusButtonText(
     text: String,
-    color: Color = ChiplessColors.textPrimary
+    color: Color = Color.Unspecified
 ) {
     Text(
         text = text,
@@ -146,7 +146,7 @@ fun LargeFocusButtonText(
 @Composable
 fun LargeButtonText(
     text: String,
-    color: Color = ChiplessColors.textPrimary
+    color: Color = Color.Unspecified
 ) {
     Text(
         text = text,
@@ -163,7 +163,7 @@ fun LargeButtonText(
 @Composable
 fun ActionButtonText(
     text: String,
-    color: Color = ChiplessColors.textPrimary
+    color: Color = Color.Unspecified
 ) {
     Text(
         text = text,
