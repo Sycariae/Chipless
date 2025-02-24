@@ -124,7 +124,7 @@ fun PlayerLabel(
                         cornerRadius = cornerRadius
                     ),
                 shape = CircleShape,
-                colors = if (greyedOut) ChiplessButtonColors(ChiplessColors.secondary.copy(alpha = 0.4f)) else ChiplessButtonColors(),
+                colors = ChiplessButtonColors(if (greyedOut) ChiplessColors.greyOut else ChiplessColors.secondary),
                 contentPadding = PaddingValues(0.dp)
             ) {
                 if (name.isNotEmpty()) {
