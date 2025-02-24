@@ -65,19 +65,6 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         Spacer(modifier = Modifier.height(45.dp))
 
-        ActionButton(
-            onClick = { viewModel.initiateNewRound() },
-            enabled = false
-        ) { ActionButtonText(text = "Next Round") }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        ActionButton(
-            onClick = { players.incrementFocusPlayer() }
-        ) { ActionButtonText(text = "Next Player") }
-
-        Spacer(modifier = Modifier.height(40.dp))
-
         val playerNames by remember {
             derivedStateOf {
                 listOf(
@@ -88,6 +75,25 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
                 )
             }
         }
+
+        ActionButton(
+            onClick = { viewModel.initiateNewRound() },
+            enabled = playerNames[0] != "Luke",
+            modifier = Modifier
+                .wrapContentWidth()
+                .height(55.dp)
+        ) { ActionButtonText(text = "Next Round") }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        ActionButton(
+            onClick = { players.incrementFocusPlayer() },
+            modifier = Modifier
+                .wrapContentWidth()
+                .height(55.dp)
+        ) { ActionButtonText(text = "Next Player") }
+
+        Spacer(modifier = Modifier.height(40.dp))
 
         PlayerLabel(
             name = playerNames[0],
