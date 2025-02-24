@@ -66,7 +66,8 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         Spacer(modifier = Modifier.height(45.dp))
 
         ActionButton(
-            onClick = { viewModel.initiateNewRound() }
+            onClick = { viewModel.initiateNewRound() },
+            enabled = false
         ) { ActionButtonText(text = "Next Round") }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -104,7 +105,8 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         PlayerLabel(
             name = playerNames[2],
-            glowIntensity = if (playerNames[2] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
+            glowIntensity = if (playerNames[2] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
+            greyedOut = true
         )
 
         Spacer(modifier = Modifier.height(10.dp))
