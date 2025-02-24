@@ -35,7 +35,7 @@ class TableDataViewModel: ViewModel() {
     val players: Players = _players
 
 
-    // = BETS AND BALANCES
+    // = TABLE BET AND POTS
     // The bet players must match for the current betting round
     private val _currentTableBet = _players.highestBet
     val currentTableBet: State<Int> = _currentTableBet
