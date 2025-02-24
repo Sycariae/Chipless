@@ -79,7 +79,9 @@ fun ActionButton(
         onClick = if (enabled) onClick else { {} },
         modifier = modifier,
         shape = shape,
-        colors = ChiplessButtonColors(if (enabled) color else colorMix(color, ChiplessColors.bgPrimary, 0.4f)),
+        colors = if (enabled) {
+            ChiplessButtonColors(color)
+        } else ChiplessButtonColors(colorMix(color, ChiplessColors.bgPrimary, 0.4f), ChiplessColors.textTertiary),
         elevation = elevation
     ) {
         contents()
