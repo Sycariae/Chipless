@@ -1,18 +1,21 @@
 package com.sycarias.chipless.viewModel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 
 class Players (playerCount: Int) {
-    private val players = mutableStateListOf(*Array(playerCount) { Player() })
+    private val _players = listOf(*Array(playerCount) { Player() })
 
     val participatingIDs by derivedStateOf { // The list of players that are not sitting out or don't exist
-        players.indices.filter { playerID ->
-            players[playerID].name.isNotBlank() && players[playerID].status != PlayerStatus.SAT_OUT
+        _players.indices.filter { playerID ->
+            _players[playerID].name.isNotBlank() && _players[playerID].status != PlayerStatus.SAT_OUT
         }
     }
     val activeIDs by derivedStateOf { // The list of active players: players that can legally take a turn
-        players.indices.filter { playerID ->
-            players[playerID].name.isNotBlank() && players[playerID].status !in listOf(
+        _players.indices.filter { playerID ->
+            _players[playerID].name.isNotBlank() && _players[playerID].status !in listOf(
                 PlayerStatus.FOLDED,
                 PlayerStatus.SAT_OUT,
                 PlayerStatus.ALL_IN
@@ -21,23 +24,23 @@ class Players (playerCount: Int) {
     }
 
     val highestBet = derivedStateOf {
-        players.maxByOrNull { it.currentBet }?.currentBet ?: 0
+        _players.maxByOrNull { it.currentBet }?.currentBet ?: 0
     }
 
     private val _focusID = mutableIntStateOf(0) // The focussed player, the one whose turn it is. By default, this is the first id from the list of active players
     val focusID by _focusID
-    val focusPlayer by derivedStateOf { players[focusID] }
+    val focusPlayer by derivedStateOf { _players[focusID] }
 
     private val _dealerID = mutableIntStateOf(0)
     val dealerID by _dealerID
-    val dealerPlayer by derivedStateOf { players[dealerID] }
+    val dealerPlayer by derivedStateOf { _players[dealerID] }
 
     // The active player ID of the player after the dealer
     val smallBlindPlayerID by getNextInActiveIDs(dealerID, increment = 1)
-    val smallBlindPlayer by derivedStateOf { players[smallBlindPlayerID] }
+    val smallBlindPlayer by derivedStateOf { _players[smallBlindPlayerID] }
     // The active player ID of the player after the small blind player; 2nd after the dealer
     val bigBlindPlayerID by getNextInActiveIDs(dealerID, increment = 2)
-    val bigBlindPlayer by derivedStateOf { players[bigBlindPlayerID] }
+    val bigBlindPlayer by derivedStateOf { _players[bigBlindPlayerID] }
 
     fun getNextInActiveIDs(
         playerID: Int,
@@ -52,7 +55,7 @@ class Players (playerCount: Int) {
         }
     }
     fun getPlayer(playerID: Int): Player {
-        return players[playerID]
+        return _players[playerID]
     }
 
     // Dealer Player Setter Function
@@ -81,7 +84,7 @@ class Players (playerCount: Int) {
 
     // = ELIMINATION
     fun checkAllForEliminations() {
-        players.forEach { player ->
+        _players.forEach { player ->
             if (player.balance <= 0) {
                 player.eliminate()
             }
@@ -90,16 +93,16 @@ class Players (playerCount: Int) {
 
     // Player Data Getter Functions
     fun getPlayerName(playerID: Int): State<String> {
-        return derivedStateOf { players[playerID].name }
+        return derivedStateOf { _players[playerID].name }
     }
     fun getPlayerStatus(playerID: Int): State<PlayerStatus> {
-        return derivedStateOf { players[playerID].status }
+        return derivedStateOf { _players[playerID].status }
     }
     fun getPlayerBalance(playerID: Int): State<Int> {
-        return derivedStateOf { players[playerID].balance }
+        return derivedStateOf { _players[playerID].balance }
     }
     fun getPlayerCurrentBet(playerID: Int): State<Int> {
-        return derivedStateOf { players[playerID].currentBet }
+        return derivedStateOf { _players[playerID].currentBet }
     }
     fun isActive(playerID: Int): Boolean {
         return playerID in activeIDs
@@ -110,15 +113,15 @@ class Players (playerCount: Int) {
 
     // Player Data Setter Functions
     fun setPlayerName(playerID: Int, newName: String) {
-        players[playerID].name = newName
+        _players[playerID].name = newName
     }
     fun setPlayerStatus(playerID: Int, newStatus: PlayerStatus) {
-        players[playerID].status = newStatus
+        _players[playerID].status = newStatus
     }
     fun updateStatusesOnBet(betterID: Int, isRaise: Boolean) {
         // Update statuses for other participating players to PARTIAL_MATCH
         if (isRaise) {
-            players.forEach { player ->
+            _players.forEach { player ->
                 if (player.status == PlayerStatus.BET_MATCHED) {
                     player.status = PlayerStatus.PARTIAL_MATCH
                 }
@@ -136,30 +139,30 @@ class Players (playerCount: Int) {
         )
     }
     fun placePlayerBet(playerID: Int, amount: Int) {
-        players[playerID].bet(amount)
+        _players[playerID].bet(amount)
     }
     fun payPlayer(playerID: Int, amount: Int) {
-        players[playerID].pay(amount)
+        _players[playerID].pay(amount)
     }
     fun setStartingBalances(startingChips: Int) {
-        players.forEach { player ->
+        _players.forEach { player ->
             player.balance = startingChips
         }
     }
 
     // Reset Functions
     fun resetAllForNewRound() {
-        players.forEach { player ->
+        _players.forEach { player ->
             player.resetForNewRound()
         }
     }
     fun resetAllForNewMatch() {
-        players.forEach { player ->
+        _players.forEach { player ->
             player.resetForNewMatch()
         }
     }
     fun resetAllForNewTable() {
-        players.forEach { player ->
+        _players.forEach { player ->
             player.resetForNewTable()
         }
     }
