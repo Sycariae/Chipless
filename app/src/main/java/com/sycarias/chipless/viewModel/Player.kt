@@ -10,6 +10,7 @@ class Player {
     var status: PlayerStatus by mutableStateOf(PlayerStatus.IDLE)
     var balance: Int by mutableIntStateOf(0)
     var currentBet: Int by mutableIntStateOf(0)
+        private set
 
     fun pay(amount: Int) {
         balance += amount
