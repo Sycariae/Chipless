@@ -63,7 +63,7 @@ class TableDataViewModel: ViewModel() {
         players.setPlayerStatus(playerID = players.smallBlindPlayerID, newStatus = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
     }
     private fun placeBet(playerID: Int, betAmount: Int, isRaise: Boolean) {
-        tablePots.makeDeposit(betAmount) // Add bet amount to table pot and set table bet
+        tablePots.currentPot.deposit(betAmount) // Add bet amount to table pot and set table bet
         players.placePlayerBet(playerID = playerID, amount = betAmount) // Update bet amount and balance for betting player
         players.updateStatusesOnBet(betterID = playerID, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
