@@ -2,33 +2,12 @@ package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class TableDataViewModel: ViewModel() {
     // = TABLE CONFIG
-    // The starting balance given out at the start of a match
-    private val _startingChips = mutableIntStateOf(1000)
-    val startingChips: State<Int> = _startingChips
-    // The minimum bet and the forced bet made by 2nd the player after the dealer at the start of a match
-    private val _bigBlind = mutableIntStateOf(10)
-    val bigBlind: State<Int> = _bigBlind
-    // The forced bet made by the player after the dealer at the start of a match
-    private val _smallBlind = mutableIntStateOf(5)
-    val smallBlind: State<Int> = _smallBlind
-
-    // Table Config Setter Functions
-    fun setStartingChips(value: Int) {
-        _startingChips.intValue = value
-    }
-    fun setBigBlind(value: Int) {
-        _bigBlind.intValue = value
-    }
-    fun setSmallBlind(value: Int) {
-        _smallBlind.intValue = value
-    }
-
+    val tableConfig = TableConfig()
 
     // = PLAYERS
     val players = Players(10)
@@ -57,8 +36,8 @@ class TableDataViewModel: ViewModel() {
         players.setPlayerStatus(playerID = playerID, newStatus = PlayerStatus.ALL_IN)
     }
     fun placeForcedBets() {
-        placeBet(playerID = players.smallBlindPlayerID, betAmount = _smallBlind.intValue, isRaise = false) // Place forced bet for small blind player
-        placeBet(playerID = players.bigBlindPlayerID, betAmount = _bigBlind.intValue, isRaise = false) // Place forced bet for big blind player
+        placeBet(playerID = players.smallBlindPlayerID, betAmount = tableConfig.smallBlind.intValue, isRaise = false) // Place forced bet for small blind player
+        placeBet(playerID = players.bigBlindPlayerID, betAmount = tableConfig.bigBlind.intValue, isRaise = false) // Place forced bet for big blind player
 
         players.setPlayerStatus(playerID = players.smallBlindPlayerID, newStatus = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
     }
@@ -114,7 +93,7 @@ class TableDataViewModel: ViewModel() {
     // Ran when first starting the table, performs all resets and ensures players are given correct starting balances
     fun initialiseNewTable() {
         players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
-        players.setStartingBalances(_startingChips.intValue) // Set all player balances to startingChips
+        players.setStartingBalances(tableConfig.startingChips.intValue) // Set all player balances to startingChips
         players.setInitialFocusPlayer() // Set focus player to the 3rd player after the dealer
         tablePots.resetPots()
         resetBettingRound() // Set betting round to PREFLOP
