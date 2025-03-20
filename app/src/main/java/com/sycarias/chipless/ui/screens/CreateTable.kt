@@ -2,7 +2,18 @@ package com.sycarias.chipless.ui.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -59,25 +70,23 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     val playerButtonTBRHSpacing = 88.dp /*- (dealerIconTBRHClearance * 2)*/ // Player Button Top and Bottom Row Horizontal Spacing
 
     // View Model Variables
-    val startingChips by remember { viewModel.startingChips }
-    val bigBlind by remember { viewModel.bigBlind }
-    val smallBlind by remember { viewModel.smallBlind }
+    val tableConfig = viewModel.tableConfig
     val players = viewModel.players
 
     // Input Field Validation
     val startingChipsValid by remember {
         derivedStateOf {
-            startingChips in bigBlind * 10 .. 1000000
+            tableConfig.startingChips in tableConfig.bigBlind * 10 .. 1000000
         }
     }
     val bigBlindValid by remember {
         derivedStateOf {
-            bigBlind in smallBlind * 2..startingChips / 10
+            tableConfig.bigBlind in tableConfig.smallBlind * 2..tableConfig.startingChips / 10
         }
     }
     val smallBlindValid by remember {
         derivedStateOf {
-            smallBlind in 5..bigBlind / 2
+            tableConfig.smallBlind in 5..tableConfig.bigBlind / 2
         }
     }
 
@@ -227,12 +236,12 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         Row() {
             IntInputField(
                 label = "Big Blind",
-                initialValue = bigBlind.toString(),
+                initialValue = tableConfig.bigBlind.toString(),
                 maxLen = 4,
                 isValid = bigBlindValid,
                 onValueChange = {
-                    viewModel.setBigBlind( it.toInt() )
-                    viewModel.setSmallBlind( it.toInt() / 2 )
+                    tableConfig.bigBlind = it.toInt()
+                    tableConfig.smallBlind = ( it.toInt() / 2 )
                 },
                 modifier = Modifier.width(150.dp)
             )
@@ -240,10 +249,10 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
 
             IntInputField(
                 label = "Small Blind",
-                initialValue = smallBlind.toString(),
+                initialValue = tableConfig.smallBlind.toString(),
                 isValid = smallBlindValid,
                 maxLen = 4,
-                onValueChange = { viewModel.setSmallBlind(it.toInt()) },
+                onValueChange = { tableConfig.smallBlind = it.toInt() },
                 modifier = Modifier.width(150.dp)
             )
         }
@@ -251,10 +260,10 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
 
         IntInputField(
             label = "Starting Chips",
-            initialValue = startingChips.toString(),
+            initialValue = tableConfig.startingChips.toString(),
             maxLen = 6,
             isValid = startingChipsValid,
-            onValueChange = { viewModel.setStartingChips(it.toInt()) },
+            onValueChange = { tableConfig.startingChips = it.toInt() },
             modifier = Modifier.width(200.dp)
         )
 

@@ -36,8 +36,8 @@ class TableDataViewModel: ViewModel() {
         players.setPlayerStatus(playerID = playerID, newStatus = PlayerStatus.ALL_IN)
     }
     fun placeForcedBets() {
-        placeBet(playerID = players.smallBlindPlayerID, betAmount = tableConfig.smallBlind.intValue, isRaise = false) // Place forced bet for small blind player
-        placeBet(playerID = players.bigBlindPlayerID, betAmount = tableConfig.bigBlind.intValue, isRaise = false) // Place forced bet for big blind player
+        placeBet(playerID = players.smallBlindPlayerID, betAmount = tableConfig.smallBlind, isRaise = false) // Place forced bet for small blind player
+        placeBet(playerID = players.bigBlindPlayerID, betAmount = tableConfig.bigBlind, isRaise = false) // Place forced bet for big blind player
 
         players.setPlayerStatus(playerID = players.smallBlindPlayerID, newStatus = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
     }
@@ -93,7 +93,7 @@ class TableDataViewModel: ViewModel() {
     // Ran when first starting the table, performs all resets and ensures players are given correct starting balances
     fun initialiseNewTable() {
         players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
-        players.setStartingBalances(tableConfig.startingChips.intValue) // Set all player balances to startingChips
+        players.setStartingBalances(tableConfig.startingChips) // Set all player balances to startingChips
         players.setInitialFocusPlayer() // Set focus player to the 3rd player after the dealer
         tablePots.resetPots()
         resetBettingRound() // Set betting round to PREFLOP

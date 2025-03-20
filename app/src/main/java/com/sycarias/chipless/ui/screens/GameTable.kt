@@ -1,6 +1,11 @@
 package com.sycarias.chipless.ui.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -21,9 +26,7 @@ import com.sycarias.chipless.viewModel.TableDataViewModel
 @Composable
 fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {
     // View Model Variables
-    val startingChips by remember { viewModel.startingChips }
-    val bigBlind by remember { viewModel.bigBlind }
-    val smallBlind by remember { viewModel.smallBlind }
+    val tableConfig = viewModel.tableConfig
 
     val players = viewModel.players
     val focusPlayerName by remember { derivedStateOf { players.focusPlayer.name } }
