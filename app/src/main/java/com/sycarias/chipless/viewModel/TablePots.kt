@@ -21,6 +21,15 @@ class TablePots (players: Players) {
         )
     }
 
+    // Distribute the a table pot amongst the winners
+    fun distributePot(pot: Pot, winners: List<Player>) {
+        val winningsSplit = pot.balance / winners.count() // Calculate an even split amongst the winners
+
+        winners.forEach { player ->
+            player.pay(winningsSplit) // Award each player their split
+        }
+    }
+
     // Sets the main pot balance to 0 and destroys all side pots
     fun resetPots() {
         mainPot.reset()

@@ -21,15 +21,6 @@ class TableDataViewModel: ViewModel() {
     // Bet Management Class
     val bet = Bet(players, tableConfig, tablePots)
 
-    // Distribute the table pot amongst the winners
-    fun distributeWinnings(winningsAmount: Int, playerIDs: List<Int>) {
-        val winningsSplit = winningsAmount / playerIDs.count() // Calculate an even split amongst the winners
-
-        players.list.forEach { player ->
-            player.pay(winningsSplit) // Award each player their split
-        }
-    }
-
 
     // = BETTING ROUND
     // The current round of betting ( e.g. PREFLOP, FLOP, TURN... )
