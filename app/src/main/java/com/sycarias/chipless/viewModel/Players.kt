@@ -11,7 +11,10 @@ class Players (playerCount: Int) {
 
     val participatingPlayers by derivedStateOf { // The list of players that are not sitting out or don't exist
         _players.filter { player ->
-            player.name.isNotBlank() && player.status != PlayerStatus.SAT_OUT
+            player.name.isNotBlank() && player.status !in listOf(
+                PlayerStatus.SAT_OUT,
+                PlayerStatus.ELIMINATED
+            )
         }
     }
 
@@ -20,7 +23,8 @@ class Players (playerCount: Int) {
             player.name.isNotBlank() && player.status !in listOf(
                 PlayerStatus.FOLDED,
                 PlayerStatus.SAT_OUT,
-                PlayerStatus.ALL_IN
+                PlayerStatus.ALL_IN,
+                PlayerStatus.ELIMINATED
             )
         }
     }
