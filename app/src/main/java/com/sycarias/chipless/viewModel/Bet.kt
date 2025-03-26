@@ -9,32 +9,40 @@ class Bet(
 ) {
     private val currentTableBet by players.highestBet
 
-    // Bet Placement Helper Functions
-    fun call(playerID: Int) {
-        place(playerID = playerID, betAmount = currentTableBet, isRaise = false)
+    // Place a bet into the current pot and update player statuses
+    fun place(player: Player, betAmount: Int, isRaise: Boolean) {
+        tablePots.currentPot.deposit(betAmount) // Add bet amount to table pot and set table bet
+        player.bet(betAmount) // Update bet amount and balance for betting player
+        players.updateStatusesOnBet(bettingPlayer = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
-    fun raise(playerID: Int, raiseAmount: Int) {
-        place(playerID = playerID, betAmount = currentTableBet + raiseAmount, isRaise = true)
+
+    // Place a bet equal to the current table bet
+    fun call(player: Player) {
+        place(player = player, betAmount = currentTableBet, isRaise = false)
     }
-    fun allIn(playerID: Int) {
+
+    // Place a bet equal to the current table bet plus a raise amount
+    fun raise(player: Player, raiseAmount: Int) {
+        place(player = player, betAmount = currentTableBet + raiseAmount, isRaise = true)
+    }
+
+    // Place a bet equal to player's balance
+    fun allIn(player: Player) {
         val isRaise = when { // Determine whether the ALL_IN bet is a raise or not
-            players.getPlayerBalance(playerID).value > currentTableBet -> true
+            player.balance > currentTableBet -> true
             else -> false
         }
 
-        place(playerID = playerID, betAmount = players.getPlayerBalance(playerID).value, isRaise = isRaise)
+        place(player = player, betAmount = player.balance, isRaise = isRaise)
 
-        players.setPlayerStatus(playerID = playerID, newStatus = PlayerStatus.ALL_IN)
+        player.status = PlayerStatus.ALL_IN // Replace the bet status applied by updateStatusesOnBet() with ALL_IN
     }
+
+    // Place blind bets (at the start of a match)
     fun placeBlinds() {
-        place(playerID = players.smallBlindPlayerID, betAmount = tableConfig.smallBlind, isRaise = false) // Place forced bet for small blind player
-        place(playerID = players.bigBlindPlayerID, betAmount = tableConfig.bigBlind, isRaise = false) // Place forced bet for big blind player
+        place(player = players.smallBlind, betAmount = tableConfig.smallBlind, isRaise = false) // Place forced bet for small blind player
+        place(player = players.bigBlind, betAmount = tableConfig.bigBlind, isRaise = false) // Place forced bet for big blind player
 
-        players.setPlayerStatus(playerID = players.smallBlindPlayerID, newStatus = PlayerStatus.PARTIAL_MATCH) // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
-    }
-    fun place(playerID: Int, betAmount: Int, isRaise: Boolean) {
-        tablePots.currentPot.deposit(betAmount) // Add bet amount to table pot and set table bet
-        players.placePlayerBet(playerID = playerID, amount = betAmount) // Update bet amount and balance for betting player
-        players.updateStatusesOnBet(betterID = playerID, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
+        players.smallBlind.status = PlayerStatus.PARTIAL_MATCH // Ensure small blind player is given PARTIAL_MATCH status without making the big blind player RAISED status
     }
 }

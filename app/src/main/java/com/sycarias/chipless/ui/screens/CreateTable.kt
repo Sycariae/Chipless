@@ -41,6 +41,7 @@ import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
+import com.sycarias.chipless.viewModel.Player
 import com.sycarias.chipless.viewModel.TableDataViewModel
 
 enum class PlayerButtonLocation {
@@ -96,8 +97,8 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
             (startingChipsValid
                     && bigBlindValid
                     && smallBlindValid
-                    && players.participatingIDs.count() >= 4)
-                    && players.isActive(players.dealerID)
+                    && players.participatingPlayers.count() >= 4)
+                    && players.isActive(players.dealer)
         }
     }
 
@@ -129,21 +130,21 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     // Local Dealer Icon Composable using Identifiers
     @Composable
     fun CTSDealerIcon(
-        playerID:Int,
-        alpha:Float = 1f
+        player: Player,
+        alpha: Float = 1f
     ) { // Create Table Screen Dealer Icon
         DealerIcon(
-            active = (playerID == players.dealerID),
+            active = (player == players.dealer),
             size = dealerIconSize,
             alpha = alpha,
-            onClick = { players.setDealerPlayer(playerID) }
+            onClick = { players.dealer = player }
         )
     }
 
     // Local Player Button Composable using Identifiers
     @Composable
     fun CTSPlayerButton(
-        playerID: Int,
+        player: Player,
         location: PlayerButtonLocation,
         side: PlayerButtonSide,
         onClick: () -> Unit = {}
@@ -172,7 +173,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 -( dealerIconTBRVSpacing + dealerIconSize )
         }
 
-        val dealerIconAlpha = animateFloatAsState(targetValue = if (players.isActive(playerID)) 1f else 0f, label = "Dealer Icon Fade In/Out")
+        val dealerIconAlpha = animateFloatAsState(targetValue = if (players.isActive(player)) 1f else 0f, label = "Dealer Icon Fade In/Out")
 
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -201,7 +202,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                 }
             ) {
                 PlayerLabel(
-                    name = players.getPlayerName(playerID).value,
+                    name = player.name,
                     size = playerButtonSize,
                     onClick = onClick
                 )
@@ -211,7 +212,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                             .offset(offsetX, offsetY)
                     ) {
                         CTSDealerIcon(
-                            playerID = playerID,
+                            player = player,
                             alpha = dealerIconAlpha.value
                         )
                     }
@@ -302,36 +303,32 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Row (modifier = Modifier.weight(1f)) {
+                        val player = players.list[0]
                         CTSPlayerButton(
-                            playerID = 0,
+                            player = player,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 0,
-                                    newName = when {
-                                        players.isNotActive(0) -> "Luke"
-                                        else -> ""
-                                    }
-                                )
+                                player.name = when {
+                                    players.isNotActive(player) -> "Luke"
+                                    else -> ""
+                                }
                             }
                         )
                     }
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
 
                     Row (modifier = Modifier.weight(1f)) {
+                        val player = players.list[1]
                         CTSPlayerButton(
-                            playerID = 1,
+                            player = player,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.TOP_ROW,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 1,
-                                    newName = when {
-                                        players.isNotActive(1) -> "Tallulah"
-                                        else -> ""
-                                    }
-                                )
+                                player.name = when {
+                                    players.isNotActive(player) -> "Tallulah"
+                                    else -> ""
+                                }
                             }
                         )
                     }
@@ -348,50 +345,44 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.End
                     ) { // LEFT
+                        val player9 = players.list[9]
                         CTSPlayerButton(
-                            playerID = 9,
+                            player = player9,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 9,
-                                    newName = when {
-                                        players.isNotActive(9) -> "Hobo J."
-                                        else -> ""
-                                    }
-                                )
+                                player9.name = when {
+                                    players.isNotActive(player9) -> "Hobo J"
+                                    else -> ""
+                                }
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
 
+                        val player8 = players.list[8]
                         CTSPlayerButton(
-                            playerID = 8,
+                            player = player8,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 8,
-                                    newName = when {
-                                        players.isNotActive(8) -> "Kornrad"
-                                        else -> ""
-                                    }
-                                )
+                                player8.name = when {
+                                    players.isNotActive(player8) -> "Kornrad"
+                                    else -> ""
+                                }
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
 
+                        val player7 = players.list[7]
                         CTSPlayerButton(
-                            playerID = 7,
+                            player = player7,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 7,
-                                    newName = when {
-                                        players.isNotActive(7) -> "Nonrod"
-                                        else -> ""
-                                    }
-                                )
+                                player7.name = when {
+                                    players.isNotActive(player7) -> "Nonrod"
+                                    else -> ""
+                                }
                             }
                         )
                     }
@@ -401,50 +392,44 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.Start
                     ) { // RIGHT
+                        val player2 = players.list[2]
                         CTSPlayerButton(
-                            playerID = 2,
+                            player = player2,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 2,
-                                    newName = when {
-                                        players.isNotActive(2) -> "Nef"
-                                        else -> ""
-                                    }
-                                )
+                                player2.name = when {
+                                    players.isNotActive(player2) -> "Nef"
+                                    else -> ""
+                                }
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
 
+                        val player3 = players.list[3]
                         CTSPlayerButton(
-                            playerID = 3,
+                            player = player3,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 3,
-                                    newName = when {
-                                        players.isNotActive(3) -> "E-van"
-                                        else -> ""
-                                    }
-                                )
+                                player3.name = when {
+                                    players.isNotActive(player3) -> "E-van"
+                                    else -> ""
+                                }
                             }
                         )
                         Spacer(modifier = Modifier.height(playerButtonMidVSpacing))
 
+                        val player4 = players.list[4]
                         CTSPlayerButton(
-                            playerID = 4,
+                            player = player4,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.MID_SECTION,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 4,
-                                    newName = when {
-                                        players.isNotActive(4) -> "Adam"
-                                        else -> ""
-                                    }
-                                )
+                                player4.name = when {
+                                    players.isNotActive(player4) -> "Adam"
+                                    else -> ""
+                                }
                             }
                         )
                     }
@@ -458,36 +443,32 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Row (modifier = Modifier.weight(1f)) {
+                        val player = players.list[6]
                         CTSPlayerButton(
-                            playerID = 6,
+                            player = player,
                             side = PlayerButtonSide.LEFT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 6,
-                                    newName = when {
-                                        players.isNotActive(6) -> "Bellamy"
-                                        else -> ""
-                                    }
-                                )
+                                player.name = when {
+                                    players.isNotActive(player) -> "Bellamy"
+                                    else -> ""
+                                }
                             }
                         )
                     }
                     Spacer(modifier = Modifier.width(playerButtonTBRHSpacing))
 
                     Row (modifier = Modifier.weight(1f)) {
+                        val player = players.list[5]
                         CTSPlayerButton(
-                            playerID = 5,
+                            player = player,
                             side = PlayerButtonSide.RIGHT,
                             location = PlayerButtonLocation.BOTTOM_ROW,
                             onClick = {
-                                players.setPlayerName(
-                                    playerID = 5,
-                                    newName = when {
-                                        players.isNotActive(5) -> "Fred"
-                                        else -> ""
-                                    }
-                                )
+                                player.name = when {
+                                    players.isNotActive(player) -> "Fred"
+                                    else -> ""
+                                }
                             }
                         )
                     }

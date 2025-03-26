@@ -8,14 +8,16 @@ class TableDataViewModel: ViewModel() {
     // = TABLE CONFIG
     val tableConfig = TableConfig()
 
+
     // = PLAYERS
     val players = Players(10)
+
 
     // = TABLE BET AND POTS
     // The bet players must match for the current betting round
     val currentTableBet = players.highestBet
     // The running total of all bets made this match that'll be shared amongst the winners at the end
-    val tablePots = TablePots()
+    val tablePots = TablePots(players)
     // Bet Management Class
     val bet = Bet(players, tableConfig, tablePots)
 
@@ -23,8 +25,8 @@ class TableDataViewModel: ViewModel() {
     fun distributeWinnings(winningsAmount: Int, playerIDs: List<Int>) {
         val winningsSplit = winningsAmount / playerIDs.count() // Calculate an even split amongst the winners
 
-        playerIDs.forEach { playerID ->
-            players.payPlayer(playerID = playerID, amount = winningsSplit) // Award each player their split
+        players.list.forEach { player ->
+            player.pay(winningsSplit) // Award each player their split
         }
     }
 
@@ -51,10 +53,13 @@ class TableDataViewModel: ViewModel() {
 
 
     // = INITIALISATION
+    // Called when a new betting round begins,
     fun initiateNewRound() {
         players.resetAllForNewRound() // Reset player statuses excluding FOLDED, ALL_IN and SAT_OUT and reset all current player bets
         incrementGameStage() // Set game stage to next stage from the current one
     }
+
+    // Called after all betting rounds have been completed, resets currentBets, sets all participating players to IDLE status, resets pots and places blind bets
     fun initiateNewMatch() {
         players.resetAllForNewMatch() // Reset player statuses excluding SAT_OUT and all current player bets
         players.checkAllForEliminations() // Check every player and applies ELIMINATED status to those with a balance of 0
@@ -62,7 +67,8 @@ class TableDataViewModel: ViewModel() {
         resetBettingRound() // Set game stage to first stage: PREFLOP
         bet.placeBlinds()
     }
-    // Ran when first starting the table, performs all resets and ensures players are given correct starting balances
+
+    // Called when first starting the table, performs all resets and ensures players are given correct starting balances
     fun initialiseNewTable() {
         players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
         players.setStartingBalances(tableConfig.startingChips) // Set all player balances to startingChips

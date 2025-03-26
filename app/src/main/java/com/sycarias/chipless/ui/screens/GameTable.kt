@@ -29,7 +29,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
     val tableConfig = viewModel.tableConfig
 
     val players = viewModel.players
-    val focusPlayerName by remember { derivedStateOf { players.focusPlayer.name } }
+    val focusPlayerName by remember { derivedStateOf { players.focus.name } }
 
     val bettingRound by remember { viewModel.bettingRound }
     val bettingRoundTitle: String = when(bettingRound) {
@@ -71,10 +71,10 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         val playerNames by remember {
             derivedStateOf {
                 listOf(
-                    players.focusPlayer.name,
-                    players.getPlayer(players.getNextInActiveIDs(players.focusID, increment = 1).value).name,
-                    players.getPlayer(players.getNextInActiveIDs(players.focusID, increment = 2).value).name,
-                    players.getPlayer(players.getNextInActiveIDs(players.focusID, increment = 3).value).name
+                    players.focus.name,
+                    players.nextActivePlayerAfter(players.focus, increment = 1).name,
+                    players.nextActivePlayerAfter(players.focus, increment = 2).name,
+                    players.nextActivePlayerAfter(players.focus, increment = 3).name
                 )
             }
         }
@@ -100,21 +100,21 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         PlayerLabel(
             name = playerNames[0],
-            glowIntensity = if (playerNames[0] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
+            glowIntensity = if (playerNames[0] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         PlayerLabel(
             name = playerNames[1],
-            glowIntensity = if (playerNames[1] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
+            glowIntensity = if (playerNames[1] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         PlayerLabel(
             name = playerNames[2],
-            glowIntensity = if (playerNames[2] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
+            glowIntensity = if (playerNames[2] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
             greyedOut = true
         )
 
@@ -122,7 +122,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         PlayerLabel(
             name = if (bettingRound == BettingRound.FLOP) playerNames[3] else "",
-            glowIntensity = if (playerNames[3] == players.dealerPlayer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
+            glowIntensity = if (playerNames[3] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
             hideOnEmpty = true
         )
     }

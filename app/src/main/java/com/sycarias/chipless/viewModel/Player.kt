@@ -12,6 +12,7 @@ class Player {
     var currentBet: Int by mutableIntStateOf(0)
         private set
 
+    // = BALANCE AND BET MANAGEMENT
     fun pay(amount: Int) {
         balance += amount
     }
