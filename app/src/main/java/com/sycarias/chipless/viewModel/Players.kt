@@ -125,19 +125,26 @@ class Players (playerCount: Int) {
 
     fun resetAllForNewRound() {
         _players.forEach { player ->
-            player.resetForNewRound()
+            player.currentBet = 0
+        }
+        activePlayers.forEach { player ->
+            player.status = PlayerStatus.IDLE
         }
     }
 
     fun resetAllForNewMatch() {
         _players.forEach { player ->
-            player.resetForNewMatch()
+            player.currentBet = 0
+        }
+        participatingPlayers.forEach { player ->
+            player.status = PlayerStatus.IDLE
         }
     }
 
     fun resetAllForNewTable() {
         _players.forEach { player ->
-            player.resetForNewTable()
+            player.currentBet = 0
+            player.status = PlayerStatus.IDLE
         }
     }
 }
