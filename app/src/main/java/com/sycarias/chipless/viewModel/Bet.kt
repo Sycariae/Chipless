@@ -1,6 +1,7 @@
 package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 class Bet(
     private val players: Players,
@@ -11,7 +12,7 @@ class Bet(
 
     // Place a bet into the current pot and update player statuses
     fun place(player: Player, betAmount: Int, isRaise: Boolean) {
-        tablePots.currentPot.deposit(betAmount) // Add bet amount to table pot and set table bet
+        tablePots.stagedBets += betAmount // Add bet amount to table pot and set table bet
         player.bet(betAmount) // Update bet amount and balance for betting player
         players.updateStatusesOnBet(bettingPlayer = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
@@ -23,19 +24,17 @@ class Bet(
 
     // Place a bet equal to the current table bet plus a raise amount
     fun raise(player: Player, raiseAmount: Int) {
-        place(player = player, betAmount = currentTableBet + raiseAmount, isRaise = true)
+        if (player.balance == (currentTableBet + raiseAmount)) {
+            allIn(player = player, isRaise = true)
+        } else {
+            place(player = player, betAmount = currentTableBet + raiseAmount, isRaise = true)
+        }
     }
 
     // Place a bet equal to player's balance
-    fun allIn(player: Player) {
-        val isRaise = when { // Determine whether the ALL_IN bet is a raise or not
-            player.balance > currentTableBet -> true
-            else -> false
-        }
-
+    fun allIn(player: Player, isRaise: Boolean = false) {
         place(player = player, betAmount = player.balance, isRaise = isRaise)
-
-        player.status = PlayerStatus.ALL_IN // Replace the bet status applied by updateStatusesOnBet() with ALL_IN
+        player.status = PlayerStatus.ALL_IN // Replace the bet status applied by updateStatusesOnBet() with ALL_IN for the subject player
     }
 
     // Place blind bets (at the start of a match)
