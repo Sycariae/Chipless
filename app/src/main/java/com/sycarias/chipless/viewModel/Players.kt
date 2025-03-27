@@ -29,10 +29,6 @@ class Players (playerCount: Int) {
         }
     }
 
-    val highestBet = derivedStateOf {
-        _players.maxByOrNull { it.currentBet }?.currentBet ?: 0
-    }
-
     // The player whose turn it is
     var focus by mutableStateOf(_players.first())
 
@@ -44,6 +40,16 @@ class Players (playerCount: Int) {
 
     // The next active player after the small blind player, 2nd after the dealer
     val bigBlind by derivedStateOf { nextActivePlayerAfter(dealer, increment = 2) }
+
+
+    // = BET MANAGEMENT
+    fun getHighestBet(players: List<Player> = _players): Int {
+        return players.maxByOrNull { it.currentBet }?.currentBet ?: 0
+    }
+
+    fun getLowestBet(players: List<Player> = _players): Int {
+        return players.minByOrNull { it.currentBet }?.currentBet ?: 0
+    }
 
 
     // = ACTIVE PLAYER MANAGEMENT

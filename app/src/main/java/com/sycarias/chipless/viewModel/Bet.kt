@@ -1,14 +1,15 @@
 package com.sycarias.chipless.viewModel
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 class Bet(
     private val players: Players,
     private val tableConfig: TableConfig,
     private val tablePots: TablePots,
+    currentTableBet: State<Int>,
 ) {
-    private val currentTableBet by players.highestBet
+    val currentTableBet: Int by currentTableBet
 
     // Place a bet into the current pot and update player statuses
     fun place(player: Player, betAmount: Int, isRaise: Boolean) {

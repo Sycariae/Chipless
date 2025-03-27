@@ -1,6 +1,8 @@
 package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
@@ -15,11 +17,16 @@ class TableDataViewModel: ViewModel() {
 
     // = TABLE BET AND POTS
     // The bet players must match for the current betting round
-    val currentTableBet = players.highestBet
+    val currentTableBet by derivedStateOf { players.getHighestBet() }
     // The running total of all bets made this match that'll be shared amongst the winners at the end
     val tablePots = TablePots(players)
     // Bet Management Class
-    val bet = Bet(players, tableConfig, tablePots)
+    val bet = Bet(
+        players = players,
+        tableConfig = tableConfig,
+        tablePots = tablePots,
+        currentTableBet = derivedStateOf { currentTableBet }
+    )
 
 
     // = BETTING ROUND
