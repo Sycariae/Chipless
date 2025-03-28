@@ -29,6 +29,12 @@ class Players (playerCount: Int) {
         }
     }
 
+    val bettingPlayers by derivedStateOf {
+        _players.filter { player ->
+            player.name.isNotBlank() && player.currentBet > 0
+        }
+    }
+
     // The player whose turn it is
     var focus by mutableStateOf(_players.first())
 
