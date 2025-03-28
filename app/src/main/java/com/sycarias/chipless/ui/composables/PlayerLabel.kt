@@ -27,7 +27,7 @@ import com.sycarias.chipless.ui.utils.measureTextWidth
 
 enum class GlowIntensity {
     HIGH,
-    MEDIUM,
+    NORMAL,
     LOW
 }
 
@@ -37,8 +37,8 @@ fun PlayerLabel(
     name: String = "",
     size: Dp = 50.dp,
     onClick: () -> Unit = {},
-    chips: Int? = null,
-    glowIntensity: GlowIntensity = GlowIntensity.MEDIUM,
+    chips: Int? = null, // TODO: Add chips display
+    glowIntensity: GlowIntensity = GlowIntensity.NORMAL,
     greyedOut: Boolean = false,
     hideOnEmpty: Boolean = false,
 ) {
@@ -59,7 +59,7 @@ fun PlayerLabel(
         if (!greyedOut) {
             when (glowIntensity) {
                 GlowIntensity.HIGH -> glowColor
-                GlowIntensity.MEDIUM -> glowColor
+                GlowIntensity.NORMAL -> glowColor
                 GlowIntensity.LOW -> Color.Transparent
             }
         } else Color.Transparent
@@ -69,7 +69,7 @@ fun PlayerLabel(
             if (!greyedOut) {
                 when (glowIntensity) {
                     GlowIntensity.HIGH -> listOf(0.4f, 1f, 0.4f, 0.5f)[id]
-                    GlowIntensity.MEDIUM -> listOf(0.4f, 1f, 0.2f, 0.5f)[id]
+                    GlowIntensity.NORMAL -> listOf(0.4f, 1f, 0.2f, 0.5f)[id]
                     GlowIntensity.LOW -> listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
                 }
             } else 0f
@@ -80,7 +80,7 @@ fun PlayerLabel(
             if (!greyedOut) {
                 when (glowIntensity) {
                     GlowIntensity.HIGH -> listOf(26.dp, 12.dp, 75.dp, 25.dp)[id]
-                    GlowIntensity.MEDIUM -> listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
+                    GlowIntensity.NORMAL -> listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
                     GlowIntensity.LOW -> listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
                 }
             } else 0.dp
