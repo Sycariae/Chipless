@@ -2,13 +2,37 @@ package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
-class TablePots (players: Players) {
+class TablePots (val players: Players) {
     val mainPot: Pot by mutableStateOf(Pot(includedPlayers = players.list))
     val sidePots: MutableList<Pot> = mutableListOf()
     val currentPot: Pot by derivedStateOf {
         sidePots.lastOrNull() ?: mainPot
+    }
+
+    // Stores bets pending distribution to table pots
+    var stagedBets by mutableIntStateOf(0)
+
+    fun commitBets() {
+        var remainingStagedBets = stagedBets
+        var remainingPlayers = players.bettingPlayers
+        var previousBetAmount = 0
+
+        while (remainingStagedBets != 0) {
+            val currentBetAmount = players.getLowestBet(remainingPlayers)
+            val betIncrement = currentBetAmount - previousBetAmount
+            val betIncrementCollection = betIncrement * remainingPlayers.count()
+
+            currentPot.deposit(betIncrementCollection)
+            remainingStagedBets -= betIncrementCollection
+
+            remainingPlayers = remainingPlayers.filter { it.currentBet > currentBetAmount }
+            if (remainingPlayers.isNotEmpty()) { newSidePot(0, remainingPlayers) }
+            previousBetAmount = currentBetAmount
+        }
     }
 
     // Creates a new Pot Object in SidePots list with the given includedPlayers
