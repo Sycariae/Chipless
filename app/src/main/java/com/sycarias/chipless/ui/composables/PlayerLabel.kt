@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.extensions.innerShadow
@@ -39,6 +42,7 @@ import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessTypography
 import com.sycarias.chipless.ui.utils.measureTextWidth
+import com.sycarias.chipless.viewModel.Player
 
 enum class GlowIntensity {
     HIGH,
@@ -49,26 +53,41 @@ enum class GlowIntensity {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerLabel(
-    name: String = "",
+    player: Player,
     size: Dp = 50.dp,
     onClick: () -> Unit = {},
-    chips: Int? = null, // TODO: Add chips display
+    showChips: Boolean = false,
     glowIntensity: GlowIntensity = GlowIntensity.NORMAL,
     greyedOut: Boolean = false,
     hideOnEmpty: Boolean = false,
 ) {
+    // = PLAYER PROPERTIES
+    val name = player.name
+    val chips = player.balance
+
+    // = TEXT STYLING
+    val nameTextStyle = ChiplessTypography.body
+    val nameTextColor = if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary
+    val nameTextPadding = 15.dp
+    val nameDisplayWidth = measureTextWidth(text = name, style = nameTextStyle) + (nameTextPadding * 2)
+
+    // = CHIPS DISPLAY STYLING
+    val chipsText by remember { derivedStateOf { chips.toString() } }
+    val chipsTextStyle = ChiplessTypography.l3
+    val chipsIconSize = 14.dp
+    val chipsDisplayWidth = chipsIconSize + measureTextWidth(text = chipsText, style = chipsTextStyle)
+
+    // = LABEL SIZING
     val cornerRadius = 100.dp
     val shape = RoundedCornerShape(cornerRadius)
-    val glowColor = ChiplessColors.primary
-    val textStyle = ChiplessTypography.body
-    val textColor = if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary
-    val textWidth = measureTextWidth(text = name, style = textStyle)
-    val textPadding = 15.dp
     val width = when {
         name.isEmpty() -> size // When Empty, default to this
-        else -> textWidth + (textPadding * 2) // Text Width + Padding
+        else -> max(nameDisplayWidth, chipsDisplayWidth)
     }
     val animatedWidth = animateDpAsState(targetValue = width, label = "Player Button Width")
+
+    // = LABEL COLOURING
+    val glowColor = ChiplessColors.primary
     val borderColor =
         if (!greyedOut) {
             when (glowIntensity) {
@@ -78,6 +97,7 @@ fun PlayerLabel(
             }
         } else Color.Transparent
 
+    // = GLOW STYLING
     fun getGlowOpacity(id: Int): State<Float> {
         return derivedStateOf {
             if (!greyedOut) {
@@ -101,6 +121,7 @@ fun PlayerLabel(
         }
     }
 
+    // = UI START
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         if (!(name.isEmpty() && hideOnEmpty)) {
             Button(
@@ -148,12 +169,12 @@ fun PlayerLabel(
                     ) {
                         Text(
                             text = name,
-                            style = textStyle,
-                            color = textColor,
-                            modifier = Modifier.padding(start = textPadding, end = textPadding),
+                            style = nameTextStyle,
+                            color = nameTextColor,
+                            modifier = Modifier.padding(start = nameTextPadding, end = nameTextPadding),
                             softWrap = false
                         )
-                        if (chips != null) {
+                        if (showChips) {
                             Row (
                                 modifier = Modifier.padding(bottom = 2.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -162,7 +183,7 @@ fun PlayerLabel(
                                     painter = painterResource(id = R.drawable.image_chip),
                                     contentDescription = "Chips Icon",
                                     modifier = Modifier
-                                        .size(14.dp)
+                                        .size(chipsIconSize)
                                         .buttonShadow(
                                             color = ChiplessColors.primary,
                                             blurRadius = 5.dp,
@@ -171,9 +192,9 @@ fun PlayerLabel(
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-                                    text = chips.toString(),
-                                    style = ChiplessTypography.l3,
-                                    color = textColor,
+                                    text = chipsText,
+                                    style = chipsTextStyle,
+                                    color = nameTextColor,
                                     softWrap = false
                                 )
                             }
