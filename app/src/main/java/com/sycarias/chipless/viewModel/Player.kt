@@ -1,5 +1,6 @@
 package com.sycarias.chipless.viewModel
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,30 @@ class Player {
     var status: PlayerStatus by mutableStateOf(PlayerStatus.IDLE)
     var balance: Int by mutableIntStateOf(0)
     var currentBet: Int by mutableIntStateOf(0)
+
+    // = PARTICIPATING CHECK
+    val isParticipating: Boolean by derivedStateOf {
+        name.isNotBlank() && status !in listOf(
+            PlayerStatus.SAT_OUT,
+            PlayerStatus.ELIMINATED
+        )
+    }
+    val isNotParticipating: Boolean by derivedStateOf { !isParticipating }
+
+    // = ACTIVE CHECK
+    val isActive: Boolean by derivedStateOf {
+        name.isNotBlank() && status !in listOf(
+            PlayerStatus.FOLDED,
+            PlayerStatus.SAT_OUT,
+            PlayerStatus.ALL_IN,
+            PlayerStatus.ELIMINATED
+        )
+    }
+    val isNotActive: Boolean by derivedStateOf { !isActive }
+
+    // = BETTING CHECK
+    val isBetting: Boolean by derivedStateOf { name.isNotBlank() && currentBet > 0 }
+    val isNotBetting: Boolean by derivedStateOf { !isBetting }
 
     // = BALANCE AND BET MANAGEMENT
     fun pay(amount: Int) {

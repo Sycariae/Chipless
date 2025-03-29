@@ -10,29 +10,15 @@ class Players (playerCount: Int) {
     val list = _players
 
     val participatingPlayers by derivedStateOf { // The list of players that are not sitting out or don't exist
-        _players.filter { player ->
-            player.name.isNotBlank() && player.status !in listOf(
-                PlayerStatus.SAT_OUT,
-                PlayerStatus.ELIMINATED
-            )
-        }
+        _players.filter { it.isParticipating }
     }
 
     val activePlayers by derivedStateOf { // The list of active players: players that can legally take a turn
-        _players.filter { player ->
-            player.name.isNotBlank() && player.status !in listOf(
-                PlayerStatus.FOLDED,
-                PlayerStatus.SAT_OUT,
-                PlayerStatus.ALL_IN,
-                PlayerStatus.ELIMINATED
-            )
-        }
+        _players.filter { it.isActive }
     }
 
-    val bettingPlayers by derivedStateOf {
-        _players.filter { player ->
-            player.name.isNotBlank() && player.currentBet > 0
-        }
+    val bettingPlayers by derivedStateOf { // The list of betting players: players that have a currentBet more than 0
+        _players.filter { it.isBetting }
     }
 
     // The player whose turn it is
