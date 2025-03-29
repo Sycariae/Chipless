@@ -45,7 +45,7 @@ import com.sycarias.chipless.ui.utils.measureTextWidth
 import com.sycarias.chipless.viewModel.Player
 import com.sycarias.chipless.viewModel.PlayerStatus
 
-enum class GlowIntensity {
+enum class PlayerLabelGlowIntensity {
     HIGH,
     NORMAL,
     LOW
@@ -58,12 +58,15 @@ fun PlayerLabel(
     size: Dp = 50.dp,
     screen: TableScreen
 ) {
+    // = TESTING = TODO: REMOVE TESTING
+    val initName = remember { player.name }
+
     // = LABEL CONFIG
     val showChips: Boolean = (screen == TableScreen.GAME)
     val hideOnEmpty: Boolean = (screen == TableScreen.GAME)
-    val glowIntensity: GlowIntensity =
-        if (screen == TableScreen.CREATE) { GlowIntensity.NORMAL } else {
-            if (player.isActive) GlowIntensity.HIGH else GlowIntensity.LOW
+    val glowIntensity: PlayerLabelGlowIntensity =
+        if (screen == TableScreen.CREATE) { PlayerLabelGlowIntensity.NORMAL } else {
+            if (player.isFocus) PlayerLabelGlowIntensity.HIGH else PlayerLabelGlowIntensity.LOW
         }
     val greyedOut: Boolean =
         if (screen == TableScreen.CREATE) { false } else {
@@ -74,7 +77,15 @@ fun PlayerLabel(
             )
         }
     val onClick: () -> Unit = if (screen == TableScreen.CREATE) {
-        { /* TODO: Design a dialog to enter player name */ }
+        {
+            /* TESTING START = TODO: REMOVE TESTING */
+            when {
+                player.name.isEmpty() -> player.name = initName
+                else -> player.name = ""
+            }
+            /* TESTING END = TODO: REMOVE TESTING */
+            /* TODO: Design a dialog to enter player name */
+        }
     } else { {} }
 
     // = NAME DISPLAY
@@ -104,9 +115,9 @@ fun PlayerLabel(
     val borderColor =
         if (!greyedOut) {
             when (glowIntensity) {
-                GlowIntensity.HIGH -> glowColor
-                GlowIntensity.NORMAL -> glowColor
-                GlowIntensity.LOW -> Color.Transparent
+                PlayerLabelGlowIntensity.HIGH -> glowColor
+                PlayerLabelGlowIntensity.NORMAL -> glowColor
+                PlayerLabelGlowIntensity.LOW -> Color.Transparent
             }
         } else Color.Transparent
 
@@ -115,9 +126,9 @@ fun PlayerLabel(
         return derivedStateOf {
             if (!greyedOut) {
                 when (glowIntensity) {
-                    GlowIntensity.HIGH -> listOf(0.4f, 1f, 0.4f, 0.5f)[id]
-                    GlowIntensity.NORMAL -> listOf(0.4f, 1f, 0.2f, 0.5f)[id]
-                    GlowIntensity.LOW -> listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
+                    PlayerLabelGlowIntensity.HIGH -> listOf(0.4f, 1f, 0.4f, 0.5f)[id]
+                    PlayerLabelGlowIntensity.NORMAL -> listOf(0.4f, 1f, 0.2f, 0.5f)[id]
+                    PlayerLabelGlowIntensity.LOW -> listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
                 }
             } else 0f
         }
@@ -126,9 +137,9 @@ fun PlayerLabel(
         return derivedStateOf {
             if (!greyedOut) {
                 when (glowIntensity) {
-                    GlowIntensity.HIGH -> listOf(26.dp, 12.dp, 75.dp, 25.dp)[id]
-                    GlowIntensity.NORMAL -> listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
-                    GlowIntensity.LOW -> listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
+                    PlayerLabelGlowIntensity.HIGH -> listOf(26.dp, 12.dp, 75.dp, 25.dp)[id]
+                    PlayerLabelGlowIntensity.NORMAL -> listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
+                    PlayerLabelGlowIntensity.LOW -> listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
                 }
             } else 0.dp
         }
@@ -175,6 +186,9 @@ fun PlayerLabel(
                 colors = ChiplessButtonColors(if (greyedOut) ChiplessColors.greyOut else ChiplessColors.secondary),
                 contentPadding = PaddingValues(0.dp)
             ) {
+                // TODO: ADD DEALER BUTTON DISPLAY IN CREATE TABLE SCREEN
+                // TODO: ADD DEALER ICON DISPLAY IN GAME SCREEN
+                // TODO: ADD STATUS ICON DISPLAY IN GAME SCREEN
                 if (name.isNotEmpty()) {
                     Column (
                         verticalArrangement = Arrangement.Center,
