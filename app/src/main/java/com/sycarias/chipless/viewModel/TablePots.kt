@@ -18,10 +18,10 @@ class TablePots (val players: Players) {
 
     fun commitBets() {
         var remainingStagedBets = stagedBets
-        var remainingPlayers = players.bettingPlayers
+        var remainingPlayers = players.bettingPlayers.toMutableList()
         var previousBetAmount = 0
 
-        while (remainingStagedBets != 0) {
+        while (remainingStagedBets > 0 && remainingPlayers.isNotEmpty()) {
             val currentBetAmount = players.getLowestBet(remainingPlayers)
             val betIncrement = currentBetAmount - previousBetAmount
             val betIncrementCollection = betIncrement * remainingPlayers.count()
@@ -29,10 +29,11 @@ class TablePots (val players: Players) {
             currentPot.deposit(betIncrementCollection)
             remainingStagedBets -= betIncrementCollection
 
-            remainingPlayers = remainingPlayers.filter { it.currentBet > currentBetAmount }
-            if (remainingPlayers.isNotEmpty()) { newSidePot(0, remainingPlayers) }
+            remainingPlayers = remainingPlayers.filter { it.currentBet > currentBetAmount }.toMutableList()
+            if (remainingStagedBets > 0 && remainingPlayers.isNotEmpty()) { newSidePot(0, remainingPlayers) }
             previousBetAmount = currentBetAmount
         }
+        stagedBets = 0
     }
 
     // Creates a new Pot Object in SidePots list with the given includedPlayers
