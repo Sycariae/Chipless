@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -14,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sycarias.chipless.ui.composables.GlowIntensity
-import com.sycarias.chipless.ui.composables.PlayerLabel
+import com.sycarias.chipless.ui.composables.PlayerTable
+import com.sycarias.chipless.ui.composables.TableScreen
 import com.sycarias.chipless.ui.composables.presets.ActionButton
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
@@ -68,62 +67,9 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
 
         Spacer(modifier = Modifier.height(45.dp))
 
-        val playerNames by remember {
-            derivedStateOf {
-                listOf(
-                    players.focus.name,
-                    players.nextActivePlayerAfter(players.focus, increment = 1).name,
-                    players.nextActivePlayerAfter(players.focus, increment = 2).name,
-                    players.nextActivePlayerAfter(players.focus, increment = 3).name
-                )
-            }
-        }
-
-        ActionButton(
-            onClick = { viewModel.initiateNewRound() },
-            enabled = playerNames[0] != "Luke",
-            modifier = Modifier
-                .wrapContentWidth()
-                .height(55.dp)
-        ) { ActionButtonText(text = "Next Round") }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        ActionButton(
-            onClick = { players.incrementFocusPlayer() },
-            modifier = Modifier
-                .wrapContentWidth()
-                .height(55.dp)
-        ) { ActionButtonText(text = "Next Player") }
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        PlayerLabel(
-            name = playerNames[0],
-            glowIntensity = if (playerNames[0] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        PlayerLabel(
-            name = playerNames[1],
-            glowIntensity = if (playerNames[1] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW }
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        PlayerLabel(
-            name = playerNames[2],
-            glowIntensity = if (playerNames[2] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
-            greyedOut = true
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        PlayerLabel(
-            name = if (bettingRound == BettingRound.FLOP) playerNames[3] else "",
-            glowIntensity = if (playerNames[3] == players.dealer.name) { GlowIntensity.HIGH } else { GlowIntensity.LOW },
-            hideOnEmpty = true
+        PlayerTable(
+            players = players,
+            screen = TableScreen.GAME
         )
     }
 }
