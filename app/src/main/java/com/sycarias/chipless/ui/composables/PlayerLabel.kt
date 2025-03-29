@@ -43,6 +43,7 @@ import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessTypography
 import com.sycarias.chipless.ui.utils.measureTextWidth
 import com.sycarias.chipless.viewModel.Player
+import com.sycarias.chipless.viewModel.PlayerStatus
 
 enum class GlowIntensity {
     HIGH,
@@ -55,24 +56,36 @@ enum class GlowIntensity {
 fun PlayerLabel(
     player: Player,
     size: Dp = 50.dp,
-    onClick: () -> Unit = {},
-    showChips: Boolean = false,
-    glowIntensity: GlowIntensity = GlowIntensity.NORMAL,
-    greyedOut: Boolean = false,
-    hideOnEmpty: Boolean = false,
+    screen: TableScreen
 ) {
-    // = PLAYER PROPERTIES
-    val name = player.name
-    val chips = player.balance
+    // = LABEL CONFIG
+    val showChips: Boolean = (screen == TableScreen.GAME)
+    val hideOnEmpty: Boolean = (screen == TableScreen.GAME)
+    val glowIntensity: GlowIntensity =
+        if (screen == TableScreen.CREATE) { GlowIntensity.NORMAL } else {
+            if (player.isActive) GlowIntensity.HIGH else GlowIntensity.LOW
+        }
+    val greyedOut: Boolean =
+        if (screen == TableScreen.CREATE) { false } else {
+            player.status in listOf(
+                PlayerStatus.FOLDED,
+                PlayerStatus.SAT_OUT,
+                PlayerStatus.ELIMINATED
+            )
+        }
+    val onClick: () -> Unit = if (screen == TableScreen.CREATE) {
+        { /* TODO: Design a dialog to enter player name */ }
+    } else { {} }
 
-    // = TEXT STYLING
+    // = NAME DISPLAY
+    val name by remember { derivedStateOf { player.name } }
     val nameTextStyle = ChiplessTypography.body
     val nameTextColor = if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary
     val nameTextPadding = 15.dp
     val nameDisplayWidth = measureTextWidth(text = name, style = nameTextStyle) + (nameTextPadding * 2)
 
-    // = CHIPS DISPLAY STYLING
-    val chipsText by remember { derivedStateOf { chips.toString() } }
+    // = CHIPS DISPLAY
+    val chipsText by remember { derivedStateOf { player.balance.toString() } }
     val chipsTextStyle = ChiplessTypography.l3
     val chipsIconSize = 14.dp
     val chipsDisplayWidth = chipsIconSize + measureTextWidth(text = chipsText, style = chipsTextStyle)
