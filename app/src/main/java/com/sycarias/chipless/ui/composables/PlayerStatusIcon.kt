@@ -11,19 +11,25 @@ import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
 
+enum class PlayerStatusIcon {
+    RAISED,
+    BET_MATCHED,
+    PARTIAL_MATCH
+}
+
 @Composable
 fun StatusIcon(
-    type: StatusIconType
+    type: PlayerStatusIcon
 ) {
     val icon = when(type) {
-        StatusIconType.RAISE -> ImageVector.vectorResource(id = R.drawable.icon_raised)
-        StatusIconType.BET_MET -> ImageVector.vectorResource(id = R.drawable.icon_matched)
-        StatusIconType.PARTIALLY_MET -> ImageVector.vectorResource(id = R.drawable.icon_partial_match)
+        PlayerStatusIcon.RAISED -> ImageVector.vectorResource(id = R.drawable.icon_raised)
+        PlayerStatusIcon.BET_MATCHED -> ImageVector.vectorResource(id = R.drawable.icon_matched)
+        PlayerStatusIcon.PARTIAL_MATCH -> ImageVector.vectorResource(id = R.drawable.icon_partial_match)
     }
     val color = when(type) {
-        StatusIconType.RAISE -> ChiplessColors.success
-        StatusIconType.BET_MET -> ChiplessColors.success
-        StatusIconType.PARTIALLY_MET -> ChiplessColors.warning
+        PlayerStatusIcon.RAISED -> ChiplessColors.success
+        PlayerStatusIcon.BET_MATCHED -> ChiplessColors.success
+        PlayerStatusIcon.PARTIAL_MATCH -> ChiplessColors.warning
     }
 
     Icon(
@@ -36,10 +42,4 @@ fun StatusIcon(
                 cornerRadius = 100.dp
             )
     )
-}
-
-enum class StatusIconType {
-    RAISE,
-    BET_MET,
-    PARTIALLY_MET
 }
