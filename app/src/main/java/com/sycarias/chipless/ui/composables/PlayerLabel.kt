@@ -1,19 +1,34 @@
 package com.sycarias.chipless.ui.composables
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -54,7 +69,6 @@ fun PlayerLabel(
         else -> textWidth + (textPadding * 2) // Text Width + Padding
     }
     val animatedWidth = animateDpAsState(targetValue = width, label = "Player Button Width")
-
     val borderColor =
         if (!greyedOut) {
             when (glowIntensity) {
@@ -128,13 +142,43 @@ fun PlayerLabel(
                 contentPadding = PaddingValues(0.dp)
             ) {
                 if (name.isNotEmpty()) {
-                    Text(
-                        text = name,
-                        style = textStyle,
-                        color = textColor,
-                        modifier = Modifier.padding(start = textPadding, end = textPadding),
-                        softWrap = false
-                    )
+                    Column (
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = name,
+                            style = textStyle,
+                            color = textColor,
+                            modifier = Modifier.padding(start = textPadding, end = textPadding),
+                            softWrap = false
+                        )
+                        if (chips != null) {
+                            Row (
+                                modifier = Modifier.padding(bottom = 2.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.image_chip),
+                                    contentDescription = "Chips Icon",
+                                    modifier = Modifier
+                                        .size(14.dp)
+                                        .buttonShadow(
+                                            color = ChiplessColors.primary,
+                                            blurRadius = 5.dp,
+                                            cornerRadius = 100.dp
+                                        )
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = chips.toString(),
+                                    style = ChiplessTypography.l3,
+                                    color = textColor,
+                                    softWrap = false
+                                )
+                            }
+                        }
+                    }
                 } else {
                     Icon(
                         painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
