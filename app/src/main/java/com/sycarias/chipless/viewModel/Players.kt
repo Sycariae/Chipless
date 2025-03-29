@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 class Players (playerCount: Int) {
-    private val _players = listOf(*Array(playerCount) { Player() })
+    private val _players = listOf(Player(isFocus = true, isDealer = true), *Array(playerCount-1) { Player() })
     val list = _players
 
     val participatingPlayers by derivedStateOf { // The list of players that are not sitting out or don't exist
@@ -23,9 +23,11 @@ class Players (playerCount: Int) {
 
     // The player whose turn it is
     var focus by mutableStateOf(_players.first())
+        private set
 
     // The player who shuffles and deals the cards
     var dealer by mutableStateOf(_players.first())
+        private set
 
     // The next active player after the dealer
     val smallBlind by derivedStateOf { nextActivePlayerAfter(dealer, increment = 1) }
@@ -41,6 +43,19 @@ class Players (playerCount: Int) {
 
     fun getLowestBet(players: List<Player> = _players): Int {
         return players.minByOrNull { it.currentBet }?.currentBet ?: 0
+    }
+
+
+    // = FOCUS AND DEALER MANAGEMENT
+    fun setFocusPlayer(player: Player) {
+        focus.isFocus = false // Set previous player's focus state to false
+        focus = player // Set new player as focus
+        focus.isFocus = true // Set new player's focus state to true
+    }
+    fun setDealerPlayer(player: Player) {
+        dealer.isDealer = false // Set previous dealer's dealer state to false
+        dealer = player // Set new player as dealer
+        dealer.isDealer = true // Set new player's dealer state to true
     }
 
 
@@ -68,7 +83,7 @@ class Players (playerCount: Int) {
     // = FOCUS PLAYER MANAGEMENT
     fun setInitialFocusPlayer() {
         if (activePlayers.isNotEmpty()) {
-            focus = nextActivePlayerAfter(dealer, increment = 3)
+            setFocusPlayer( nextActivePlayerAfter(dealer, increment = 3) )
         } else {
             throw IndexOutOfBoundsException("NO ACTIVE PLAYERS: activeIDs IS EMPTY")
         }
@@ -76,7 +91,7 @@ class Players (playerCount: Int) {
 
     fun incrementFocusPlayer() {
         if (activePlayers.isNotEmpty()) {
-            focus = nextActivePlayerAfter(focus, increment = 1)
+            setFocusPlayer( nextActivePlayerAfter(focus, increment = 1) )
         } else {
             throw IndexOutOfBoundsException("NO ACTIVE PLAYERS: activeIDs IS EMPTY")
         }
