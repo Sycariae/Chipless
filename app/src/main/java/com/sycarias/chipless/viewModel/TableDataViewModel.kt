@@ -70,7 +70,6 @@ class TableDataViewModel: ViewModel() {
 
     // Called when first starting the table, performs all resets and ensures players are given correct starting balances
     fun initialiseNewTable() {
-        tablePots.commitBets() // Distribute the stagedBets to tablePots
         players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
         players.setStartingBalances(tableConfig.startingChips) // Set all player balances to startingChips
         players.setInitialFocusPlayer() // Set focus player to the 3rd player after the dealer
