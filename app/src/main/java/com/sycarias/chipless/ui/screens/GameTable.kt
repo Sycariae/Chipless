@@ -2,11 +2,14 @@ package com.sycarias.chipless.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -21,14 +24,22 @@ import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.Subtitle
 import com.sycarias.chipless.viewModel.BettingRound
 import com.sycarias.chipless.viewModel.TableDataViewModel
+import kotlin.math.min
+
+enum class PlayerActionType {
+    CHECK,
+    CALL,
+    ALL_IN,
+    BET,
+    RAISE,
+    FOLD
+}
 
 @Composable
 fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {
     // View Model Variables
-    val tableConfig = viewModel.tableConfig
-
     val players = viewModel.players
-    val focusPlayerName by remember { derivedStateOf { players.focus.name } }
+    val bet = viewModel.bet
 
     val bettingRound by remember { viewModel.bettingRound }
     val bettingRoundTitle: String = when(bettingRound) {
@@ -39,14 +50,42 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         BettingRound.SHOWDOWN -> "Showdown"
     }
 
+    fun getBetAmountInput(): Int {
+        /* TESTING START TODO: REMOVE TESTING */
+        return min(100, players.focus.balance)
+        /* TESTING END */
+        /* TODO: Create Dialog to get validated bet amount */
+    }
+
     @Composable
     fun PlayerActionButton(
-        onClick: () -> Unit,
-        text: String
+        type: PlayerActionType
     ) {
         ActionButton(
-            onClick = onClick
-        ) { ActionButtonText(text = text) }
+            onClick = {
+                when (type) {
+                    PlayerActionType.CHECK -> { bet.call(players.focus) }
+                    PlayerActionType.CALL -> { bet.call(players.focus) }
+                    PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
+                    PlayerActionType.BET -> { bet.place(players.focus, getBetAmountInput()) }
+                    PlayerActionType.RAISE -> { bet.raise(players.focus, getBetAmountInput()) }
+                    PlayerActionType.FOLD -> { players.focus.fold() }
+                }
+                players.incrementFocusPlayer()
+            },
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            ActionButtonText(
+                text = when (type) {
+                    PlayerActionType.CHECK -> "Check"
+                    PlayerActionType.CALL -> "Call"
+                    PlayerActionType.ALL_IN -> "All In"
+                    PlayerActionType.BET -> "Bet"
+                    PlayerActionType.RAISE -> "Raise"
+                    PlayerActionType.FOLD -> "Fold"
+                }
+            )
+        }
     }
 
     // START OF UI
@@ -63,13 +102,41 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         Spacer(modifier = Modifier.height(6.dp))
 
         // Player Turn Subheading
-        Subtitle(text = "$focusPlayerName's Turn")
+        Subtitle(text = "${players.focus.name}'s Turn")
 
-        Spacer(modifier = Modifier.height(45.dp))
+        Spacer(modifier = Modifier.height(35.dp))
 
         PlayerTable(
             players = players,
             screen = TableScreen.GAME
         )
+
+        Spacer(modifier = Modifier.height(80.dp))
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, bottom = 30.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PlayerActionButton(
+                type = if (viewModel.currentTableBet == players.focus.currentBet)
+                    PlayerActionType.CHECK
+                else if (viewModel.currentTableBet >= (players.focus.balance + players.focus.currentBet))
+                    PlayerActionType.ALL_IN
+                else
+                    PlayerActionType.CALL
+            )
+            PlayerActionButton(
+                type = if (viewModel.currentTableBet > 0)
+                    PlayerActionType.RAISE
+                else
+                    PlayerActionType.BET
+            )
+            PlayerActionButton(
+                type = PlayerActionType.FOLD
+            )
+        }
     }
 }
