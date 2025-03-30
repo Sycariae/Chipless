@@ -28,7 +28,7 @@ class Bet(
         if (player.balance == (currentTableBet + raiseAmount)) {
             allIn(player = player, isRaise = true)
         } else {
-            place(player = player, betAmount = currentTableBet + raiseAmount, isRaise = true)
+            place(player = player, betAmount = (currentTableBet + raiseAmount) - player.currentBet, isRaise = true)
         }
     }
 
