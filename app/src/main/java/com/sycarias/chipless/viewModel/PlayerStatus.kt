@@ -9,5 +9,4 @@ enum class PlayerStatus {
     FOLDED,         // Cut their losses and out for the round                               Indication: grey out
     SAT_OUT,        // Sat the round out and will be automatically sat out next round too   Indication: grey out
     ALL_IN,         // Doesn't participate in betting for the rest of the round             Indication: green BET_MATCHED icon
-    ELIMINATED      // Had their balance reduced to 0, essentially SAT_OUT until bought in  Indication: grey out
 }

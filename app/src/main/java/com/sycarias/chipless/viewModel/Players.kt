@@ -99,16 +99,6 @@ class Players (playerCount: Int) {
     }
 
 
-    // = ELIMINATION
-    fun checkAllForEliminations() {
-        _players.forEach { player ->
-            if (player.balance <= 0) {
-                player.eliminate()
-            }
-        }
-    }
-
-
     // = STATUS MANAGEMENT
     fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) {
         // Update statuses for other participating players to PARTIAL_MATCH

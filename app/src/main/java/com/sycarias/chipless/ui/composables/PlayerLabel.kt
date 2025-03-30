@@ -70,10 +70,9 @@ fun PlayerLabel(
         }
     val greyedOut: Boolean =
         if (screen == TableScreen.CREATE) { false } else {
-            player.status in listOf(
+            player.isEliminated || player.status in listOf(
                 PlayerStatus.FOLDED,
-                PlayerStatus.SAT_OUT,
-                PlayerStatus.ELIMINATED
+                PlayerStatus.SAT_OUT
             )
         }
     val onClick: () -> Unit = if (screen == TableScreen.CREATE) {
