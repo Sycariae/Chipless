@@ -28,9 +28,9 @@ import com.sycarias.chipless.ui.composables.IntInputField
 import com.sycarias.chipless.ui.composables.PlayerTable
 import com.sycarias.chipless.ui.composables.StaticShadow
 import com.sycarias.chipless.ui.composables.TableScreen
-import com.sycarias.chipless.ui.composables.presets.ActionButton
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
+import com.sycarias.chipless.ui.composables.presets.PrimaryActionButton
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.viewModel.TableDataViewModel
@@ -98,21 +98,17 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         true -> ChiplessColors.primary
         false -> ChiplessColors.secondary
     }
-    val playButtonModifier = Modifier
-        .height(55.dp)
-        .then(
-            when (tableConfigValid) {
-                true -> Modifier
-                    .buttonShadow(
-                        color = ChiplessColors.primary,
-                        offsetX = 0.dp,
-                        offsetY = 0.dp,
-                        blurRadius = 20.dp,
-                        cornerRadius = 100.dp
-                    )
-                false -> Modifier
-            }
-        )
+    val playButtonModifier = when (tableConfigValid) {
+        true -> Modifier
+            .buttonShadow(
+                color = ChiplessColors.primary,
+                offsetX = 0.dp,
+                offsetY = 0.dp,
+                blurRadius = 20.dp,
+                cornerRadius = 100.dp
+            )
+        false -> Modifier
+    }
     val playButtonTextColor = when (tableConfigValid) {
         true -> ChiplessColors.textPrimary
         false -> ChiplessColors.textTertiary
@@ -259,7 +255,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         PlayerTable(
             players = players,
             screen = TableScreen.CREATE,
-            modifier = Modifier.padding(bottom = 80.dp)
+            modifier = Modifier.padding(bottom = 80.dp).fillMaxSize()
         )
     }
 
@@ -270,7 +266,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom
     ) {
-        ActionButton(
+        PrimaryActionButton(
             onClick = {
                 when (tableConfigValid) {
                     true -> {

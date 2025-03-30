@@ -1,5 +1,6 @@
 package com.sycarias.chipless.ui.composables.presets
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,9 +44,7 @@ fun LargeFocusButton(
 @Composable
 fun LargeButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
-        .width(290.dp)
-        .height(65.dp),
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(100.dp),
     color: Color = ChiplessColors.secondary,
@@ -54,7 +53,10 @@ fun LargeButton(
 ) {
     Button(
         onClick = if (enabled) onClick else { {} },
-        modifier = modifier,
+        modifier = Modifier
+            .width(290.dp)
+            .height(65.dp)
+            .then(modifier),
         shape = shape,
         colors = ChiplessButtonColors(if (enabled) color else colorMix(color, ChiplessColors.bgPrimary, 0.4f)),
         elevation = elevation
@@ -64,25 +66,55 @@ fun LargeButton(
 }
 
 @Composable
-fun ActionButton(
+fun PrimaryActionButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
-        .width(120.dp)
-        .height(55.dp),
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(100.dp),
     color: Color = ChiplessColors.secondary,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(5.dp),
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     contents: @Composable () -> Unit
 ) {
     Button(
         onClick = if (enabled) onClick else { {} },
-        modifier = modifier,
+        modifier = Modifier
+            .height(55.dp)
+            .then(modifier),
         shape = shape,
         colors = if (enabled) {
             ChiplessButtonColors(color)
         } else ChiplessButtonColors(colorMix(color, ChiplessColors.bgPrimary, 0.4f), ChiplessColors.textTertiary),
-        elevation = elevation
+        elevation = elevation,
+        contentPadding = contentPadding
+    ) {
+        contents()
+    }
+}
+
+@Composable
+fun ActionButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    shape: Shape = RoundedCornerShape(100.dp),
+    color: Color = ChiplessColors.secondary,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(5.dp),
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contents: @Composable () -> Unit
+) {
+    Button(
+        onClick = if (enabled) onClick else { {} },
+        modifier = Modifier
+            .width(115.dp)
+            .height(50.dp)
+            .then(modifier),
+        shape = shape,
+        colors = if (enabled) {
+            ChiplessButtonColors(color)
+        } else ChiplessButtonColors(colorMix(color, ChiplessColors.bgPrimary, 0.4f), ChiplessColors.textTertiary),
+        elevation = elevation,
+        contentPadding = contentPadding
     ) {
         contents()
     }
