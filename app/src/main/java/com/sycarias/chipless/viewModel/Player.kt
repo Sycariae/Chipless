@@ -57,8 +57,12 @@ class Player(
         balance -= amount
     }
 
-    // = ELIMINATION
+    // = STATUS MANAGEMENT
     fun eliminate() {
         status = PlayerStatus.ELIMINATED
+    }
+
+    fun fold() {
+        status = PlayerStatus.FOLDED
     }
 }

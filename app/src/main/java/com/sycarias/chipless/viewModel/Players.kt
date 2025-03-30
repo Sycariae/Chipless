@@ -22,11 +22,14 @@ class Players (playerCount: Int) {
     }
 
     // The player whose turn it is
-    var focus by mutableStateOf(_players.first())
+    var focus by mutableStateOf(_players[0])
+        private set
+
+    var nextFocus by mutableStateOf(_players[1])
         private set
 
     // The player who shuffles and deals the cards
-    var dealer by mutableStateOf(_players.first())
+    var dealer by mutableStateOf(_players[0])
         private set
 
     // The next active player after the dealer
@@ -46,12 +49,14 @@ class Players (playerCount: Int) {
     }
 
 
-    // = FOCUS AND DEALER MANAGEMENT
+    // = FOCUS AND DEALER SETTERS
     fun setFocusPlayer(player: Player) {
         focus.isFocus = false // Set previous player's focus state to false
         focus = player // Set new player as focus
         focus.isFocus = true // Set new player's focus state to true
+        nextFocus = nextActivePlayerAfter(focus)
     }
+
     fun setDealerPlayer(player: Player) {
         dealer.isDealer = false // Set previous dealer's dealer state to false
         dealer = player // Set new player as dealer
@@ -90,11 +95,7 @@ class Players (playerCount: Int) {
     }
 
     fun incrementFocusPlayer() {
-        if (activePlayers.isNotEmpty()) {
-            setFocusPlayer( nextActivePlayerAfter(focus, increment = 1) )
-        } else {
-            throw IndexOutOfBoundsException("NO ACTIVE PLAYERS: activeIDs IS EMPTY")
-        }
+        setFocusPlayer( nextFocus )
     }
 
 
