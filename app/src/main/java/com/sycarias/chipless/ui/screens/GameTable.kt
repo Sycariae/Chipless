@@ -62,6 +62,18 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
         /* TODO: Create Dialog to get validated bet amount */
     }
 
+    fun getRaiseAmountInput(): Int {
+        val defaultRaiseAmount = 100
+        val maxRaiseAmount = players.focus.balance - (viewModel.currentTableBet - players.focus.currentBet)
+        println("Max Raise Amount: $maxRaiseAmount")
+
+        return if (maxRaiseAmount >= defaultRaiseAmount) {
+            defaultRaiseAmount
+        } else {
+            maxRaiseAmount.coerceAtLeast(0) // Ensure it's not negative
+        }
+    }
+
     @Composable
     fun PlayerActionButton(
         type: PlayerActionType
@@ -73,7 +85,7 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
                     PlayerActionType.CALL -> { bet.call(players.focus) }
                     PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
                     PlayerActionType.BET -> { bet.place(players.focus, getBetAmountInput()) }
-                    PlayerActionType.RAISE -> { bet.raise(players.focus, getBetAmountInput()) }
+                    PlayerActionType.RAISE -> { bet.raise(players.focus, getRaiseAmountInput()) }
                     PlayerActionType.FOLD -> { players.focus.fold() }
                 }
                 players.incrementFocusPlayer()
@@ -133,12 +145,14 @@ fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel)
                 else
                     PlayerActionType.CALL
             )
-            PlayerActionButton(
-                type = if (viewModel.currentTableBet > 0)
-                    PlayerActionType.RAISE
-                else
-                    PlayerActionType.BET
-            )
+            if (viewModel.currentTableBet < (players.focus.balance + players.focus.currentBet)) {
+                PlayerActionButton(
+                    type = if (viewModel.currentTableBet > 0)
+                        PlayerActionType.RAISE
+                    else
+                        PlayerActionType.BET
+                )
+            }
             PlayerActionButton(
                 type = PlayerActionType.FOLD
             )
