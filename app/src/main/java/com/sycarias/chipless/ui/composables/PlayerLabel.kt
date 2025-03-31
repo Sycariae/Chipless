@@ -75,17 +75,24 @@ fun PlayerLabel(
                 PlayerStatus.SAT_OUT
             )
         }
-    val onClick: () -> Unit = if (screen == TableScreen.CREATE) {
-        {
-            /* TESTING START = TODO: REMOVE TESTING */
-            when {
-                player.name.isEmpty() -> player.name = initName
-                else -> player.name = ""
+    val onClick: () -> Unit =
+        if (screen == TableScreen.CREATE) {
+            {
+                /* TESTING START = TODO: REMOVE TESTING */
+                when {
+                    player.name.isEmpty() -> player.name = initName
+                    else -> player.name = ""
+                }
+                /* TESTING END = TODO: REMOVE TESTING */
+                /* TODO: Design a dialog to enter player name */
             }
-            /* TESTING END = TODO: REMOVE TESTING */
-            /* TODO: Design a dialog to enter player name */
+        } else {
+            {
+                if (player.isEliminated) {
+                    player.reset()
+                }
+            }
         }
-    } else { {} }
 
     // = NAME DISPLAY
     val name by remember { derivedStateOf { player.name } }
