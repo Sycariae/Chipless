@@ -62,8 +62,7 @@ class TableDataViewModel: ViewModel() {
     fun initiateNewMatch() {
         tablePots.commitBets() // Distribute the stagedBets to tablePots
         players.resetAllForNewMatch() // Reset player statuses excluding SAT_OUT and all current player bets
-        players.checkAllForEliminations() // Check every player and applies ELIMINATED status to those with a balance of 0
-        tablePots.resetPots()
+        tablePots.reset()
         resetBettingRound() // Set game stage to first stage: PREFLOP
         bet.placeBlinds()
     }
@@ -73,8 +72,15 @@ class TableDataViewModel: ViewModel() {
         players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
         players.setStartingBalances(tableConfig.startingChips) // Set all player balances to startingChips
         players.setInitialFocusPlayer() // Set focus player to the 3rd player after the dealer
-        tablePots.resetPots()
+        tablePots.reset()
         resetBettingRound() // Set betting round to PREFLOP
         bet.placeBlinds()
+    }
+
+    fun resetForTableCreation() {
+        players.reset()
+        tableConfig.reset()
+        tablePots.reset()
+        resetBettingRound()
     }
 }

@@ -12,7 +12,7 @@ class Player(
 ) {
     var name: String by mutableStateOf("")
     var status: PlayerStatus by mutableStateOf(PlayerStatus.IDLE)
-    var balance: Int by mutableIntStateOf(0)
+    var balance: Int by mutableIntStateOf(1)
     var currentBet: Int by mutableIntStateOf(0)
 
 
@@ -70,5 +70,14 @@ class Player(
     // = STATUS MANAGEMENT
     fun fold() {
         status = PlayerStatus.FOLDED
+    }
+
+
+    // = RESET
+    fun reset() {
+        name = ""
+        status = PlayerStatus.IDLE
+        balance = 1
+        currentBet = 0
     }
 }

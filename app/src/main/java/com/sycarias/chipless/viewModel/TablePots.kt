@@ -56,8 +56,9 @@ class TablePots (val players: Players) {
     }
 
     // Sets the main pot balance to 0 and destroys all side pots
-    fun resetPots() {
+    fun reset() {
         mainPot.reset()
         sidePots.clear()
+        stagedBets = 0
     }
 }

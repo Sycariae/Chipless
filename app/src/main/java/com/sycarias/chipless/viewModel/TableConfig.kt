@@ -11,4 +11,10 @@ class TableConfig {
     var bigBlind by mutableIntStateOf(10)
     // The forced bet made by the player after the dealer at the start of a match
     var smallBlind by mutableIntStateOf(5)
+
+    fun reset() {
+        startingChips = 1000
+        bigBlind = 10
+        smallBlind = 5
+    }
 }

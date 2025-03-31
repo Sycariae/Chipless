@@ -29,7 +29,7 @@ class Players (playerCount: Int) {
         private set
 
     // The player who shuffles and deals the cards
-    var dealer by mutableStateOf(_players[0])
+    var dealer by mutableStateOf(_players[0]) // TODO: DETERMINE NEXT DEALER IN CASE DEALER GETS REMOVED FROM ACTIVE PLAYERS
         private set
 
     // The next active player after the dealer
@@ -150,5 +150,9 @@ class Players (playerCount: Int) {
             player.currentBet = 0
             player.status = PlayerStatus.IDLE
         }
+    }
+
+    fun reset() {
+        _players.forEach { it.reset() }
     }
 }
