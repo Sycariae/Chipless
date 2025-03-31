@@ -76,14 +76,6 @@ class Players (playerCount: Int) {
         }
     }
 
-    fun isActive(player: Player): Boolean {
-        return player in activePlayers
-    }
-
-    fun isNotActive(player: Player): Boolean {
-        return player !in activePlayers
-    }
-
 
     // = FOCUS PLAYER MANAGEMENT
     fun setInitialFocusPlayer() {

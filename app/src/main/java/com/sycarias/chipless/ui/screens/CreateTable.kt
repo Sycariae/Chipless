@@ -85,11 +85,11 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     // Table Config Validation
     val tableConfigValid by remember {
         derivedStateOf {
-            (startingChipsValid
-                    && bigBlindValid
-                    && smallBlindValid
-                    && players.participatingPlayers.count() >= 4)
-                    && players.isActive(players.dealer)
+            startingChipsValid
+                && bigBlindValid
+                && smallBlindValid
+                && players.participatingPlayers.count() >= 4
+                && players.dealer.isActive
         }
     }
 
