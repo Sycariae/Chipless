@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -58,12 +59,17 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
     val tableConfig = viewModel.tableConfig
     val players = viewModel.players
 
-    // = TESTING = TODO: REMOVE TESTING
-    remember {
+
+    LaunchedEffect(Unit) {
+        viewModel.resetForTableCreation()
+
+        // TESTING START = TODO: REMOVE TESTING
         players.list.forEachIndexed { index, player ->
             player.name = "Player$index"
         }
+        // TESTING END
     }
+
 
     // Input Field Validation
     val startingChipsValid by remember {
@@ -269,10 +275,7 @@ fun CreateTableScreen(navController: NavController, viewModel: TableDataViewMode
         PrimaryActionButton(
             onClick = {
                 when (tableConfigValid) {
-                    true -> {
-                        viewModel.initialiseNewTable()
-                        navController.navigate(GameTable)
-                    }
+                    true -> { navController.navigate(GameTable) }
                     false -> {}
                 }
             },
