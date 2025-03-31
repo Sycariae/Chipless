@@ -9,12 +9,12 @@ class Bet(
     private val tablePots: TablePots,
     currentTableBet: State<Int>,
 ) {
-    val currentTableBet: Int by currentTableBet
+    private val currentTableBet: Int by currentTableBet
 
     // Place a bet into the current pot and update player statuses
     fun place(player: Player, betAmount: Int, isRaise: Boolean = false) {
         tablePots.stagedBets += betAmount // Add bet amount to table pot and set table bet
-        player.bet(betAmount) // Update bet amount and balance for betting player
+        player.bet(betAmount) // Subtract bet amount from balance and add to currentBet for betting player
         players.updateStatusesOnBet(bettingPlayer = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
 
@@ -25,7 +25,7 @@ class Bet(
 
     // Place a bet equal to the current table bet plus a raise amount
     fun raise(player: Player, raiseAmount: Int) {
-        if (player.balance == (currentTableBet + raiseAmount)) {
+        if (player.balance == ((currentTableBet + raiseAmount) - player.currentBet) ) {
             allIn(player = player, isRaise = true)
         } else {
             place(player = player, betAmount = (currentTableBet + raiseAmount) - player.currentBet, isRaise = true)
