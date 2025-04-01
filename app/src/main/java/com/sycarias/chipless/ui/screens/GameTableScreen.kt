@@ -89,6 +89,7 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
                     PlayerActionType.FOLD -> { players.focus.fold() }
                 }
                 players.incrementFocusPlayer()
+                viewModel.checkForBettingRoundEnd()
             },
             contentPadding = PaddingValues(0.dp)
         ) {
