@@ -47,7 +47,6 @@ import com.sycarias.chipless.viewModel.PlayerStatus
 
 enum class PlayerLabelGlowIntensity {
     HIGH,
-    NORMAL,
     LOW
 }
 
@@ -65,7 +64,7 @@ fun PlayerLabel(
     val showChips: Boolean = (screen == TableScreen.GAME)
     val hideOnEmpty: Boolean = (screen == TableScreen.GAME)
     val glowIntensity: PlayerLabelGlowIntensity =
-        if (screen == TableScreen.CREATE) { PlayerLabelGlowIntensity.NORMAL } else {
+        if (screen == TableScreen.CREATE) { PlayerLabelGlowIntensity.HIGH } else {
             if (player.isFocus) PlayerLabelGlowIntensity.HIGH else PlayerLabelGlowIntensity.LOW
         }
     val greyedOut: Boolean =
@@ -122,8 +121,7 @@ fun PlayerLabel(
         if (!greyedOut) {
             when (glowIntensity) {
                 PlayerLabelGlowIntensity.HIGH -> glowColor
-                PlayerLabelGlowIntensity.NORMAL -> glowColor
-                PlayerLabelGlowIntensity.LOW -> Color.Transparent
+                PlayerLabelGlowIntensity.LOW -> glowColor.copy(alpha = 0.1f)
             }
         } else Color.Transparent
 
@@ -131,22 +129,16 @@ fun PlayerLabel(
     fun getGlowOpacity(id: Int): State<Float> {
         return derivedStateOf {
             if (!greyedOut) {
-                when (glowIntensity) {
-                    PlayerLabelGlowIntensity.HIGH -> listOf(0.4f, 1f, 0.4f, 0.5f)[id]
-                    PlayerLabelGlowIntensity.NORMAL -> listOf(0.4f, 1f, 0.2f, 0.5f)[id]
-                    PlayerLabelGlowIntensity.LOW -> listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
-                }
+                if (glowIntensity == PlayerLabelGlowIntensity.HIGH) listOf(0.4f, 1f, 0.2f, 0.5f)[id]
+                else listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
             } else 0f
         }
     }
     fun getGlowBlur(id: Int): State<Dp> {
         return derivedStateOf {
             if (!greyedOut) {
-                when (glowIntensity) {
-                    PlayerLabelGlowIntensity.HIGH -> listOf(26.dp, 12.dp, 75.dp, 25.dp)[id]
-                    PlayerLabelGlowIntensity.NORMAL -> listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
-                    PlayerLabelGlowIntensity.LOW -> listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
-                }
+                if (glowIntensity == PlayerLabelGlowIntensity.HIGH) listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
+                else listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
             } else 0.dp
         }
     }
@@ -192,9 +184,9 @@ fun PlayerLabel(
                 colors = ChiplessButtonColors(if (greyedOut) ChiplessColors.greyOut else ChiplessColors.secondary),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                // TODO: ADD DEALER BUTTON DISPLAY IN CREATE TABLE SCREEN
-                // TODO: ADD DEALER ICON DISPLAY IN GAME SCREEN
-                // TODO: ADD STATUS ICON DISPLAY IN GAME SCREEN
+                // TODO: ADD DEALER SELECTION BUTTONS IN CREATE TABLE SCREEN
+                // TODO: ADD DEALER ICON DISPLAYS IN GAME SCREEN
+                // TODO: ADD STATUS ICON DISPLAYS IN GAME SCREEN
                 if (name.isNotEmpty()) {
                     Column (
                         verticalArrangement = Arrangement.Center,
