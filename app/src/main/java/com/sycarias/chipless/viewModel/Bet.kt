@@ -11,17 +11,15 @@ class Bet(
 ) {
     private val currentTableBet: Int by currentTableBet
 
-    private fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) {
+    private fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) { // TODO: Replace isRaise with a newBettingPlayerStatus
         // Update statuses for other participating players to PARTIAL_MATCH
-        if (isRaise) {
-            players.list.forEach { player ->
-                if (player.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) ) {
-                    player.status = PlayerStatus.PARTIAL_MATCH
-                }
+        players.list.forEach { player ->
+            if (player.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) ) {
+                player.status = PlayerStatus.PARTIAL_MATCH
             }
         }
 
-        // Update status for betting player to be BET_MATCHED or RAISED
+        // Update status for betting player to be BET_MATCHED or RAISED | TODO: ...or ALL_IN
         bettingPlayer.status =
             if (isRaise) {
                 PlayerStatus.RAISED
