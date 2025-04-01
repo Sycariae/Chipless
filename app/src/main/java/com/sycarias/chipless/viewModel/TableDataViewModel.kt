@@ -33,13 +33,15 @@ class TableDataViewModel: ViewModel() {
     // The current round of betting ( e.g. PREFLOP, FLOP, TURN... )
     private val _bettingRound = mutableStateOf(BettingRound.PREFLOP)
     val bettingRound: State<BettingRound> = _bettingRound
+    // TODO: Remove Showdown and make a function to display showdown with winner selection after RIVER
 
     // Update betting round to PREFLOP
     private fun resetBettingRound() {
         _bettingRound.value = BettingRound.PREFLOP
     }
+
     // Update betting round to next round
-    private fun incrementGameStage() {
+    private fun incrementBettingRound() {
         _bettingRound.value = when(_bettingRound.value) {
             BettingRound.PREFLOP -> BettingRound.FLOP
             BettingRound.FLOP -> BettingRound.TURN
@@ -49,13 +51,27 @@ class TableDataViewModel: ViewModel() {
         }
     }
 
+    // Checks to see if
+    fun checkForBettingRoundEnd() {
+        if (players.activePlayers.isEmpty()) {
+            tablePots.commitBets()
+            _bettingRound.value = BettingRound.SHOWDOWN // TODO: Replace this with showdown function call
+        }
+        else if (
+            players.activePlayers.all { it.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) }
+        ) {
+            initiateNewRound()
+            players.setFocusPlayer(players.smallBlind)
+        }
+    }
+
 
     // = INITIALISATION
     // Called when a new betting round begins,
     fun initiateNewRound() {
         tablePots.commitBets() // Distribute the stagedBets to tablePots
         players.resetAllForNewRound() // Reset player statuses excluding FOLDED, ALL_IN and SAT_OUT and reset all current player bets
-        incrementGameStage() // Set game stage to next stage from the current one
+        incrementBettingRound() // Set game stage to next stage from the current one
     }
 
     // Called after all betting rounds have been completed, resets currentBets, sets all participating players to IDLE status, resets pots and places blind bets
