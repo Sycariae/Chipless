@@ -11,11 +11,30 @@ class Bet(
 ) {
     private val currentTableBet: Int by currentTableBet
 
+    private fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) {
+        // Update statuses for other participating players to PARTIAL_MATCH
+        if (isRaise) {
+            players.list.forEach { player ->
+                if (player.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) ) {
+                    player.status = PlayerStatus.PARTIAL_MATCH
+                }
+            }
+        }
+
+        // Update status for betting player to be BET_MATCHED or RAISED
+        bettingPlayer.status =
+            if (isRaise) {
+                PlayerStatus.RAISED
+            } else {
+                PlayerStatus.BET_MATCHED
+            }
+    }
+
     // Place a bet into the current pot and update player statuses
     fun place(player: Player, betAmount: Int, isRaise: Boolean = false) {
         tablePots.stagedBets += betAmount // Add bet amount to table pot and set table bet
         player.bet(betAmount) // Subtract bet amount from balance and add to currentBet for betting player
-        players.updateStatusesOnBet(bettingPlayer = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
+        updateStatusesOnBet(bettingPlayer = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
 
     // Place a bet equal to the current table bet

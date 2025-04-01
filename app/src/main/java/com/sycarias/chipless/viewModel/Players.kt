@@ -91,27 +91,6 @@ class Players (playerCount: Int) {
     }
 
 
-    // = STATUS MANAGEMENT
-    fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) {
-        // Update statuses for other participating players to PARTIAL_MATCH
-        if (isRaise) {
-            _players.forEach { player ->
-                if (player.status == PlayerStatus.BET_MATCHED) {
-                    player.status = PlayerStatus.PARTIAL_MATCH
-                }
-            }
-        }
-
-        // Update status for betting player to be BET_MATCHED or RAISED
-        bettingPlayer.status =
-            if (isRaise) {
-                PlayerStatus.RAISED
-            } else {
-                PlayerStatus.BET_MATCHED
-            }
-    }
-
-
     // = INITIATION
     fun setStartingBalances(startingChips: Int) {
         _players.forEach { player ->
