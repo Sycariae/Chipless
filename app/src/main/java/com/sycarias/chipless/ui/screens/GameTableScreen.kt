@@ -134,7 +134,7 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 30.dp),
+                .padding(top = 20.dp, bottom = 30.dp, start = 10.dp, end = 10.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {

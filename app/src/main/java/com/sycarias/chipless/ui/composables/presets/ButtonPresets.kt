@@ -106,7 +106,7 @@ fun ActionButton(
     Button(
         onClick = if (enabled) onClick else { {} },
         modifier = Modifier
-            .width(115.dp)
+            .width(100.dp)
             .height(50.dp)
             .then(modifier),
         shape = shape,
