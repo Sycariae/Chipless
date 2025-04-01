@@ -34,7 +34,7 @@ import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.PrimaryActionButton
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
-import com.sycarias.chipless.viewModel.TableDataViewModel
+import com.sycarias.chipless.viewModel.ViewModel
 
 enum class PlayerButtonLocation {
     TOP_ROW,
@@ -48,7 +48,7 @@ enum class PlayerButtonSide {
 }
 
 @Composable
-fun CreateTableScreen(navController: NavController, viewModel: TableDataViewModel) {
+fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
     // Define Sizing and Spacing for Dealer Icons
     val dealerIconSize = 30.dp // Sizing of Dealer Icons
     val dealerIconMidSpacing = 5.dp // Spacing Between Player Button and Dealer Icon in Mid-Section

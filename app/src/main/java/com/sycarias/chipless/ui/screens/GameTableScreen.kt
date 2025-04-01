@@ -24,7 +24,7 @@ import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.Subtitle
 import com.sycarias.chipless.viewModel.BettingRound
-import com.sycarias.chipless.viewModel.TableDataViewModel
+import com.sycarias.chipless.viewModel.ViewModel
 import kotlin.math.min
 
 enum class PlayerActionType {
@@ -37,7 +37,7 @@ enum class PlayerActionType {
 }
 
 @Composable
-fun GameTableScreen(navController: NavController, viewModel: TableDataViewModel) {
+fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
     // View Model Variables
     val players = viewModel.players
     val bet = viewModel.bet

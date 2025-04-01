@@ -12,7 +12,7 @@ import com.sycarias.chipless.ui.screens.CreateTableScreen
 import com.sycarias.chipless.ui.screens.GameTableScreen
 import com.sycarias.chipless.ui.screens.MainMenuScreen
 import com.sycarias.chipless.ui.theme.ChiplessTheme
-import com.sycarias.chipless.viewModel.TableDataViewModel
+import com.sycarias.chipless.viewModel.ViewModel
 import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +38,7 @@ object GameTable
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    val viewModel: TableDataViewModel = viewModel()
+    val viewModel: ViewModel = viewModel()
 
     NavHost(
         navController = navController,

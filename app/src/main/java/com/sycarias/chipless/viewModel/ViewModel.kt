@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
-class TableDataViewModel: ViewModel() {
+class ViewModel: ViewModel() {
     // = TABLE CONFIG
     val tableConfig = TableConfig()
 
