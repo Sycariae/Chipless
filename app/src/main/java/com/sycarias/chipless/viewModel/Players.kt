@@ -2,22 +2,23 @@ package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 class Players (playerCount: Int) {
-    private val _players = listOf(Player(isFocus = true, isDealer = true), *Array(playerCount-1) { Player() })
+    private val _players = mutableStateListOf(Player(isFocus = true, isDealer = true), *Array(playerCount-1) { Player() })
     val list = _players
 
-    val participatingPlayers by derivedStateOf { // The list of players that are not sitting out or don't exist
+    val participatingList by derivedStateOf { // The list of players that are not sitting out or don't exist
         _players.filter { it.isParticipating }
     }
 
-    val activePlayers by derivedStateOf { // The list of active players: players that can legally take a turn
+    val activeList by derivedStateOf { // The list of active players: players that can legally take a turn
         _players.filter { it.isActive }
     }
 
-    val bettingPlayers by derivedStateOf { // The list of betting players: players that have a currentBet more than 0
+    val bettingList by derivedStateOf { // The list of betting players: players that have a currentBet more than 0
         _players.filter { it.isBetting }
     }
 
@@ -69,8 +70,8 @@ class Players (playerCount: Int) {
         player: Player,
         increment: Int = 1
     ): Player {
-        return if (activePlayers.isNotEmpty()) {
-            activePlayers[ ( activePlayers.indexOf(player) + increment) % activePlayers.size ]
+        return if (activeList.isNotEmpty()) {
+            activeList[ ( activeList.indexOf(player) + increment) % activeList.size ]
         } else {
             _players.first() // Return null if no active players exist
         }
@@ -79,7 +80,7 @@ class Players (playerCount: Int) {
 
     // = FOCUS PLAYER MANAGEMENT
     fun setInitialFocusPlayer() {
-        if (activePlayers.isNotEmpty()) {
+        if (activeList.isNotEmpty()) {
             setFocusPlayer( nextActivePlayerAfter(dealer, increment = 3) )
         } else {
             throw IndexOutOfBoundsException("NO ACTIVE PLAYERS: activeIDs IS EMPTY")
@@ -102,7 +103,7 @@ class Players (playerCount: Int) {
         _players.forEach { player ->
             player.currentBet = 0
         }
-        activePlayers.forEach { player ->
+        activeList.forEach { player ->
             player.status = PlayerStatus.IDLE
         }
     }
@@ -111,7 +112,7 @@ class Players (playerCount: Int) {
         _players.forEach { player ->
             player.currentBet = 0
         }
-        participatingPlayers.forEach { player ->
+        participatingList.forEach { player ->
             player.status = PlayerStatus.IDLE
         }
     }

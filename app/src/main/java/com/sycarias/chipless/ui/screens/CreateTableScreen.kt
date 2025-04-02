@@ -94,7 +94,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
             startingChipsValid
                 && bigBlindValid
                 && smallBlindValid
-                && players.participatingPlayers.count() >= 4
+                && players.participatingList.count() >= 4
                 && players.dealer.isActive
         }
     }

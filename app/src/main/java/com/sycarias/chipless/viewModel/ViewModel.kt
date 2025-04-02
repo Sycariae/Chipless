@@ -1,9 +1,9 @@
 package com.sycarias.chipless.viewModel
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class ViewModel: ViewModel() {
@@ -31,18 +31,18 @@ class ViewModel: ViewModel() {
 
     // = BETTING ROUND
     // The current round of betting ( e.g. PREFLOP, FLOP, TURN... )
-    private val _bettingRound = mutableStateOf(BettingRound.PREFLOP)
-    val bettingRound: State<BettingRound> = _bettingRound
+    var bettingRound by mutableStateOf(BettingRound.PREFLOP)
+        private set
     // TODO: Remove Showdown and make a function to display showdown with winner selection after RIVER
 
     // Update betting round to PREFLOP
     private fun resetBettingRound() {
-        _bettingRound.value = BettingRound.PREFLOP
+        bettingRound = BettingRound.PREFLOP
     }
 
     // Update betting round to next round
     private fun incrementBettingRound() {
-        _bettingRound.value = when(_bettingRound.value) {
+        bettingRound = when(bettingRound) {
             BettingRound.PREFLOP -> BettingRound.FLOP
             BettingRound.FLOP -> BettingRound.TURN
             BettingRound.TURN -> BettingRound.RIVER
@@ -53,12 +53,12 @@ class ViewModel: ViewModel() {
 
     // Checks to see if
     fun checkForBettingRoundEnd() {
-        if (players.activePlayers.isEmpty()) {
+        if (players.activeList.isEmpty()) {
             tablePots.commitBets()
-            _bettingRound.value = BettingRound.SHOWDOWN // TODO: Replace this with showdown function call
+            bettingRound = BettingRound.SHOWDOWN // TODO: Replace this with showdown function call
         }
         else if (
-            players.activePlayers.all { it.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) }
+            players.activeList.all { it.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) }
         ) {
             initiateNewRound()
             players.setFocusPlayer(players.smallBlind)

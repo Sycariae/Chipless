@@ -11,7 +11,7 @@ class Pot(
 ) {
     var balance by mutableIntStateOf(balance)
         private set
-    val includedPlayers = mutableStateListOf(*includedPlayers.toTypedArray())
+    val includedPlayers = mutableStateListOf(*includedPlayers.toTypedArray()) // TODO: Convert to immutable list data structure
 
     fun deposit(amount: Int) {
         balance += amount

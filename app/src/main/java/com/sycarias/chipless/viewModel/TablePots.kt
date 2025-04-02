@@ -18,7 +18,7 @@ class TablePots (val players: Players) {
 
     fun commitBets() {
         var remainingStagedBets = stagedBets
-        var remainingPlayers = players.bettingPlayers.toMutableList()
+        var remainingPlayers = players.bettingList.toMutableList()
         var previousBetAmount = 0
 
         while (remainingStagedBets > 0 && remainingPlayers.isNotEmpty()) {
