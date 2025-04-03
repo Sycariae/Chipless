@@ -85,7 +85,6 @@ class Player(
 
 
     // = BALANCE AND BET MANAGEMENT
-
     /**
      * Increases the [Player]'s [balance] by the specified `amount`.
      *

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 
 /**
- * Represents a pot in a game, typically used for managing a shared pool of resources or money.
+ * Used for managing a pool of chips that can be distributed to winning players.
  *
  * Maintains a [balance] and tracks the [includedPlayers] who have contributed to it.
  * It provides functionality to:

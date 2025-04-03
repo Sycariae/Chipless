@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
  * Manages betting actions and status updates on bet placement.
  *
  * This class provides functionality for:
- * - [updateStatusesOnBet] - Updating player statuses based on bet actions.
+ * - [updateStatusesOnBet] - Updating [Player.status] for all relevant [Player] objects based on bet actions.
  * - [place] - Placing bets and staging them in [tablePots].
  * - [call] - Calling the [currentTableBet].
  * - [raise] - Raising the [currentTableBet] by a specified amount.
@@ -78,6 +78,8 @@ class Bet(
      * between the [currentTableBet] and the [Player.currentBet] to the pot.
      *
      * @param player The player who is calling the [currentTableBet].
+     *
+     * @see place
      */
     fun call(player: Player) {
         place(player = player, betAmount = currentTableBet - player.currentBet, isRaise = false)
@@ -92,6 +94,9 @@ class Bet(
      *
      * @param player The player who is raising the bet.
      * @param raiseAmount The amount by which the player wants to raise the bet.
+     *
+     * @see allIn
+     * @see place
      */
     fun raise(player: Player, raiseAmount: Int) {
         if (player.balance == ((currentTableBet + raiseAmount) - player.currentBet) ) {
@@ -101,13 +106,31 @@ class Bet(
         }
     }
 
-    // Place a bet equal to player's balance
+    /**
+     * Allows a `player` to go [PlayerStatus.ALL_IN].
+     *
+     * It places a bet for the `player` using their entire [Player.balance] and then updates the [Player.status]
+     * to [PlayerStatus.ALL_IN], indicating that they have no more chips to bet.
+     *
+     * @param player The [Player] who is going all-in.
+     * @param isRaise `true` if the betting player raised the [currentTableBet]. `false` if they matched it.
+     *
+     * @see PlayerStatus
+     * @see place
+     */
     fun allIn(player: Player, isRaise: Boolean = false) {
         place(player = player, betAmount = player.balance, isRaise = isRaise)
         player.status = PlayerStatus.ALL_IN // Replace the bet status applied by updateStatusesOnBet() with ALL_IN for the subject player
     }
 
-    // Place blind bets (at the start of a match)
+
+    /**
+     * Places the forced small and big blind bets.
+     *
+     * This function forces the [Players.smallBlind] player to bet the [TableConfig.smallBlind] amount and the [Players.bigBlind] player
+     * to bet the [TableConfig.bigBlind] amount. It also sets [Players.smallBlind]'s [Player.status] to
+     * [PlayerStatus.PARTIAL_MATCH] to indicate a partial contribution.
+     */
     fun placeBlinds() {
         place(player = players.smallBlind, betAmount = tableConfig.smallBlind, isRaise = false) // Place forced bet for small blind player
         place(player = players.bigBlind, betAmount = tableConfig.bigBlind, isRaise = false) // Place forced bet for big blind player
