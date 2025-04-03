@@ -61,7 +61,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
 
 
     LaunchedEffect(Unit) {
-        viewModel.resetForTableCreation()
+        viewModel.resetForTableConfiguration()
 
         // TESTING START = TODO: REMOVE TESTING
         players.list.forEachIndexed { index, player ->

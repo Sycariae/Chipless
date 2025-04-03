@@ -1,6 +1,12 @@
 package com.sycarias.chipless.viewModel
 
-// The different statuses that a player can have
+
+/**
+ * Represents the current status of a player in a betting round.
+ *
+ * This enum defines the various states a player can be in, during a betting round,
+ * along with a corresponding visual indication for each state.
+ */
 enum class PlayerStatus {
     IDLE,           // Waiting on their turn                                                Indication: no icon and no grey out
     BET_MATCHED,    // Met the current bet                                                  Indication: green BET_MATCHED icon
