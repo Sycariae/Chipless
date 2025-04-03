@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,7 +43,7 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
     val players = viewModel.players
     val bet = viewModel.bet
 
-    val bettingRound by remember { viewModel.bettingRound }
+    val bettingRound by remember { derivedStateOf { viewModel.bettingRound } }
     val bettingRoundTitle: String = when(bettingRound) {
         BettingRound.PREFLOP -> "Pre-Flop"
         BettingRound.FLOP -> "Flop"
