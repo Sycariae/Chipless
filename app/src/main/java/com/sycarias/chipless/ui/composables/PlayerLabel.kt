@@ -88,7 +88,7 @@ fun PlayerLabel(
         } else {
             {
                 if (player.isEliminated) {
-                    player.reset()
+                    player.reset() // TODO: Make sure that the focus, next focus and dealer is accounted for
                 }
             }
         }
