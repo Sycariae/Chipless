@@ -22,26 +22,81 @@ import com.sycarias.chipless.ui.theme.ChiplessColors as CColor
 import com.sycarias.chipless.ui.theme.ChiplessTypography as CStyle
 
 @Composable
-fun IntInputField(
+fun InputField(
     label: String,
     modifier: Modifier = Modifier,
     initialValue: String = "",
-    maxLen: Int = 7,
+    maxLen: Int = 16,
     isValid: Boolean = true,
     onValueChange: (String) -> Unit = {}
 ) {
     var textFieldValue by remember { mutableStateOf(TextFieldValue(initialValue, selection = TextRange(initialValue.length))) }
-    val maxLength = minOf(9,maxLen)
+    val maxLength = minOf(16,maxLen)
+
+    fun validateInput(newValue: String): String {
+        return when {
+            newValue.length > maxLength -> newValue.take(maxLength) // Limit to max length
+            else -> newValue
+        }
+    }
+
+    OutlinedTextField(
+        label = { Label(text = label) },
+        value = textFieldValue,
+        modifier = modifier,
+        isError = !isValid,
+        onValueChange = { newValue ->
+            val validatedValue = validateInput(newValue.text)
+            if (textFieldValue.text != validatedValue) {
+                textFieldValue = TextFieldValue(
+                    text = validatedValue,
+                    selection = TextRange(initialValue.length) // TODO: Allow for selections to not be forced to the end
+                )
+                onValueChange(validatedValue)
+            }
+        },
+        textStyle = CStyle.body.copy(color = CColor.textSecondary),
+        singleLine = true,
+        colors = OutlinedTextFieldDefaults.colors(
+            errorBorderColor = CColor.accentPrimary,
+            errorLabelColor = CColor.accentPrimary,
+            focusedBorderColor = CColor.textTertiary,
+            unfocusedBorderColor = CColor.textTertiary,
+            errorCursorColor = CColor.accentPrimary,
+            cursorColor = CColor.textTertiary,
+            selectionColors = TextSelectionColors(
+                handleColor = CColor.textTertiary,
+                backgroundColor = CColor.textTertiary.copy(alpha = 0.4f)
+            ),
+        ),
+        shape = RoundedCornerShape(15.dp),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done
+        )
+    )
+}
+
+@Composable
+fun IntInputField(
+    label: String,
+    modifier: Modifier = Modifier,
+    initialValue: String = "",
+    maxLen: Int = 8,
+    isValid: Boolean = true,
+    onValueChange: (String) -> Unit = {}
+) {
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(initialValue, selection = TextRange(initialValue.length))) }
+    val maxLength = minOf(8,maxLen)
 
     fun validateInput(newValue: String): String {
         var newIntValue = newValue
         if ( newValue.any { it.isDigit().not() } ) {
-            newIntValue = newIntValue.filter { it.isDigit() }
+            newIntValue = newValue.filter { it.isDigit() }
         }
         return when {
             newIntValue.isEmpty() -> "0" // Prevent empty value
             newIntValue == "00" -> "0" // Prevent multiple zeros
-            newIntValue.startsWith('0') && newIntValue.toInt() > 0 -> newIntValue.trimStart('0')
+            newIntValue.startsWith('0') && newIntValue.toInt() > 0 -> newIntValue.trimStart('0') // Prevents leading zeros
             newIntValue.length > maxLength -> newIntValue.take(maxLength) // Limit to max length
             else -> newIntValue
         }
