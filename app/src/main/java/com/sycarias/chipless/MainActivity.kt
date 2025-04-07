@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sycarias.chipless.ui.screens.CreateTableScreen
 import com.sycarias.chipless.ui.screens.GameTableScreen
 import com.sycarias.chipless.ui.screens.MainMenuScreen
+import com.sycarias.chipless.ui.screens.SettingsScreen
 import com.sycarias.chipless.ui.theme.ChiplessTheme
 import com.sycarias.chipless.viewModel.ViewModel
 import kotlinx.serialization.Serializable
@@ -35,6 +36,9 @@ object CreateTable
 @Serializable
 object GameTable
 
+@Serializable
+object Settings
+
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -46,6 +50,9 @@ fun AppNavigation() {
     ) {
         composable<MainMenu> {
             MainMenuScreen(navController)
+        }
+        composable<Settings> {
+            SettingsScreen(navController)
         }
         composable<CreateTable> {
             CreateTableScreen(navController, viewModel)

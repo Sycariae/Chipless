@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sycarias.chipless.CreateTable
 import com.sycarias.chipless.R
+import com.sycarias.chipless.Settings
 import com.sycarias.chipless.ui.composables.presets.LargeButton
 import com.sycarias.chipless.ui.composables.presets.LargeButtonText
 import com.sycarias.chipless.ui.composables.presets.LargeFocusButton
@@ -73,8 +74,7 @@ fun MainMenuScreen(navController: NavController) {
         // Settings Button
         LargeButton(
             onClick = {
-                Toast.makeText(context, "COMING SOON!", Toast.LENGTH_SHORT).show()
-                /* TODO: Settings Button click */
+                navController.navigate(Settings)
             }
         ) { LargeButtonText(text = "Settings") }
     }
