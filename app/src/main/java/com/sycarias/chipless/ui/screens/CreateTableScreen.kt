@@ -34,6 +34,7 @@ import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.PrimaryActionButton
 import com.sycarias.chipless.ui.extensions.buttonShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
+import com.sycarias.chipless.viewModel.TableConfigDefaults
 import com.sycarias.chipless.viewModel.ViewModel
 
 enum class PlayerButtonLocation {
@@ -49,11 +50,13 @@ enum class PlayerButtonSide {
 
 @Composable
 fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
+    /* TODO: MOVE
     // Define Sizing and Spacing for Dealer Icons
     val dealerIconSize = 30.dp // Sizing of Dealer Icons
     val dealerIconMidSpacing = 5.dp // Spacing Between Player Button and Dealer Icon in Mid-Section
     val dealerIconTBRHSpacing = (-6).dp // Horizontal Spacing Between Player Button and Dealer Icon in Top and Bottom Rows
     val dealerIconTBRVSpacing = (-10).dp // Vertical Spacing Between Player Button and Dealer Icon in Top and Bottom Rows
+    */
 
     // View Model Variables
     val tableConfig = viewModel.tableConfig
@@ -227,7 +230,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
         Row() {
             IntInputField(
                 label = "Big Blind",
-                initialValue = tableConfig.bigBlind.toString(),
+                initialValue = TableConfigDefaults.BIG_BLIND.toString(),
                 maxLen = 4,
                 isValid = bigBlindValid,
                 onValueChange = {
@@ -240,7 +243,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
 
             IntInputField(
                 label = "Small Blind",
-                initialValue = tableConfig.smallBlind.toString(),
+                initialValue = TableConfigDefaults.SMALL_BLIND.toString(),
                 isValid = smallBlindValid,
                 maxLen = 4,
                 onValueChange = { tableConfig.smallBlind = it.toInt() },
@@ -251,7 +254,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
 
         IntInputField(
             label = "Starting Chips",
-            initialValue = tableConfig.startingChips.toString(),
+            initialValue = TableConfigDefaults.STARTING_CHIPS.toString(),
             maxLen = 6,
             isValid = startingChipsValid,
             onValueChange = { tableConfig.startingChips = it.toInt() },
