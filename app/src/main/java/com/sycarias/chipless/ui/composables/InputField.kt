@@ -5,7 +5,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.text.TextRange
@@ -20,10 +24,9 @@ import com.sycarias.chipless.ui.theme.ChiplessTypography as CStyle
 @Composable
 fun IntInputField(
     label: String,
-    initialValue: String = "",
-    defaultValue: String = "0",
-    maxLen: Int = 7,
     modifier: Modifier = Modifier,
+    initialValue: String = "",
+    maxLen: Int = 7,
     isValid: Boolean = true,
     onValueChange: (String) -> Unit = {}
 ) {
@@ -36,9 +39,10 @@ fun IntInputField(
             newIntValue = newIntValue.filter { it.isDigit() }
         }
         return when {
-            newIntValue.isEmpty() -> defaultValue
-            textFieldValue.text == "0" && newIntValue != "0" -> newIntValue.trimStart('0')
-            newIntValue.length > maxLength -> newIntValue.take(maxLength)
+            newIntValue.isEmpty() -> "0" // Prevent empty value
+            newIntValue == "00" -> "0" // Prevent multiple zeros
+            newIntValue.startsWith('0') && newIntValue.toInt() > 0 -> newIntValue.trimStart('0')
+            newIntValue.length > maxLength -> newIntValue.take(maxLength) // Limit to max length
             else -> newIntValue
         }
     }
