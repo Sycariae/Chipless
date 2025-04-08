@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.sycarias.chipless.R
-import com.sycarias.chipless.ui.extensions.buttonShadow
+import com.sycarias.chipless.ui.extensions.dropShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
 
 enum class PlayerStatusIcon {
@@ -36,7 +36,7 @@ fun StatusIcon(
         painter = rememberVectorPainter(image = icon),
         contentDescription = "Player Status Icon",
         modifier = Modifier
-            .buttonShadow(
+            .dropShadow(
                 blurRadius = 5.dp,
                 color = color,
                 cornerRadius = 100.dp

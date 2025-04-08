@@ -32,7 +32,7 @@ import com.sycarias.chipless.ui.composables.TableScreen
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.PrimaryActionButton
-import com.sycarias.chipless.ui.extensions.buttonShadow
+import com.sycarias.chipless.ui.extensions.dropShadow
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.viewModel.TableConfigDefaults
 import com.sycarias.chipless.viewModel.ViewModel
@@ -109,7 +109,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
     }
     val playButtonModifier = when (tableConfigValid) {
         true -> Modifier
-            .buttonShadow(
+            .dropShadow(
                 color = ChiplessColors.primary,
                 offsetX = 0.dp,
                 offsetY = 0.dp,

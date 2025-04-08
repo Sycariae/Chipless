@@ -19,7 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sycarias.chipless.R
-import com.sycarias.chipless.ui.extensions.buttonShadow
+import com.sycarias.chipless.ui.extensions.dropShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 
@@ -45,7 +45,7 @@ fun DealerIcon(
 
         Button(
             modifier = Modifier
-                .buttonShadow(
+                .dropShadow(
                     blurRadius = 10.dp,
                     color = glowColor.copy(alpha = alpha),
                     offsetX = 0.dp,

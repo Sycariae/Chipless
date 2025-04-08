@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.sycarias.chipless.ui.extensions.buttonShadow
+import com.sycarias.chipless.ui.extensions.dropShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.utils.colorMix
@@ -27,7 +27,7 @@ fun LargeFocusButton(
         modifier = Modifier
             .width(320.dp)
             .height(75.dp)
-            .buttonShadow(
+            .dropShadow(
                 color = ChiplessColors.primary,
                 offsetX = 0.dp,
                 offsetY = 0.dp,

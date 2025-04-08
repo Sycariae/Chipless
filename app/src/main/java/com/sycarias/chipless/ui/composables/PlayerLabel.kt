@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.sycarias.chipless.R
-import com.sycarias.chipless.ui.extensions.buttonShadow
+import com.sycarias.chipless.ui.extensions.dropShadow
 import com.sycarias.chipless.ui.extensions.innerShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
@@ -170,12 +170,12 @@ fun PlayerLabel(
                         offsetX = 0.dp,
                         offsetY = 0.dp
                     )
-                    .buttonShadow(
+                    .dropShadow(
                         color = glowColor.copy(alpha = getGlowOpacity(2).value),
                         blurRadius = getGlowBlur(2).value,
                         cornerRadius = cornerRadius
                     )
-                    .buttonShadow(
+                    .dropShadow(
                         color = glowColor.copy(alpha = getGlowOpacity(3).value),
                         blurRadius = getGlowBlur(3).value,
                         cornerRadius = cornerRadius
@@ -209,7 +209,7 @@ fun PlayerLabel(
                                     contentDescription = "Chips Icon",
                                     modifier = Modifier
                                         .size(chipsIconSize)
-                                        .buttonShadow(
+                                        .dropShadow(
                                             color = ChiplessColors.primary,
                                             blurRadius = 5.dp,
                                             cornerRadius = 100.dp
