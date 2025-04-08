@@ -21,7 +21,6 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,6 +32,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.sycarias.chipless.R
@@ -41,14 +41,11 @@ import com.sycarias.chipless.ui.extensions.innerShadow
 import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.theme.ChiplessTypography
+import com.sycarias.chipless.ui.utils.GlowIntensity
 import com.sycarias.chipless.ui.utils.measureTextWidth
 import com.sycarias.chipless.viewModel.Player
 import com.sycarias.chipless.viewModel.PlayerStatus
 
-enum class PlayerLabelGlowIntensity {
-    HIGH,
-    LOW
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,24 +54,31 @@ fun PlayerLabel(
     size: Dp = 50.dp,
     screen: TableScreen
 ) {
-    // = TESTING = TODO: REMOVE TESTING
+    // = TESTING START = TODO: REMOVE TESTING
     val initName = remember { player.name }
+    // = TESTING END
 
     // = LABEL CONFIG
-    val showChips: Boolean = (screen == TableScreen.GAME)
-    val hideOnEmpty: Boolean = (screen == TableScreen.GAME)
-    val glowIntensity: PlayerLabelGlowIntensity =
-        if (screen == TableScreen.CREATE) { PlayerLabelGlowIntensity.HIGH } else {
-            if (player.isFocus) PlayerLabelGlowIntensity.HIGH else PlayerLabelGlowIntensity.LOW
+    val showChips: Boolean = remember { screen == TableScreen.GAME }
+    val hideOnEmpty: Boolean = showChips
+    val glowIntensity: GlowIntensity = remember {
+        if (screen == TableScreen.CREATE) {
+            GlowIntensity.HIGH
+        } else {
+            if (player.isFocus) GlowIntensity.HIGH else GlowIntensity.LOW
         }
-    val greyedOut: Boolean =
-        if (screen == TableScreen.CREATE) { false } else {
+    }
+    val greyedOut: Boolean = remember {
+        if (screen == TableScreen.CREATE) {
+            false
+        } else {
             player.isEliminated || player.status in listOf(
                 PlayerStatus.FOLDED,
                 PlayerStatus.SAT_OUT
             )
         }
-    val onClick: () -> Unit =
+    }
+    val onClick: () -> Unit = remember {
         if (screen == TableScreen.CREATE) {
             {
                 /* TESTING START = TODO: REMOVE TESTING */
@@ -92,11 +96,12 @@ fun PlayerLabel(
                 }
             }
         }
+    }
 
     // = NAME DISPLAY
     val name by remember { derivedStateOf { player.name } }
     val nameTextStyle = ChiplessTypography.body
-    val nameTextColor = if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary
+    val nameTextColor by remember { derivedStateOf { if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary } }
     val nameTextPadding = 15.dp
     val nameDisplayWidth = measureTextWidth(text = name, style = nameTextStyle) + (nameTextPadding * 2)
 
@@ -120,28 +125,10 @@ fun PlayerLabel(
     val borderColor =
         if (!greyedOut) {
             when (glowIntensity) {
-                PlayerLabelGlowIntensity.HIGH -> glowColor
-                PlayerLabelGlowIntensity.LOW -> glowColor.copy(alpha = 0.1f)
+                GlowIntensity.HIGH -> glowColor
+                GlowIntensity.LOW -> glowColor.copy(alpha = 0.1f)
             }
         } else Color.Transparent
-
-    // = GLOW STYLING
-    fun getGlowOpacity(id: Int): State<Float> {
-        return derivedStateOf {
-            if (!greyedOut) {
-                if (glowIntensity == PlayerLabelGlowIntensity.HIGH) listOf(0.4f, 1f, 0.2f, 0.5f)[id]
-                else listOf(0.25f, 0.4f, 0.1f, 0.3f)[id]
-            } else 0f
-        }
-    }
-    fun getGlowBlur(id: Int): State<Dp> {
-        return derivedStateOf {
-            if (!greyedOut) {
-                if (glowIntensity == PlayerLabelGlowIntensity.HIGH) listOf(22.dp, 8.dp, 35.dp, 6.dp)[id]
-                else listOf(18.dp, 8.dp, 35.dp, 6.dp)[id]
-            } else 0.dp
-        }
-    }
 
     // = UI START
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
@@ -158,26 +145,34 @@ fun PlayerLabel(
                     )
                     .innerShadow(
                         shape = shape,
-                        color = glowColor.copy(alpha = getGlowOpacity(0).value),
-                        blur = getGlowBlur(0).value,
+                        color = glowColor.copy(alpha = glowIntensity.inner.glow),
+                        blur = glowIntensity.inner.blur,
                         offsetX = 0.dp,
                         offsetY = 0.dp
                     )
                     .innerShadow(
                         shape = shape,
-                        color = glowColor.copy(alpha = getGlowOpacity(1).value),
-                        blur = getGlowBlur(1).value,
+                        color = glowColor.copy(
+                            alpha = (glowIntensity.inner.glow * 2).coerceAtMost(
+                                1f
+                            )
+                        ),
+                        blur = (glowIntensity.inner.blur - 10.dp).coerceAtLeast(0.dp),
                         offsetX = 0.dp,
                         offsetY = 0.dp
                     )
                     .dropShadow(
-                        color = glowColor.copy(alpha = getGlowOpacity(2).value),
-                        blurRadius = getGlowBlur(2).value,
+                        color = glowColor.copy(alpha = glowIntensity.outer.glow),
+                        blurRadius = glowIntensity.inner.blur,
                         cornerRadius = cornerRadius
                     )
                     .dropShadow(
-                        color = glowColor.copy(alpha = getGlowOpacity(3).value),
-                        blurRadius = getGlowBlur(3).value,
+                        color = glowColor.copy(
+                            alpha = (glowIntensity.outer.glow * 2).coerceAtMost(
+                                1f
+                            )
+                        ),
+                        blurRadius = (glowIntensity.outer.blur - 20.dp).coerceAtLeast(0.dp),
                         cornerRadius = cornerRadius
                     ),
                 shape = CircleShape,
