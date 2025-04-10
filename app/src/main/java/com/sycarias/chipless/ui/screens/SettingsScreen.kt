@@ -24,12 +24,13 @@ fun SettingsScreen(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(35.dp))
 
-        Heading(text = "Settings")
+        Heading(text = "Testing") // TODO: Change to "Settings"
 
         Spacer(modifier = Modifier.height(25.dp))
 
         InputField(
-            label = "Test Label"
+            label = "Input Field",
+            maxLen = 8
         )
     }
 }

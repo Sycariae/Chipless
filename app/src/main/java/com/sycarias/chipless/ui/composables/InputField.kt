@@ -30,7 +30,7 @@ fun InputField(
     isValid: Boolean = true,
     onValueChange: (String) -> Unit = {}
 ) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(initialValue, selection = TextRange(initialValue.length))) }
+    var text by remember { mutableStateOf(initialValue) }
     val maxLength = minOf(16,maxLen)
 
     fun validateInput(newValue: String): String {
@@ -42,16 +42,13 @@ fun InputField(
 
     OutlinedTextField(
         label = { Label(text = label) },
-        value = textFieldValue,
+        value = text,
         modifier = modifier,
         isError = !isValid,
         onValueChange = { newValue ->
-            val validatedValue = validateInput(newValue.text)
-            if (textFieldValue.text != validatedValue) {
-                textFieldValue = TextFieldValue(
-                    text = validatedValue,
-                    selection = TextRange(initialValue.length) // TODO: Allow for selections to not be forced to the end
-                )
+            val validatedValue = validateInput(newValue)
+            if (text != validatedValue) {
+                text = validatedValue
                 onValueChange(validatedValue)
             }
         },
