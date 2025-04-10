@@ -235,7 +235,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
                 isValid = bigBlindValid,
                 onValueChange = {
                     tableConfig.bigBlind = it.toInt()
-                    tableConfig.smallBlind = ( it.toInt() / 2 )
+                    /*tableConfig.smallBlind = ( it.toInt() / 2 )*/ // Caused issue with correct smallBlind value not being displayed, only changed in the backend.
                 },
                 modifier = Modifier.width(150.dp)
             )
