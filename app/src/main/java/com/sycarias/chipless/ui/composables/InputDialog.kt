@@ -3,6 +3,8 @@ package com.sycarias.chipless.ui.composables
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -65,10 +67,15 @@ fun InputDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Subtitle(text = title)
+                if (title.isNotEmpty()) {
+                    Subtitle(
+                        text = title
+                    )
+                    Spacer(modifier = Modifier.height(25.dp))
+                }
 
                 Column(
-                    modifier = Modifier.padding(top = 25.dp, bottom = 20.dp),
+                    modifier = Modifier.padding(bottom = 20.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
