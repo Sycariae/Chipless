@@ -46,6 +46,11 @@ import com.sycarias.chipless.ui.utils.measureTextWidth
 import com.sycarias.chipless.viewModel.Player
 import com.sycarias.chipless.viewModel.PlayerStatus
 
+enum class PlayerLabelLocation {
+    TOP,
+    MID,
+    BOTTOM
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,29 +61,33 @@ fun PlayerLabel(
 ) {
     // = TESTING START = TODO: REMOVE TESTING
     val initName = remember { player.name }
-    // = TESTING END
+    // = TESTING END = TODO: REMOVE TESTING
 
     // = LABEL CONFIG
     val showChips: Boolean = remember { screen == TableScreen.GAME }
     val hideOnEmpty: Boolean = showChips
-    val glowIntensity: GlowIntensity = remember {
-        if (screen == TableScreen.CREATE) {
-            GlowIntensity.HIGH
-        } else {
-            if (player.isFocus) GlowIntensity.HIGH else GlowIntensity.LOW
+    val glowIntensity: GlowIntensity by remember {
+        derivedStateOf {
+            if (screen == TableScreen.CREATE) {
+                GlowIntensity.HIGH
+            } else {
+                if (player.isFocus) GlowIntensity.HIGH else GlowIntensity.LOW
+            }
         }
     }
-    val greyedOut: Boolean = remember {
-        if (screen == TableScreen.CREATE) {
-            false
-        } else {
-            player.isEliminated || player.status in listOf(
-                PlayerStatus.FOLDED,
-                PlayerStatus.SAT_OUT
-            )
+    val greyedOut: Boolean by remember {
+        derivedStateOf {
+            if (screen == TableScreen.CREATE) {
+                false
+            } else {
+                player.isEliminated || player.status in listOf(
+                    PlayerStatus.FOLDED,
+                    PlayerStatus.SAT_OUT
+                )
+            }
         }
     }
-    val onClick: () -> Unit = remember {
+    val onClick: () -> Unit =
         if (screen == TableScreen.CREATE) {
             {
                 /* TESTING START = TODO: REMOVE TESTING */
@@ -96,7 +105,6 @@ fun PlayerLabel(
                 }
             }
         }
-    }
 
     // = NAME DISPLAY
     val name by remember { derivedStateOf { player.name } }
