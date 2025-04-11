@@ -85,7 +85,7 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
                     PlayerActionType.CHECK -> { bet.call(players.focus) }
                     PlayerActionType.CALL -> { bet.call(players.focus) }
                     PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
-                    PlayerActionType.BET -> { bet.place(players.focus, getBetAmountInput()) }
+                    PlayerActionType.BET -> { bet.place(players.focus, getBetAmountInput(), isRaise = true) }
                     PlayerActionType.RAISE -> { bet.raise(players.focus, getRaiseAmountInput()) }
                     PlayerActionType.FOLD -> { players.focus.fold() }
                 }

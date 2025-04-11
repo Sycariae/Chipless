@@ -39,9 +39,11 @@ class Bet(
      */
     private fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) { // TODO: Replace isRaise with a newBettingPlayerStatus and update docs
         // Update statuses for other players to PARTIAL_MATCH
-        players.list.forEach { player ->
-            if (player.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED) ) {
-                player.status = PlayerStatus.PARTIAL_MATCH
+        if (isRaise) {
+            players.list.forEach { player ->
+                if (player.status in listOf(PlayerStatus.BET_MATCHED, PlayerStatus.RAISED)) {
+                    player.status = PlayerStatus.PARTIAL_MATCH
+                }
             }
         }
 
