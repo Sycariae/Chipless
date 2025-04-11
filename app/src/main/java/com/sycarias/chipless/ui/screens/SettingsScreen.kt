@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sycarias.chipless.ui.composables.DialogInputType
 import com.sycarias.chipless.ui.composables.InputDialog
+import com.sycarias.chipless.ui.composables.InputField
 import com.sycarias.chipless.ui.composables.presets.Heading
 
 @Composable
@@ -34,17 +34,28 @@ fun SettingsScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(25.dp))
 
         var showInputDialog by remember { mutableStateOf(true) }
-        var inputValue by remember { mutableStateOf("") }
+        var inputValue1 by remember { mutableStateOf("") }
+        var inputValue2 by remember { mutableStateOf("") }
         if (showInputDialog){
             InputDialog(
-                type = DialogInputType.STRING,
-                prompt = "Add Player",
-                inputFieldLabel = "Player Name",
-                isValid = inputValue.isNotEmpty(),
+                title = "Add Player",
+                isConfirmEnabled = (inputValue1.isNotEmpty() && inputValue2.isNotEmpty()),
                 onDismiss = { showInputDialog = false },
-                onConfirm = { showInputDialog = false },
-                onValueChange = { inputValue = it }
-            )
+                onConfirm = { showInputDialog = false }
+            ) {
+                InputField(
+                    initialValue = inputValue1,
+                    onValueChange = { inputValue1 = it },
+                    maxLen = 6,
+                    label = "Player Name"
+                )
+                InputField(
+                    initialValue = inputValue2,
+                    onValueChange = { inputValue2 = it },
+                    maxLen = 6,
+                    label = "Player Name"
+                )
+            }
         }
     }
 }
