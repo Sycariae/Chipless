@@ -127,15 +127,14 @@ class ViewModel: ViewModel() {
     }
 
     /**
-     * Initiates a new table.
+     * Initiates the new table after configuration.
      *
      * This function makes preparations for the next table by:
-     * 1. **Resets Players:** For each player, resets their status to [PlayerStatus.IDLE] (except those who are [PlayerStatus.SAT_OUT]) and resets their [Player.currentBet].
-     * 2. **Sets Starting Balances:** Sets all [Player.balance] to [TableConfig.startingChips].
-     * 3. **Sets Focus Player:** Sets [Players.focus] to the 3rd player after the dealer.
-     * 4. **Resets Pots:** Clears the [TablePots.mainPot] and [TablePots.sidePots].
-     * 5. **Resets Betting Round:** Sets [bettingRound] to [BettingRound.PREFLOP].
-     * 6. **Places Blinds:** Automatically places the blind bets to start the new table.
+     * 1. **Sets Starting Balances:** Sets all [Player.balance] to [TableConfig.startingChips].
+     * 2. **Sets Focus Player:** Sets [Players.focus] to the 3rd player after the dealer.
+     * 3. **Places Blinds:** Automatically places the blind bets to start the new table.
+     *
+     * [resetForTableConfiguration] must always be called before this function.
      *
      * @see PlayerStatus
      * @see Player
@@ -143,11 +142,11 @@ class ViewModel: ViewModel() {
      * @see BettingRound
      */
     fun initialiseNewTable() {
-        players.resetAllForNewTable() // Reset all player statuses and reset all current player bets
+        /*players.resetAllForNewTable()*/ // Reset all player statuses and reset all current player bets
         players.setStartingBalances(tableConfig.startingChips) // Set all player balances to startingChips
         players.setInitialFocusPlayer() // Set focus player to the 3rd player after the dealer
-        tablePots.reset()
-        resetBettingRound() // Set betting round to PREFLOP
+        /*tablePots.reset()*/
+        /*resetBettingRound()*/ // Set betting round to PREFLOP
         bet.placeBlinds()
     }
 
@@ -156,14 +155,12 @@ class ViewModel: ViewModel() {
      * This is for when navigating to the `CreateTableScreen`.
      *
      * Resets included in this function:
-     * - [Players.reset]
-     * - [TableConfig.reset]
-     * - [TablePots.reset]
-     * - [resetBettingRound]
+     * 1. **Resets Players:** For each player, resets their status to [PlayerStatus.IDLE] and resets their [Player.currentBet].
+     * 2. **Resets Pots:** Clears the [TablePots.mainPot] and [TablePots.sidePots].
+     * 3. **Resets Betting Round:** Sets [bettingRound] to [BettingRound.PREFLOP].
      */
     fun resetForTableConfiguration() {
-        players.reset()
-        tableConfig.reset()
+        players.resetAllForNewTable()
         tablePots.reset()
         resetBettingRound()
     }

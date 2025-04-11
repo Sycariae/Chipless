@@ -242,6 +242,7 @@ class Players (playerCount: Int) {
         _players.forEach { player ->
             player.currentBet = 0
             player.status = PlayerStatus.IDLE
+            player.balance = 1
         }
     }
 

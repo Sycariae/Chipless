@@ -23,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,9 +61,31 @@ fun PlayerLabel(
     size: Dp = 50.dp,
     screen: TableScreen
 ) {
-    // = TESTING START = TODO: REMOVE TESTING
-    val initName = remember { player.name }
-    // = TESTING END = TODO: REMOVE TESTING
+    // = NEW PLAYER DIALOG
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogInput by remember { mutableStateOf("") }
+    val isDialogInputValid by remember {
+        derivedStateOf {
+            !(player.name.isEmpty() && dialogInput.isEmpty()) // When trying to set player name from nothing to nothing TODO: Add any other validation checks
+        }
+    }
+    val dialogTitle by remember {
+        derivedStateOf {
+            if (player.name.isEmpty())
+                "Add Player"
+            else
+                "Edit Player"
+        }
+    }
+    val dialogButtonText by remember {
+        derivedStateOf {
+            if (player.name.isNotEmpty()) // If renaming or removing a player
+                if (dialogInput.isEmpty()) "Remove"
+                else "Rename"
+            else // If adding a player or input is invalid as you can't set player name from nothing to nothing)
+                "Confirm"
+        }
+    }
 
     // = LABEL CONFIG
     val showChips: Boolean = remember { screen == TableScreen.GAME }
@@ -90,13 +114,8 @@ fun PlayerLabel(
     val onClick: () -> Unit =
         if (screen == TableScreen.CREATE) {
             {
-                /* TESTING START = TODO: REMOVE TESTING */
-                when {
-                    player.name.isEmpty() -> player.name = initName
-                    else -> player.name = ""
-                }
-                /* TESTING END = TODO: REMOVE TESTING */
-                /* TODO: Design a dialog to enter player name */
+                dialogInput = ""
+                showDialog = true
             }
         } else {
             {
@@ -107,23 +126,23 @@ fun PlayerLabel(
         }
 
     // = NAME DISPLAY
-    val name by remember { derivedStateOf { player.name } }
     val nameTextStyle = ChiplessTypography.body
     val nameTextColor by remember { derivedStateOf { if (greyedOut) ChiplessColors.textTertiary else ChiplessColors.textPrimary } }
-    val nameTextPadding = 15.dp
-    val nameDisplayWidth = measureTextWidth(text = name, style = nameTextStyle) + (nameTextPadding * 2)
+    val nameTextPadding = 16.dp
+    val nameDisplayWidth = measureTextWidth(text = player.name, style = nameTextStyle) + (nameTextPadding * 2)
 
     // = CHIPS DISPLAY
     val chipsText by remember { derivedStateOf { player.balance.toString() } }
     val chipsTextStyle = ChiplessTypography.l3
     val chipsIconSize = 14.dp
-    val chipsDisplayWidth = chipsIconSize + measureTextWidth(text = chipsText, style = chipsTextStyle)
+    val chipsDisplayPadding = 20.dp
+    val chipsDisplayWidth = chipsIconSize + measureTextWidth(text = chipsText, style = chipsTextStyle) + (chipsDisplayPadding * 2)
 
     // = LABEL SIZING
     val cornerRadius = 100.dp
     val shape = RoundedCornerShape(cornerRadius)
     val width = when {
-        name.isEmpty() -> size // When Empty, default to this
+        player.name.isEmpty() -> size // When Empty, default to this
         else -> max(nameDisplayWidth, chipsDisplayWidth)
     }
     val animatedWidth = animateDpAsState(targetValue = width, label = "Player Button Width")
@@ -139,8 +158,26 @@ fun PlayerLabel(
         } else Color.Transparent
 
     // = UI START
+    if (showDialog) {
+        InputDialog(
+            title = remember { dialogTitle },
+            buttonText = dialogButtonText,
+            isConfirmEnabled = (isDialogInputValid),
+            onDismiss = { showDialog = false },
+            onConfirm = {
+                player.name = dialogInput
+                showDialog = false
+            }
+        ) {
+            InputField(
+                onValueChange = { dialogInput = it },
+                maxLen = 6,
+                label = "Player Name"
+            )
+        }
+    }
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
-        if (!(name.isEmpty() && hideOnEmpty)) {
+        if (!(player.name.isEmpty() && hideOnEmpty)) {
             Button(
                 onClick = onClick,
                 modifier = Modifier
@@ -190,16 +227,15 @@ fun PlayerLabel(
                 // TODO: ADD DEALER SELECTION BUTTONS IN CREATE TABLE SCREEN
                 // TODO: ADD DEALER ICON DISPLAYS IN GAME SCREEN
                 // TODO: ADD STATUS ICON DISPLAYS IN GAME SCREEN
-                if (name.isNotEmpty()) {
+                if (player.name.isNotEmpty()) {
                     Column (
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = name,
+                            text = player.name,
                             style = nameTextStyle,
                             color = nameTextColor,
-                            modifier = Modifier.padding(start = nameTextPadding, end = nameTextPadding),
                             softWrap = false
                         )
                         if (showChips) {

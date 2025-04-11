@@ -62,15 +62,6 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
     val players = viewModel.players
 
 
-    // TESTING START = TODO: REMOVE TESTING
-    remember {
-        players.list.forEachIndexed { index, player ->
-            player.name = "Player$index"
-        }
-    }
-    // TESTING END = TODO: REMOVE TESTING
-
-
     LaunchedEffect(Unit) {
         viewModel.resetForTableConfiguration()
     }
