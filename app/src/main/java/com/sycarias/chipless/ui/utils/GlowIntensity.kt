@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-enum class GlowIntensity(
+enum class GlowIntensity( // TODO: REWORK TO BE MORE GENERALLY APPLICABLE
     val inner: GlowSettings,
     val outer: GlowSettings
 ) {
