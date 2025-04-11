@@ -32,8 +32,6 @@ import com.sycarias.chipless.ui.composables.TableScreen
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
 import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.PrimaryActionButton
-import com.sycarias.chipless.ui.extensions.dropShadow
-import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.viewModel.TableConfigDefaults
 import com.sycarias.chipless.viewModel.ViewModel
 
@@ -50,6 +48,7 @@ enum class PlayerButtonSide {
 
 @Composable
 fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
+
     /* TODO: MOVE
     // Define Sizing and Spacing for Dealer Icons
     val dealerIconSize = 30.dp // Sizing of Dealer Icons
@@ -63,14 +62,17 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
     val players = viewModel.players
 
 
-    LaunchedEffect(Unit) {
-        viewModel.resetForTableConfiguration()
-
-        // TESTING START = TODO: REMOVE TESTING
+    // TESTING START = TODO: REMOVE TESTING
+    remember {
         players.list.forEachIndexed { index, player ->
             player.name = "Player$index"
         }
-        // TESTING END
+    }
+    // TESTING END = TODO: REMOVE TESTING
+
+
+    LaunchedEffect(Unit) {
+        viewModel.resetForTableConfiguration()
     }
 
 
@@ -100,27 +102,6 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
                 && players.participatingList.count() >= 4
                 && players.dealer.isActive
         }
-    }
-
-    // Define Theming of Play Button based on Table Config Validity
-    val playButtonColor = when (tableConfigValid) {
-        true -> ChiplessColors.primary
-        false -> ChiplessColors.secondary
-    }
-    val playButtonModifier = when (tableConfigValid) {
-        true -> Modifier
-            .dropShadow(
-                color = ChiplessColors.primary,
-                offsetX = 0.dp,
-                offsetY = 0.dp,
-                blurRadius = 20.dp,
-                cornerRadius = 100.dp
-            )
-        false -> Modifier
-    }
-    val playButtonTextColor = when (tableConfigValid) {
-        true -> ChiplessColors.textPrimary
-        false -> ChiplessColors.textTertiary
     }
 
     /* = GOING TO MOVE ANY REQUIRED LOGIC TO OTHER FILES
@@ -282,8 +263,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
                     false -> {}
                 }
             },
-            modifier = playButtonModifier,
-            color = playButtonColor
+            enabled = tableConfigValid
         ) {
             StaticShadow(
                 blurRadius = 5.dp,
@@ -294,15 +274,13 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
                 Icon(
                     painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
                     contentDescription = "Settings",
-                    tint = playButtonTextColor,
                     modifier = Modifier.size(18.dp)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
 
             ActionButtonText(
-                text = "Play",
-                color = playButtonTextColor
+                text = "Play"
             )
         }
     }

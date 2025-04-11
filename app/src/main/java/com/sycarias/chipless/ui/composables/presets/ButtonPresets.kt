@@ -70,8 +70,7 @@ fun PrimaryActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = RoundedCornerShape(100.dp),
-    color: Color = ChiplessColors.secondary,
+    color: Color = ChiplessColors.primary,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(5.dp),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     contents: @Composable () -> Unit
@@ -79,12 +78,22 @@ fun PrimaryActionButton(
     Button(
         onClick = if (enabled) onClick else { {} },
         modifier = Modifier
+            .then(modifier)
             .height(55.dp)
-            .then(modifier),
-        shape = shape,
+            .then(
+                if (enabled) {
+                    Modifier.dropShadow(
+                        color = ChiplessColors.primary,
+                        offsetX = 0.dp,
+                        offsetY = 0.dp,
+                        blurRadius = 20.dp,
+                        cornerRadius = 100.dp
+                    )
+                } else Modifier
+            ),
         colors = if (enabled) {
             ChiplessButtonColors(color)
-        } else ChiplessButtonColors(colorMix(color, ChiplessColors.bgPrimary, 0.4f), ChiplessColors.textTertiary),
+        } else ChiplessButtonColors(colorMix(ChiplessColors.secondary, ChiplessColors.bgPrimary, 0.4f), ChiplessColors.textTertiary),
         elevation = elevation,
         contentPadding = contentPadding
     ) {
