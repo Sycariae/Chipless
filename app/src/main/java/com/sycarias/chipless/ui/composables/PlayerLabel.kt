@@ -132,11 +132,10 @@ fun PlayerLabel(
     val nameDisplayWidth = measureTextWidth(text = player.name, style = nameTextStyle) + (nameTextPadding * 2)
 
     // = CHIPS DISPLAY
-    val chipsText by remember { derivedStateOf { player.balance.toString() } }
     val chipsTextStyle = ChiplessTypography.l3
     val chipsIconSize = 14.dp
     val chipsDisplayPadding = 20.dp
-    val chipsDisplayWidth = chipsIconSize + measureTextWidth(text = chipsText, style = chipsTextStyle) + (chipsDisplayPadding * 2)
+    val chipsDisplayWidth = chipsIconSize + measureTextWidth(text = player.balance.toString(), style = chipsTextStyle) + (chipsDisplayPadding * 2)
 
     // = LABEL SIZING
     val cornerRadius = 100.dp
@@ -161,7 +160,7 @@ fun PlayerLabel(
     if (showDialog) {
         InputDialog(
             title = remember { dialogTitle },
-            buttonText = dialogButtonText,
+            confirmText = dialogButtonText,
             isConfirmEnabled = (isDialogInputValid),
             onDismiss = { showDialog = false },
             onConfirm = {
@@ -256,7 +255,7 @@ fun PlayerLabel(
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-                                    text = chipsText,
+                                    text = player.balance.toString(),
                                     style = chipsTextStyle,
                                     color = nameTextColor,
                                     softWrap = false

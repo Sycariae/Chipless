@@ -27,7 +27,7 @@ import com.sycarias.chipless.ui.theme.ChiplessColors
 @Composable
 fun InputDialog(
     title: String = "",
-    buttonText: String = "Confirm",
+    confirmText: String = "Confirm",
     isConfirmEnabled: Boolean = true,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
@@ -86,7 +86,7 @@ fun InputDialog(
                     onClick = { onConfirm() },
                     enabled = isConfirmEnabled,
                     modifier = Modifier.padding(top = 10.dp)
-                ) { ActionButtonText(text = buttonText) }
+                ) { ActionButtonText(text = confirmText) }
             }
         }
     }
