@@ -1,6 +1,7 @@
 package com.sycarias.chipless.viewModel
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 
 /**
@@ -23,9 +24,15 @@ class Bet(
     private val players: Players,
     private val tableConfig: TableConfig,
     private val tablePots: TablePots,
-    currentTableBet: State<Int>,
+    tableBet: State<Int>,
 ) {
-    private val currentTableBet: Int by currentTableBet
+    private val currentTableBet: Int by tableBet
+
+    val callAmount: Int by derivedStateOf { currentTableBet - players.focus.currentBet }
+    val minBetAmount: Int by derivedStateOf { tableConfig.bigBlind }
+    val maxBetAmount: Int by derivedStateOf { players.focus.balance }
+    val minRaiseAmount: Int by derivedStateOf { callAmount + tableConfig.bigBlind }
+    val maxRaiseAmount: Int by derivedStateOf { players.focus.balance - callAmount }
 
     /**
      * Updates the statuses of players in the current round of betting based on a new bet placed.
@@ -84,7 +91,7 @@ class Bet(
      * @see place
      */
     fun call(player: Player) {
-        place(player = player, betAmount = currentTableBet - player.currentBet, isRaise = false)
+        place(player = player, betAmount = callAmount, isRaise = false)
     }
 
     /**
@@ -101,10 +108,11 @@ class Bet(
      * @see place
      */
     fun raise(player: Player, raiseAmount: Int) {
-        if (player.balance == ((currentTableBet + raiseAmount) - player.currentBet) ) {
+        if (player.balance == ((callAmount + raiseAmount)) ) {
             allIn(player = player, isRaise = true)
         } else {
-            place(player = player, betAmount = (currentTableBet + raiseAmount) - player.currentBet, isRaise = true)
+            call(player)
+            place(player = player, betAmount = raiseAmount, isRaise = true)
         }
     }
 

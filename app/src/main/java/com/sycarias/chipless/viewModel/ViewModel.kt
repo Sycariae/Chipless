@@ -32,7 +32,7 @@ class ViewModel: ViewModel() {
         players = players,
         tableConfig = tableConfig,
         tablePots = tablePots,
-        currentTableBet = derivedStateOf { currentTableBet }
+        tableBet = derivedStateOf { currentTableBet }
     )
 
     var bettingRound by mutableStateOf(BettingRound.PREFLOP) // TODO: Remove Showdown and make a function to display showdown with winner selection after RIVER
