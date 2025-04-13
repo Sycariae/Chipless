@@ -71,7 +71,7 @@ fun InputDialog(
                     Subtitle(
                         text = title
                     )
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
 
                 Column(
