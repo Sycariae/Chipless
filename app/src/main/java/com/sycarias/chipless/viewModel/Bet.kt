@@ -41,12 +41,12 @@ class Bet(
      *
      * This function performs two main actions:
      * 1. Updates player statuses [PlayerStatus.BET_MATCHED] and [PlayerStatus.RAISED], to [PlayerStatus.PARTIAL_MATCH].
-     * 2. Updates the status of the `bettingPlayer` to [PlayerStatus.BET_MATCHED] or [PlayerStatus.RAISED], accordingly.
+     * 2. Updates the status of the `better` to [PlayerStatus.BET_MATCHED] or [PlayerStatus.RAISED], accordingly.
      *
-     * @param bettingPlayer The [Player] who is making the bet.
+     * @param better The [Player] who is making the bet.
      * @param isRaise `true` if the betting player raised the [currentTableBet]. `false` if they matched it.
      */
-    private fun updateStatusesOnBet(bettingPlayer: Player, isRaise: Boolean) { // TODO: Replace isRaise with a newBettingPlayerStatus and update docs
+    private fun updateStatusesOnBet(better: Player, isRaise: Boolean) {
         // Update statuses for other players to PARTIAL_MATCH
         if (isRaise) {
             players.list.forEach { player ->
@@ -56,9 +56,11 @@ class Bet(
             }
         }
 
-        // Update status for betting player to be BET_MATCHED or RAISED | TODO: ...or ALL_IN
-        bettingPlayer.status =
-            if (isRaise) {
+        // Update status for betting player to be BET_MATCHED or RAISED or ALL_IN
+        better.status =
+            if (better.balance == 0) {
+                PlayerStatus.ALL_IN
+            } else if (isRaise) {
                 PlayerStatus.RAISED
             } else {
                 PlayerStatus.BET_MATCHED
@@ -79,7 +81,7 @@ class Bet(
     fun place(player: Player, betAmount: Int, isRaise: Boolean = false) {
         tablePots.stagedBets += betAmount // Add bet amount to table pot and set table bet
         player.bet(betAmount) // Subtract bet amount from balance and add to currentBet for betting player
-        updateStatusesOnBet(bettingPlayer = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
+        updateStatusesOnBet(better = player, isRaise = isRaise) // Update player statuses: on raise, all BET_MATCHED are updated to PARTIAL_MATCH
     }
 
     /**
@@ -110,29 +112,23 @@ class Bet(
      * @see place
      */
     fun raise(player: Player, raiseAmount: Int) {
-        if (player.balance == ((callAmount + raiseAmount)) ) {
-            allIn(player = player, isRaise = true)
-        } else {
-            call(player)
-            place(player = player, betAmount = raiseAmount, isRaise = true)
-        }
+        call(player)
+        place(player = player, betAmount = raiseAmount, isRaise = true)
     }
 
     /**
      * Allows a `player` to go [PlayerStatus.ALL_IN].
      *
-     * It places a bet for the `player` using their entire [Player.balance] and then updates the [Player.status]
-     * to [PlayerStatus.ALL_IN], indicating that they have no more chips to bet.
+     * It places a bet for the `player` using their entire [Player.balance], updating their [Player.status]
+     * to [PlayerStatus.ALL_IN] and therefore indicating that they have no more chips to bet.
      *
      * @param player The [Player] who is going all-in.
-     * @param isRaise `true` if the betting player raised the [currentTableBet]. `false` if they matched it.
      *
      * @see PlayerStatus
      * @see place
      */
-    fun allIn(player: Player, isRaise: Boolean = false) {
-        place(player = player, betAmount = player.balance, isRaise = isRaise)
-        player.status = PlayerStatus.ALL_IN // Replace the bet status applied by updateStatusesOnBet() with ALL_IN for the subject player
+    fun allIn(player: Player) {
+        place(player = player, betAmount = player.balance, isRaise = false)
     }
 
 
