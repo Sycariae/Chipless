@@ -101,10 +101,16 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
             BetDialogType.BET -> "Bet Amount"
             BetDialogType.RAISE -> "Raise Amount"
         }
+        val newBalance by remember {
+            when (type) {
+                BetDialogType.BET -> derivedStateOf { players.focus.balance - value }
+                BetDialogType.RAISE -> derivedStateOf { players.focus.balance - (value + bet.callAmount) }
+            }
+        }
 
         InputDialog(
             title = title,
-            confirmText = "Place",
+            confirmText = if (newBalance == 0) "All In" else "Place",
             onDismiss = {
                 showBetDialog = false
             },
@@ -137,10 +143,7 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
                     modifier = Modifier.padding(horizontal = 6.dp)
                 )
                 Body(
-                    text = when (type) {
-                        BetDialogType.BET -> (players.focus.balance - value).toString()
-                        BetDialogType.RAISE -> (players.focus.balance - (value + bet.callAmount)).toString()
-                    }
+                    text = newBalance.toString()
                 )
             }
         }
