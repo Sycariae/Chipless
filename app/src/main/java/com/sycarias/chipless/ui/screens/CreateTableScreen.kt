@@ -235,12 +235,11 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
                 modifier = Modifier.width(200.dp)
             )
 
+            Spacer(Modifier.height(15.dp))
+
             PlayerTable(
                 players = players,
-                screen = TableScreen.CREATE,
-                modifier = Modifier
-                    .padding(bottom = 80.dp)
-                    .fillMaxSize()
+                screen = TableScreen.CREATE
             )
         }
 
