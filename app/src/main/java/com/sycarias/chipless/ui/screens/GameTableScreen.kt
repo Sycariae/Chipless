@@ -1,13 +1,16 @@
 package com.sycarias.chipless.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +32,7 @@ import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.composables.InputDialog
 import com.sycarias.chipless.ui.composables.IntSlider
 import com.sycarias.chipless.ui.composables.PlayerTable
+import com.sycarias.chipless.ui.composables.PokerChipIcon
 import com.sycarias.chipless.ui.composables.TableScreen
 import com.sycarias.chipless.ui.composables.presets.ActionButton
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
@@ -153,47 +157,62 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
     fun PlayerActionButton(
         type: PlayerActionType
     ) {
-        ActionButton(
-            onClick = {
-                if (isButtonProcessing || showBetDialog) return@ActionButton
-                isButtonProcessing = true
-                buttonCoroutineScope.launch {
-                    try {
-                        when (type) {
-                            PlayerActionType.CHECK -> { bet.call(players.focus) }
-                            PlayerActionType.CALL -> { bet.call(players.focus) }
-                            PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
-                            PlayerActionType.BET -> {
-                                betDialogType = BetDialogType.BET
-                                showBetDialog = true
-                            }
-                            PlayerActionType.RAISE -> {
-                                betDialogType = BetDialogType.RAISE
-                                showBetDialog = true
-                            }
-                            PlayerActionType.FOLD -> { players.focus.fold() }
-                        }
-                        if (type !in listOf(PlayerActionType.BET, PlayerActionType.RAISE)) {
-                            players.incrementFocusPlayer()
-                            viewModel.checkForBettingRoundEnd()
-                        }
-                    } finally {
-                        isButtonProcessing = false
-                    }
-                }
-            },
-            contentPadding = PaddingValues(0.dp)
+        Box(
+            contentAlignment = Alignment.Center
         ) {
-            ActionButtonText(
-                text = when (type) {
-                    PlayerActionType.CHECK -> "Check"
-                    PlayerActionType.CALL -> "Call"
-                    PlayerActionType.ALL_IN -> "All In"
-                    PlayerActionType.BET -> "Bet"
-                    PlayerActionType.RAISE -> "Raise"
-                    PlayerActionType.FOLD -> "Fold"
+            if (type == PlayerActionType.CALL) {
+                Row(
+                    modifier = Modifier.offset(y = (-48).dp).padding(end = 5.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    PokerChipIcon(size = 24.dp)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Body(text = bet.callAmount.toString())
                 }
-            )
+            }
+            ActionButton(
+                onClick = {
+                    if (isButtonProcessing || showBetDialog) return@ActionButton
+                    isButtonProcessing = true
+                    buttonCoroutineScope.launch {
+                        try {
+                            when (type) {
+                                PlayerActionType.CHECK -> { bet.call(players.focus) }
+                                PlayerActionType.CALL -> { bet.call(players.focus) }
+                                PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
+                                PlayerActionType.BET -> {
+                                    betDialogType = BetDialogType.BET
+                                    showBetDialog = true
+                                }
+                                PlayerActionType.RAISE -> {
+                                    betDialogType = BetDialogType.RAISE
+                                    showBetDialog = true
+                                }
+                                PlayerActionType.FOLD -> { players.focus.fold() }
+                            }
+                            if (type !in listOf(PlayerActionType.BET, PlayerActionType.RAISE)) {
+                                players.incrementFocusPlayer()
+                                viewModel.checkForBettingRoundEnd()
+                            }
+                        } finally {
+                            isButtonProcessing = false
+                        }
+                    }
+                },
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                ActionButtonText(
+                    text = when (type) {
+                        PlayerActionType.CHECK -> "Check"
+                        PlayerActionType.CALL -> "Call"
+                        PlayerActionType.ALL_IN -> "All In"
+                        PlayerActionType.BET -> "Bet"
+                        PlayerActionType.RAISE -> "Raise"
+                        PlayerActionType.FOLD -> "Fold"
+                    }
+                )
+            }
         }
     }
 
@@ -223,34 +242,42 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
                 players = players,
                 screen = TableScreen.GAME
             )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 30.dp, start = 10.dp, end = 10.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+
         ) {
-            PlayerActionButton(
-                type = if (viewModel.currentTableBet == players.focus.currentBet)
-                    PlayerActionType.CHECK
-                else if (viewModel.currentTableBet >= (players.focus.balance + players.focus.currentBet))
-                    PlayerActionType.ALL_IN
-                else
-                    PlayerActionType.CALL
-            )
-            if (viewModel.currentTableBet < (players.focus.balance + players.focus.currentBet)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, bottom = 30.dp, start = 10.dp, end = 10.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 PlayerActionButton(
-                    type = if (viewModel.currentTableBet > 0)
-                        PlayerActionType.RAISE
+                    type = if (viewModel.currentTableBet == players.focus.currentBet)
+                        PlayerActionType.CHECK
+                    else if (viewModel.currentTableBet >= (players.focus.balance + players.focus.currentBet))
+                        PlayerActionType.ALL_IN
                     else
-                        PlayerActionType.BET
+                        PlayerActionType.CALL
+                )
+                if (viewModel.currentTableBet < (players.focus.balance + players.focus.currentBet)) {
+                    PlayerActionButton(
+                        type = if (viewModel.currentTableBet > 0)
+                            PlayerActionType.RAISE
+                        else
+                            PlayerActionType.BET
+                    )
+                }
+                PlayerActionButton(
+                    type = PlayerActionType.FOLD
                 )
             }
-            PlayerActionButton(
-                type = PlayerActionType.FOLD
-            )
         }
     }
 }

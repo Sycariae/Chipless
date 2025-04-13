@@ -1,7 +1,6 @@
 package com.sycarias.chipless.ui.composables
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtLeast
@@ -212,9 +210,7 @@ fun PlayerLabel(
                     )
                     .dropShadow(
                         color = glowColor.copy(
-                            alpha = (glowIntensity.outer.glow * 2).coerceAtMost(
-                                1f
-                            )
+                            alpha = (glowIntensity.outer.glow * 2).coerceAtMost(1f)
                         ),
                         blurRadius = (glowIntensity.outer.blur - 20.dp).coerceAtLeast(0.dp),
                         cornerRadius = cornerRadius
@@ -242,17 +238,7 @@ fun PlayerLabel(
                                 modifier = Modifier.padding(bottom = 2.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.image_chip),
-                                    contentDescription = "Chips Icon",
-                                    modifier = Modifier
-                                        .size(chipsIconSize)
-                                        .dropShadow(
-                                            color = ChiplessColors.primary,
-                                            blurRadius = 5.dp,
-                                            cornerRadius = 100.dp
-                                        )
-                                )
+                                PokerChipIcon(size = chipsIconSize)
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = player.balance.toString(),
