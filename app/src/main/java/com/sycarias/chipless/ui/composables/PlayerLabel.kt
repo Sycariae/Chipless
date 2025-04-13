@@ -96,11 +96,14 @@ fun PlayerLabel(
     }
 
     // = LABEL CONFIG
-    val showChips: Boolean = remember { screen == TableScreen.GAME }
-    val hideOnEmpty: Boolean = showChips
+    val isGameScreen = remember { screen == TableScreen.GAME }
+    val isCreateScreen = remember { screen == TableScreen.CREATE }
+    val showStatusIcon = isGameScreen
+    val showChips: Boolean = isGameScreen
+    val hideOnEmpty: Boolean = isGameScreen
     val glowIntensity: GlowIntensity by remember {
         derivedStateOf {
-            if (screen == TableScreen.CREATE) {
+            if (isCreateScreen) {
                 GlowIntensity.HIGH
             } else {
                 if (player.isFocus) GlowIntensity.HIGH else GlowIntensity.LOW
@@ -109,7 +112,7 @@ fun PlayerLabel(
     }
     val greyedOut: Boolean by remember {
         derivedStateOf {
-            if (screen == TableScreen.CREATE) {
+            if (isCreateScreen) {
                 false
             } else {
                 player.isEliminated || player.status in listOf(
@@ -120,7 +123,7 @@ fun PlayerLabel(
         }
     }
     val onClick: () -> Unit =
-        if (screen == TableScreen.CREATE) {
+        if (isCreateScreen) {
             {
                 dialogInput = ""
                 showDialog = true
@@ -185,86 +188,99 @@ fun PlayerLabel(
     }
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         if (!(player.name.isEmpty() && hideOnEmpty)) {
-            Button(
-                onClick = onClick,
-                modifier = Modifier
-                    .height(size)
-                    .width(animatedWidth.value)
-                    .border(
-                        width = (0.5).dp,
-                        shape = shape,
-                        color = borderColor
-                    )
-                    .innerShadow(
-                        shape = shape,
-                        color = glowColor.copy(alpha = glowIntensity.inner.glow),
-                        blur = glowIntensity.inner.blur,
-                        offsetX = 0.dp,
-                        offsetY = 0.dp
-                    )
-                    .innerShadow(
-                        shape = shape,
-                        color = glowColor.copy(
-                            alpha = (glowIntensity.inner.glow * 2).coerceAtMost(
-                                1f
-                            )
-                        ),
-                        blur = (glowIntensity.inner.blur - 10.dp).coerceAtLeast(0.dp),
-                        offsetX = 0.dp,
-                        offsetY = 0.dp
-                    )
-                    .dropShadow(
-                        color = glowColor.copy(alpha = glowIntensity.outer.glow),
-                        blurRadius = glowIntensity.inner.blur,
-                        cornerRadius = cornerRadius
-                    )
-                    .dropShadow(
-                        color = glowColor.copy(
-                            alpha = (glowIntensity.outer.glow * 2).coerceAtMost(1f)
-                        ),
-                        blurRadius = (glowIntensity.outer.blur - 20.dp).coerceAtLeast(0.dp),
-                        cornerRadius = cornerRadius
-                    ),
-                shape = CircleShape,
-                colors = ChiplessButtonColors(if (greyedOut) ChiplessColors.greyOut else ChiplessColors.secondary),
-                contentPadding = PaddingValues(0.dp)
+            Box(
+                contentAlignment = if (location.side == PlayerLabelSide.LEFT) Alignment.CenterEnd else Alignment.CenterStart
             ) {
-                // TODO: ADD DEALER SELECTION BUTTONS IN CREATE TABLE SCREEN
-                // TODO: ADD DEALER ICON DISPLAYS IN GAME SCREEN
-                // TODO: ADD STATUS ICON DISPLAYS IN GAME SCREEN
-                if (player.name.isNotEmpty()) {
-                    Column (
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = player.name,
-                            style = nameTextStyle,
-                            color = nameTextColor,
-                            softWrap = false
+                Button(
+                    onClick = onClick,
+                    modifier = Modifier
+                        .height(size)
+                        .width(animatedWidth.value)
+                        .border(
+                            width = (0.5).dp,
+                            shape = shape,
+                            color = borderColor
                         )
-                        if (showChips) {
-                            Row (
-                                modifier = Modifier.padding(bottom = 2.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                PokerChipIcon(size = chipsIconSize)
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = player.balance.toString(),
-                                    style = chipsTextStyle,
-                                    color = nameTextColor,
-                                    softWrap = false
-                                )
+                        .innerShadow(
+                            shape = shape,
+                            color = glowColor.copy(alpha = glowIntensity.inner.glow),
+                            blur = glowIntensity.inner.blur,
+                            offsetX = 0.dp,
+                            offsetY = 0.dp
+                        )
+                        .innerShadow(
+                            shape = shape,
+                            color = glowColor.copy(alpha = (glowIntensity.inner.glow * 2).coerceAtMost(1f)),
+                            blur = (glowIntensity.inner.blur - 10.dp).coerceAtLeast(0.dp),
+                            offsetX = 0.dp,
+                            offsetY = 0.dp
+                        )
+                        .dropShadow(
+                            color = glowColor.copy(alpha = glowIntensity.outer.glow),
+                            blurRadius = glowIntensity.inner.blur,
+                            cornerRadius = cornerRadius
+                        )
+                        .dropShadow(
+                            color = glowColor.copy(
+                                alpha = (glowIntensity.outer.glow * 2).coerceAtMost(1f)
+                            ),
+                            blurRadius = (glowIntensity.outer.blur - 20.dp).coerceAtLeast(0.dp),
+                            cornerRadius = cornerRadius
+                        ),
+                    shape = CircleShape,
+                    colors = ChiplessButtonColors(if (greyedOut) ChiplessColors.greyOut else ChiplessColors.secondary),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    // TODO: ADD DEALER SELECTION BUTTONS IN CREATE TABLE SCREEN
+                    // TODO: ADD DEALER ICON DISPLAYS IN GAME SCREEN
+                    // TODO: ADD STATUS ICON DISPLAYS IN GAME SCREEN
+                    if (player.name.isNotEmpty()) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = player.name,
+                                style = nameTextStyle,
+                                color = nameTextColor,
+                                softWrap = false
+                            )
+                            if (showChips) {
+                                Row(
+                                    modifier = Modifier.padding(bottom = 2.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    PokerChipIcon(size = chipsIconSize)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = player.balance.toString(),
+                                        style = chipsTextStyle,
+                                        color = nameTextColor,
+                                        softWrap = false
+                                    )
+                                }
                             }
                         }
+                    } else {
+                        Icon(
+                            painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
+                            contentDescription = "Add Icon",
+                            modifier = Modifier
+                                .size(24.dp)
+                        )
                     }
-                } else {
-                    Icon(
-                        painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
-                        contentDescription = "Add Icon",
+                }
+                if (showStatusIcon && player.status !in listOf(PlayerStatus.FOLDED, PlayerStatus.IDLE, PlayerStatus.SAT_OUT)) {
+                    PlayerStatusIcon(
+                        type = PlayerIconType.fromStatus(player.status),
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(18.dp)
+                            .offset(x =
+                                if (location.side == PlayerLabelSide.LEFT)
+                                    9.dp
+                                else
+                                    (-9).dp
+                            )
                     )
                 }
             }
