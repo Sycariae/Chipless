@@ -18,6 +18,7 @@ fun PlayerLabelRow(
     leftPlayer: Player,
     rightPlayer: Player,
     size: Dp,
+    section: PlayerLabelSection,
     screen: TableScreen
 ) {
     Row (
@@ -34,6 +35,7 @@ fun PlayerLabelRow(
             PlayerLabel(
                 player = leftPlayer,
                 size = size,
+                location = PlayerLabelLocation(PlayerLabelSide.LEFT, section = section),
                 screen = screen
             )
         }
@@ -45,6 +47,7 @@ fun PlayerLabelRow(
             PlayerLabel(
                 player = rightPlayer,
                 size = size,
+                location = PlayerLabelLocation(PlayerLabelSide.RIGHT, section = section),
                 screen = screen
             )
         }

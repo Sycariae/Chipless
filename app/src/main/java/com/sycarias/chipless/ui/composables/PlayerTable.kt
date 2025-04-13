@@ -71,10 +71,20 @@ fun PlayerTable(
             val rows = 1..5 // Range from 1 to total number of rows
             for (row in rows) {
                 PlayerLabelRow(
-                    spacing = if (row in listOf(rows.first, rows.last)) playerLabelTBHSpacing else playerLabelMidHSpacing,
+                    spacing =
+                        if (row in listOf(rows.first, rows.last))
+                            playerLabelTBHSpacing
+                        else
+                            playerLabelMidHSpacing,
                     leftPlayer = players.list[10-row],
                     rightPlayer = players.list[row-1],
                     size = playerLabelSize,
+                    section =
+                        when (row) {
+                            rows.first -> PlayerLabelSection.TOP
+                            rows.last -> PlayerLabelSection.BOTTOM
+                            else -> PlayerLabelSection.MID
+                        },
                     screen = screen
                 )
                 if (row != rows.last) { Spacer(modifier = Modifier.height(playerLabelVSpacing)) }

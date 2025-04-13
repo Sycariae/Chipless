@@ -3,11 +3,13 @@ package com.sycarias.chipless.ui.composables
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,10 +48,17 @@ import com.sycarias.chipless.ui.utils.measureTextWidth
 import com.sycarias.chipless.viewModel.Player
 import com.sycarias.chipless.viewModel.PlayerStatus
 
-enum class PlayerLabelLocation {
+data class PlayerLabelLocation(val side: PlayerLabelSide, val section: PlayerLabelSection)
+
+enum class PlayerLabelSection {
     TOP,
     MID,
     BOTTOM
+}
+
+enum class PlayerLabelSide {
+    LEFT,
+    RIGHT
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,6 +66,7 @@ enum class PlayerLabelLocation {
 fun PlayerLabel(
     player: Player,
     size: Dp = 50.dp,
+    location: PlayerLabelLocation,
     screen: TableScreen
 ) {
     // = NEW PLAYER DIALOG
