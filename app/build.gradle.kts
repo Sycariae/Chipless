@@ -84,7 +84,4 @@ dependencies {
 
     // Json Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
-    // Lucide Icons
-    implementation("com.composables:icons-lucide:1.0.0")
 }

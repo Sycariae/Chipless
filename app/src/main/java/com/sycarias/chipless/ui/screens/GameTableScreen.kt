@@ -21,11 +21,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.MoveRight
+import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.composables.InputDialog
 import com.sycarias.chipless.ui.composables.IntSlider
 import com.sycarias.chipless.ui.composables.PlayerTable
@@ -137,7 +138,7 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
             Row {
                 Body(text = players.focus.balance.toString())
                 Icon(
-                    painter = rememberVectorPainter(image = Lucide.MoveRight),
+                    painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_right_arrow)),
                     contentDescription = "Right Arrow",
                     tint = ChiplessColors.textSecondary,
                     modifier = Modifier.padding(horizontal = 6.dp)

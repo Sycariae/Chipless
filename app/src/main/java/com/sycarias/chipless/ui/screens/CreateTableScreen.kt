@@ -18,12 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Play
 import com.sycarias.chipless.GameTable
+import com.sycarias.chipless.R
 import com.sycarias.chipless.ui.composables.IntInputField
 import com.sycarias.chipless.ui.composables.PlayerTable
 import com.sycarias.chipless.ui.composables.StaticShadow
@@ -263,7 +264,7 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
                 offsetY = 4.dp
             ) {
                 Icon(
-                    painter = rememberVectorPainter(image = Lucide.Play),
+                    painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_play)),
                     contentDescription = "Settings",
                     modifier = Modifier.size(18.dp)
                 )

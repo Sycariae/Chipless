@@ -268,7 +268,7 @@ fun PlayerLabel(
                         painter = rememberVectorPainter(image = ImageVector.vectorResource(id = R.drawable.icon_add)),
                         contentDescription = "Add Icon",
                         modifier = Modifier
-                            .size(17.dp)
+                            .size(24.dp)
                     )
                 }
             }
