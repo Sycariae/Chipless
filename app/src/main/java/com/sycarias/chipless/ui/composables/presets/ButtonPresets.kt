@@ -17,6 +17,8 @@ import com.sycarias.chipless.ui.theme.ChiplessButtonColors
 import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.ui.utils.colorMix
 
+// TODO: REWORK TO USE MULTIPLE OBJECTS WITH DEFAULT INPUTS AND A SINGLE COMPOSABLE (SIMILAR TO MATERIAL3's ButtonDefaults)
+
 @Composable
 fun LargeFocusButton(
     onClick: () -> Unit,
