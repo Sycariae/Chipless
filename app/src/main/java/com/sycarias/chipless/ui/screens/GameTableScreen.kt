@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -202,31 +201,31 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
     if (showBetDialog) {
         BetInputDialog(type = betDialogType)
     }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Spacer(modifier = Modifier.height(35.dp))
+    Column {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(modifier = Modifier.height(35.dp))
 
-        // Game Stage Heading
-        Heading(text = bettingRoundTitle)
+            // Game Stage Heading
+            Heading(text = bettingRoundTitle)
 
-        Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
-        // Player Turn Subheading
-        Subtitle(text = "${players.focus.name}'s Turn")
+            // Player Turn Subheading
+            Subtitle(text = "${players.focus.name}'s Turn")
 
-        Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(35.dp))
 
-        PlayerTable(
-            players = players,
-            screen = TableScreen.GAME
-        )
+            PlayerTable(
+                players = players,
+                screen = TableScreen.GAME
+            )
+        }
 
-        Spacer(modifier = Modifier.height(80.dp))
-
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 30.dp, start = 10.dp, end = 10.dp),

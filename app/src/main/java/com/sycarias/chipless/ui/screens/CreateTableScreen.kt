@@ -1,6 +1,7 @@
 package com.sycarias.chipless.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -187,74 +188,75 @@ fun CreateTableScreen(navController: NavController, viewModel: ViewModel) {
     }*/
 
     // START OF UI
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Spacer(modifier = Modifier.height(35.dp))
+    Box {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(modifier = Modifier.height(35.dp))
 
-        Heading(text = "Create Table")
+            Heading(text = "Create Table")
 
-        Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-        // Settings Input Fields
-        Row() {
+            // Settings Input Fields
+            Row() {
+                IntInputField(
+                    label = "Big Blind",
+                    initialValue = TableConfigDefaults.BIG_BLIND.toString(),
+                    maxLen = 4,
+                    isValid = bigBlindValid,
+                    onValueChange = {
+                        tableConfig.bigBlind = it.toInt()
+                        /*tableConfig.smallBlind = ( it.toInt() / 2 )*/ // Caused issue with correct smallBlind value not being displayed, only changed in the backend.
+                    },
+                    modifier = Modifier.width(150.dp)
+                )
+                Spacer(Modifier.width(18.dp))
+
+                IntInputField(
+                    label = "Small Blind",
+                    initialValue = TableConfigDefaults.SMALL_BLIND.toString(),
+                    isValid = smallBlindValid,
+                    maxLen = 4,
+                    onValueChange = { tableConfig.smallBlind = it.toInt() },
+                    modifier = Modifier.width(150.dp)
+                )
+            }
+            Spacer(Modifier.height(12.dp))
+
             IntInputField(
-                label = "Big Blind",
-                initialValue = TableConfigDefaults.BIG_BLIND.toString(),
-                maxLen = 4,
-                isValid = bigBlindValid,
-                onValueChange = {
-                    tableConfig.bigBlind = it.toInt()
-                    /*tableConfig.smallBlind = ( it.toInt() / 2 )*/ // Caused issue with correct smallBlind value not being displayed, only changed in the backend.
-                },
-                modifier = Modifier.width(150.dp)
+                label = "Starting Chips",
+                initialValue = TableConfigDefaults.STARTING_CHIPS.toString(),
+                maxLen = 6,
+                isValid = startingChipsValid,
+                onValueChange = { tableConfig.startingChips = it.toInt() },
+                modifier = Modifier.width(200.dp)
             )
-            Spacer(Modifier.width(18.dp))
 
-            IntInputField(
-                label = "Small Blind",
-                initialValue = TableConfigDefaults.SMALL_BLIND.toString(),
-                isValid = smallBlindValid,
-                maxLen = 4,
-                onValueChange = { tableConfig.smallBlind = it.toInt() },
-                modifier = Modifier.width(150.dp)
+            PlayerTable(
+                players = players,
+                screen = TableScreen.CREATE,
+                modifier = Modifier
+                    .padding(bottom = 80.dp)
+                    .fillMaxSize()
             )
         }
-        Spacer(Modifier.height(12.dp))
 
-        IntInputField(
-            label = "Starting Chips",
-            initialValue = TableConfigDefaults.STARTING_CHIPS.toString(),
-            maxLen = 6,
-            isValid = startingChipsValid,
-            onValueChange = { tableConfig.startingChips = it.toInt() },
-            modifier = Modifier.width(200.dp)
-        )
-
-        PlayerTable(
-            players = players,
-            screen = TableScreen.CREATE,
-            modifier = Modifier.padding(bottom = 80.dp).fillMaxSize()
-        )
-    }
-
-
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(end = 25.dp, bottom = 25.dp),
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Bottom
-    ) {
         PrimaryActionButton(
             onClick = {
                 when (tableConfigValid) {
-                    true -> { navController.navigate(GameTable) }
+                    true -> {
+                        navController.navigate(GameTable)
+                    }
+
                     false -> {}
                 }
             },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 30.dp, end = 20.dp),
             enabled = tableConfigValid
         ) {
             StaticShadow(
