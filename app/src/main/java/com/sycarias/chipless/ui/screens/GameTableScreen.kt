@@ -9,24 +9,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.MoveRight
+import com.sycarias.chipless.ui.composables.InputDialog
+import com.sycarias.chipless.ui.composables.IntSlider
 import com.sycarias.chipless.ui.composables.PlayerTable
 import com.sycarias.chipless.ui.composables.TableScreen
 import com.sycarias.chipless.ui.composables.presets.ActionButton
 import com.sycarias.chipless.ui.composables.presets.ActionButtonText
+import com.sycarias.chipless.ui.composables.presets.Body
 import com.sycarias.chipless.ui.composables.presets.Heading
 import com.sycarias.chipless.ui.composables.presets.Subtitle
+import com.sycarias.chipless.ui.theme.ChiplessColors
 import com.sycarias.chipless.viewModel.BettingRound
 import com.sycarias.chipless.viewModel.ViewModel
-import kotlin.math.min
+import kotlinx.coroutines.launch
 
 enum class PlayerActionType {
     CHECK,
@@ -37,12 +49,18 @@ enum class PlayerActionType {
     FOLD
 }
 
+enum class BetDialogType {
+    BET,
+    RAISE
+}
+
 @Composable
 fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
-    // View Model Variables
+    // = VIEWMODEL OBJECTS
     val players = viewModel.players
     val bet = viewModel.bet
 
+    // = BETTING ROUND
     val bettingRound by remember { derivedStateOf { viewModel.bettingRound } }
     val bettingRoundTitle: String = when(bettingRound) {
         BettingRound.PREFLOP -> "Pre-Flop"
@@ -52,26 +70,79 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
         BettingRound.SHOWDOWN -> "Showdown"
     }
 
+    // = BETTING DIALOG
+    var showBetDialog by remember { mutableStateOf(false) }
+    var betDialogType by remember { mutableStateOf(BetDialogType.BET) }
+
+    // = DEBOUNCE SYSTEM
+    var isButtonProcessing by remember { mutableStateOf(false) }
+    val buttonCoroutineScope = rememberCoroutineScope()
+
+
     LaunchedEffect(Unit) {
         viewModel.initialiseNewTable()
     }
 
-    fun getBetAmountInput(): Int {
-        /* TESTING START TODO: REMOVE TESTING */
-        return min(100, players.focus.balance)
-        /* TESTING END */
-        /* TODO: Create Dialog to get validated bet amount */
-    }
+    @Composable
+    fun BetInputDialog(
+        type: BetDialogType,
+    ) {
+        var value by remember {
+            mutableIntStateOf(
+                if (type == BetDialogType.BET) bet.minBetAmount
+                else bet.minRaiseAmount
+            )
+        }
+        val title = when (type) {
+            BetDialogType.BET -> "Bet"
+            BetDialogType.RAISE -> "Raise"
+        }
+        val label = when (type) {
+            BetDialogType.BET -> "Bet Amount"
+            BetDialogType.RAISE -> "Raise Amount"
+        }
 
-    fun getRaiseAmountInput(): Int {
-        val defaultRaiseAmount = 100
-        val maxRaiseAmount = players.focus.balance - (viewModel.currentTableBet - players.focus.currentBet)
-        println("Max Raise Amount: $maxRaiseAmount")
+        InputDialog(
+            title = title,
+            confirmText = "Place",
+            onDismiss = {
+                showBetDialog = false
+            },
+            onConfirm = {
+                when (type) {
+                    BetDialogType.BET -> bet.place(players.focus, value)
+                    BetDialogType.RAISE -> bet.raise(players.focus, value)
+                }
+                players.incrementFocusPlayer()
+                viewModel.checkForBettingRoundEnd()
 
-        return if (maxRaiseAmount >= defaultRaiseAmount) {
-            defaultRaiseAmount
-        } else {
-            maxRaiseAmount.coerceAtLeast(0) // Ensure it's not negative
+                showBetDialog = false
+            },
+        ) {
+            IntSlider(
+                value = value,
+                onValueChange = { value = it },
+                range = if (type == BetDialogType.BET) bet.betAmountRange else bet.raiseAmountRange,
+                stepSize = 5,
+                label = label,
+                showValue = true
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+            Row {
+                Body(text = players.focus.balance.toString())
+                Icon(
+                    painter = rememberVectorPainter(image = Lucide.MoveRight),
+                    contentDescription = "Right Arrow",
+                    tint = ChiplessColors.textSecondary,
+                    modifier = Modifier.padding(horizontal = 6.dp)
+                )
+                Body(
+                    text = when (type) {
+                        BetDialogType.BET -> (players.focus.balance - value).toString()
+                        BetDialogType.RAISE -> (players.focus.balance - (value + bet.callAmount)).toString()
+                    }
+                )
+            }
         }
     }
 
@@ -81,16 +152,32 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
     ) {
         ActionButton(
             onClick = {
-                when (type) {
-                    PlayerActionType.CHECK -> { bet.call(players.focus) }
-                    PlayerActionType.CALL -> { bet.call(players.focus) }
-                    PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
-                    PlayerActionType.BET -> { bet.place(players.focus, getBetAmountInput(), isRaise = true) }
-                    PlayerActionType.RAISE -> { bet.raise(players.focus, getRaiseAmountInput()) }
-                    PlayerActionType.FOLD -> { players.focus.fold() }
+                if (isButtonProcessing || showBetDialog) return@ActionButton
+                isButtonProcessing = true
+                buttonCoroutineScope.launch {
+                    try {
+                        when (type) {
+                            PlayerActionType.CHECK -> { bet.call(players.focus) }
+                            PlayerActionType.CALL -> { bet.call(players.focus) }
+                            PlayerActionType.ALL_IN -> { bet.allIn(players.focus) }
+                            PlayerActionType.BET -> {
+                                betDialogType = BetDialogType.BET
+                                showBetDialog = true
+                            }
+                            PlayerActionType.RAISE -> {
+                                betDialogType = BetDialogType.RAISE
+                                showBetDialog = true
+                            }
+                            PlayerActionType.FOLD -> { players.focus.fold() }
+                        }
+                        if (type !in listOf(PlayerActionType.BET, PlayerActionType.RAISE)) {
+                            players.incrementFocusPlayer()
+                            viewModel.checkForBettingRoundEnd()
+                        }
+                    } finally {
+                        isButtonProcessing = false
+                    }
                 }
-                players.incrementFocusPlayer()
-                viewModel.checkForBettingRoundEnd()
             },
             contentPadding = PaddingValues(0.dp)
         ) {
@@ -108,6 +195,9 @@ fun GameTableScreen(navController: NavController, viewModel: ViewModel) {
     }
 
     // START OF UI
+    if (showBetDialog) {
+        BetInputDialog(type = betDialogType)
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
