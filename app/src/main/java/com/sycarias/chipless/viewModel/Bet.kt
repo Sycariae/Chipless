@@ -32,7 +32,7 @@ class Bet(
     val minBetAmount: Int by derivedStateOf { tableConfig.bigBlind }
     val maxBetAmount: Int by derivedStateOf { players.focus.balance }
     val betAmountRange: IntRange by derivedStateOf { minBetAmount..maxBetAmount }
-    val minRaiseAmount: Int by derivedStateOf { callAmount + tableConfig.bigBlind }
+    val minRaiseAmount: Int by derivedStateOf { tableConfig.bigBlind }
     val maxRaiseAmount: Int by derivedStateOf { players.focus.balance - callAmount }
     val raiseAmountRange: IntRange by derivedStateOf { minRaiseAmount..maxRaiseAmount }
 
