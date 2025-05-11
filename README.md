@@ -5,4 +5,4 @@ This is a tool for Texas Hold'em Poker that is used for managing bets within in-
 
 This is still a WIP and only unfinished version that lack core functionality are available as of current.
 
-![Preview](https://github.com/user-attachments/assets/b712b271-2c15-46fd-9481-42577a3a818f)
+![Preview](https://github.com/user-attachments/assets/ed30d54f-953a-462c-a123-aaaea56e83b2)
